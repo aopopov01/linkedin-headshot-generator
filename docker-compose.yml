@@ -1,0 +1,481 @@
+version: '3.8'
+
+services:
+  # LinkedIn Headshot Generator Backend API with AI/ML capabilities
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+      args:
+        - BUILD_DATE=${BUILD_DATE:-$(date -u +'%Y-%m-%dT%H:%M:%SZ')}
+        - VCS_REF=${VCS_REF:-$(git rev-parse HEAD)}
+        - BUILD_VERSION=${BUILD_VERSION:-latest}
+    container_name: linkedin-headshot-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/linkedin_headshot
+      - JWT_SECRET=${JWT_SECRET}
+      - REPLICATE_API_TOKEN=${REPLICATE_API_TOKEN}
+      - CLOUDINARY_URL=${CLOUDINARY_URL}
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+      - NODE_OPTIONS=--max-old-space-size=2048
+      - VIPS_CONCURRENCY=4
+      - VIPS_DISC_THRESHOLD=100mb
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - backend_logs:/app/logs
+      - backend_uploads:/app/uploads
+      - backend_temp:/app/temp
+      - backend_models:/app/models
+      - backend_cache:/app/cache
+    networks:
+      - linkedin-headshot-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    labels:
+      - "prometheus.scrape=true"
+      - "prometheus.port=3001"
+      - "prometheus.path=/metrics"
+
+  # PostgreSQL Database optimized for AI workloads
+  postgres:
+    image: postgres:15-alpine
+    container_name: linkedin-headshot-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=linkedin_headshot
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/pgdata
+      - ./postgres/init:/docker-entrypoint-initdb.d/
+      - ./postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    networks:
+      - linkedin-headshot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d linkedin_headshot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  # Redis for caching and session management with persistence
+  redis:
+    image: redis:7-alpine
+    container_name: linkedin-headshot-redis
+    restart: unless-stopped
+    command: >
+      redis-server 
+      --appendonly yes 
+      --requirepass ${REDIS_PASSWORD}
+      --maxmemory 1gb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - linkedin-headshot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+
+  # NGINX Reverse Proxy with advanced caching and compression
+  nginx:
+    image: nginx:alpine
+    container_name: linkedin-headshot-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/logs:/var/log/nginx
+      - nginx_cache:/var/cache/nginx
+      - backend_uploads:/var/www/uploads:ro
+    depends_on:
+      - backend
+    networks:
+      - linkedin-headshot-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/nginx-health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+
+  # AI Model Cache - Separate Redis instance for AI models
+  ai-cache:
+    image: redis:7-alpine
+    container_name: linkedin-headshot-ai-cache
+    restart: unless-stopped
+    command: >
+      redis-server
+      --maxmemory 2gb
+      --maxmemory-policy allkeys-lru
+      --requirepass ${AI_CACHE_PASSWORD}
+      --port 6380
+    ports:
+      - "6381:6380"
+    volumes:
+      - ai_cache_data:/data
+    networks:
+      - linkedin-headshot-network
+    profiles: ["ai"]
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '0.5'
+
+  # MinIO for S3-compatible object storage (alternative to Cloudinary)
+  minio:
+    image: minio/minio:latest
+    container_name: linkedin-headshot-minio
+    restart: unless-stopped
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY}
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - linkedin-headshot-network
+    profiles: ["storage"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring - Prometheus with advanced configuration
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: linkedin-headshot-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.wal-compression'
+      - '--web.enable-admin-api'
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+    networks:
+      - linkedin-headshot-network
+    profiles: ["monitoring"]
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+
+  # Monitoring - Grafana with pre-configured dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: linkedin-headshot-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin123}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel
+    ports:
+      - "3002:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - linkedin-headshot-network
+    profiles: ["monitoring"]
+
+  # Log aggregation - Elasticsearch optimized for AI logs
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: linkedin-headshot-elasticsearch
+    restart: unless-stopped
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=linkedin-headshot-logs
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.ml.enabled=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - "9201:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - linkedin-headshot-network
+    profiles: ["logging"]
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1'
+
+  # Log aggregation - Kibana for AI log analysis
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: linkedin-headshot-kibana
+    restart: unless-stopped
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - XPACK_SECURITY_ENABLED=false
+    ports:
+      - "5602:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - linkedin-headshot-network
+    profiles: ["logging"]
+
+  # Log shipping - Filebeat for comprehensive log collection
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.8.0
+    container_name: linkedin-headshot-filebeat
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ./monitoring/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - backend_logs:/var/log/app:ro
+      - nginx_logs:/var/log/nginx:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+    networks:
+      - linkedin-headshot-network
+    profiles: ["logging"]
+
+  # Security scanning - Clair for container vulnerability detection
+  clair:
+    image: quay.io/coreos/clair:latest
+    container_name: linkedin-headshot-clair
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    volumes:
+      - ./security/clair/config.yaml:/etc/clair/config.yaml:ro
+    networks:
+      - linkedin-headshot-network
+    profiles: ["security"]
+
+  # Automated backup service with S3 sync
+  backup:
+    image: postgres:15-alpine
+    container_name: linkedin-headshot-backup
+    restart: unless-stopped
+    environment:
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - S3_BUCKET=${BACKUP_S3_BUCKET}
+    volumes:
+      - ./backup/scripts:/scripts:ro
+      - backup_data:/backup
+    command: >
+      sh -c "
+        apk add --no-cache aws-cli &&
+        while true; do
+          echo 'Creating database backup...'
+          BACKUP_FILE=\"linkedin_headshot_\$(date +%Y%m%d_%H%M%S).sql\"
+          pg_dump -h postgres -U postgres -d linkedin_headshot > \"/backup/\$BACKUP_FILE\"
+          
+          if [ ! -z \"\$S3_BUCKET\" ]; then
+            echo 'Uploading backup to S3...'
+            aws s3 cp \"/backup/\$BACKUP_FILE\" \"s3://\$S3_BUCKET/backups/\"
+          fi
+          
+          find /backup -name '*.sql' -mtime +7 -delete
+          sleep 86400
+        done
+      "
+    depends_on:
+      - postgres
+    networks:
+      - linkedin-headshot-network
+    profiles: ["backup"]
+
+  # Performance testing with K6
+  k6:
+    image: grafana/k6:latest
+    container_name: linkedin-headshot-k6
+    restart: "no"
+    volumes:
+      - ./testing/k6:/scripts:ro
+    command: run /scripts/load-test.js
+    environment:
+      - K6_INFLUXDB_ORGANIZATION=linkedin-headshot
+      - K6_INFLUXDB_BUCKET=k6
+    networks:
+      - linkedin-headshot-network
+    profiles: ["testing"]
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/postgres
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/redis
+  ai_cache_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/ai-cache
+  backend_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/log/linkedin-headshot/backend
+  backend_uploads:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/uploads
+  backend_temp:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/temp
+  backend_models:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/models
+  backend_cache:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/cache
+  nginx_cache:
+    driver: local
+  nginx_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/log/linkedin-headshot/nginx
+  minio_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/minio
+  prometheus_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/prometheus
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/grafana
+  elasticsearch_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/linkedin-headshot/elasticsearch
+  backup_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/backups/linkedin-headshot
+
+networks:
+  linkedin-headshot-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+    labels:
+      - "description=LinkedIn Headshot Generator network"

@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: linkedin-headshot-backend-ingress
+  namespace: ${NAMESPACE:-linkedin-headshot-production}
+  labels:
+    app: linkedin-headshot-backend
+    component: ingress
+    environment: ${ENVIRONMENT:-production}
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/group.name: linkedin-headshot-${ENVIRONMENT:-production}
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: ${CERTIFICATE_ARN}
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "30"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "10"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/load-balancer-attributes: |
+      idle_timeout.timeout_seconds=60,
+      routing.http2.enabled=true,
+      access_logs.s3.enabled=true,
+      access_logs.s3.bucket=${ALB_LOGS_BUCKET},
+      access_logs.s3.prefix=linkedin-headshot-${ENVIRONMENT:-production}
+spec:
+  rules:
+  - host: ${API_DOMAIN:-api.linkedin-headshot.com}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: linkedin-headshot-backend-service
+            port:
+              number: 80
+  - host: ${API_DOMAIN_STAGING:-staging-api.linkedin-headshot.com}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: linkedin-headshot-backend-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - ${API_DOMAIN:-api.linkedin-headshot.com}
+    - ${API_DOMAIN_STAGING:-staging-api.linkedin-headshot.com}
+    secretName: linkedin-headshot-tls-secret

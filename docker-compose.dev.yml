@@ -1,0 +1,87 @@
+version: '3.8'
+
+# Development override for LinkedIn Headshot Generator
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: builder
+    environment:
+      - NODE_ENV=development
+      - DEBUG=app:*
+      - ENABLE_DEBUG_LOGGING=true
+    volumes:
+      - ./backend:/app
+      - /app/node_modules  # Anonymous volume to prevent overwriting
+      - ./backend/logs:/app/logs
+    command: ["npm", "run", "dev"]
+    ports:
+      - "3000:3000"
+      - "9229:9229"  # Debug port
+    
+  postgres:
+    environment:
+      - POSTGRES_DB=linkedin_headshot_dev
+    ports:
+      - "5433:5432"  # Different port for development
+    
+  redis:
+    command: redis-server --appendonly yes
+    ports:
+      - "6380:6379"  # Different port for development
+    
+  # Development database seeding
+  db-migrate:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: builder
+    command: ["npm", "run", "migrate:latest"]
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/linkedin_headshot_dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    networks:
+      - linkedin-headshot-network
+    
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: linkedin-headshot-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - linkedin-headshot-network
+    
+  # Optional: Redis Commander
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: linkedin-headshot-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - linkedin-headshot-network
+
+  # Remove production services in development
+  nginx:
+    profiles: ["production"]
+    
+  prometheus:
+    profiles: ["monitoring"]
+    
+  grafana:
+    profiles: ["monitoring"]

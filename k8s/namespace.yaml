@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkedin-headshot-production
+  labels:
+    name: linkedin-headshot-production
+    environment: production
+    app: linkedin-headshot-generator
+    managed-by: kubernetes
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkedin-headshot-staging
+  labels:
+    name: linkedin-headshot-staging
+    environment: staging
+    app: linkedin-headshot-generator
+    managed-by: kubernetes

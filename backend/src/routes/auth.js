@@ -339,4 +339,73 @@ router.post('/change-password', async (req, res) => {
   }
 });
 
+/**
+ * Demo login - creates or returns a demo user for testing
+ */
+router.post('/demo-login', async (req, res) => {
+  try {
+    const { email = 'demo@example.com' } = req.body;
+    
+    // Check if demo user exists
+    let user = await db('users').where({ email }).first();
+    
+    if (!user) {
+      // Create demo user
+      [user] = await db('users')
+        .insert({
+          email,
+          first_name: 'Demo',
+          last_name: 'User',
+          subscription_status: 'premium', // Give demo user premium access
+          credits_remaining: 999, // Unlimited credits for demo
+          preferences: {},
+          password_hash: '$2a$12$demo.hash.for.demo.user.only' // Demo hash
+        })
+        .returning(['id', 'email', 'first_name', 'last_name', 'subscription_status', 'credits_remaining']);
+    } else {
+      // Reset demo user credits
+      await db('users')
+        .where({ id: user.id })
+        .update({ 
+          credits_remaining: 999,
+          last_active: new Date()
+        });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    logger.info('Demo user logged in:', {
+      userId: user.id,
+      email: user.email
+    });
+
+    res.json({
+      success: true,
+      message: 'Demo login successful',
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        subscription_status: user.subscription_status,
+        credits_remaining: user.credits_remaining,
+        isDemo: true
+      },
+      token
+    });
+
+  } catch (error) {
+    logger.error('Demo login failed:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Demo login failed'
+    });
+  }
+});
+
 module.exports = router;

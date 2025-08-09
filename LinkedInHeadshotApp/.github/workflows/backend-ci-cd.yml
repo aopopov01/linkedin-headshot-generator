@@ -1,0 +1,187 @@
+name: LinkedIn Headshot Backend CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths: [ 'backend/**' ]
+  pull_request:
+    branches: [ main, develop ]
+    paths: [ 'backend/**' ]
+
+env:
+  NODE_VERSION: '18'
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: production/linkedin-headshot/backend
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json    - name: Install dependencies
+      run: |
+        cd backend
+        npm ci
+
+    - name: Run linting
+      run: |
+        cd backend
+        npm run lint
+
+    - name: Run tests
+      env:
+        NODE_ENV: test
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379
+      run: |
+        cd backend
+        npm run test:coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: backend/coverage
+        fail_ci_if_error: true
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: 'backend/'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: Run npm audit
+      run: |
+        cd backend
+        npm audit --audit-level moderate
+
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    needs: [test, security-scan]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+        ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
+      run: |
+        cd backend
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT-latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ENVIRONMENT-latest
+
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name mobile-apps-cluster
+
+    - name: Deploy to Kubernetes
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+        ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+      run: |
+        # Update deployment image
+        kubectl set image deployment/linkedin-headshot-backend \
+          linkedin-headshot-backend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+          -n $ENVIRONMENT
+        
+        # Wait for rollout to complete
+        kubectl rollout status deployment/linkedin-headshot-backend -n $ENVIRONMENT --timeout=300s
+
+    - name: Run smoke tests
+      env:
+        ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+      run: |
+        # Get service URL
+        SERVICE_URL=$(kubectl get service linkedin-headshot-backend -n $ENVIRONMENT -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+        
+        # Wait for service to be ready
+        timeout 300 bash -c 'until curl -f http://$SERVICE_URL/health; do sleep 5; done'
+        
+        # Run basic smoke tests
+        curl -f http://$SERVICE_URL/health || exit 1
+        curl -f http://$SERVICE_URL/api/v1/status || exit 1
+
+  notify:
+    name: Notify Deployment
+    runs-on: ubuntu-latest
+    needs: [build-and-deploy]
+    if: always()
+    
+    steps:
+    - name: Notify Slack
+      if: always()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        text: |
+          LinkedIn Headshot Backend deployment ${{ job.status }}!
+          Branch: ${{ github.ref }}
+          Commit: ${{ github.sha }}
+        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

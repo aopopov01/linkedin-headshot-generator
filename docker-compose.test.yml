@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  # Simple PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: linkedin-headshot-postgres-test
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=linkedin_headshot_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=headshot_dev_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d linkedin_headshot_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Simple Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: linkedin-headshot-redis-test
+    restart: unless-stopped
+    command: redis-server --requirepass redis_dev_pass
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_test_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis_dev_pass", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: linkedin-headshot-backend-test
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - DATABASE_URL=postgresql://postgres:headshot_dev_pass@postgres:5432/linkedin_headshot_dev
+      - REDIS_URL=redis://:redis_dev_pass@redis:6379
+      - JWT_SECRET=your_jwt_secret_key_change_in_production
+      - REPLICATE_API_TOKEN=demo_token
+      - ENABLE_MOCK_AI=true
+      - CLOUDINARY_URL=cloudinary://demo:demo@demo
+      - DEBUG=app:*
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
+
+  # Web Demo Interface
+  web-demo:
+    build:
+      context: .
+      dockerfile: Dockerfile.demo
+    container_name: linkedin-headshot-web-demo
+    restart: unless-stopped
+    environment:
+      - REACT_APP_API_URL=http://localhost:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./demo-web:/app
+      - /app/node_modules
+
+volumes:
+  postgres_test_data:
+  redis_test_data:
+
+networks:
+  default:
+    name: linkedin-headshot-test-network

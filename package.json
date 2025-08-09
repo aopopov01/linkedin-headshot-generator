@@ -1,0 +1,27 @@
+{
+  "name": "linkedin-headshot",
+  "version": "1.0.0",
+  "description": "A mobile app that generates professional LinkedIn headshots using AI, targeting job seekers, career changers, and professionals who need high-quality headshots quickly and affordably. Built with React Native for cross-platform deployment on iOS and Android app stores.",
+  "main": "demo-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aopopov01/linkedin-headshot-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/aopopov01/linkedin-headshot-generator/issues"
+  },
+  "homepage": "https://github.com/aopopov01/linkedin-headshot-generator#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2"
+  }
+}

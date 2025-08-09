@@ -3,9 +3,13 @@ const logger = require('../config/logger');
 
 class AIService {
   constructor() {
-    this.replicate = new Replicate({
-      auth: process.env.REPLICATE_API_TOKEN,
-    });
+    this.isDemo = process.env.ENABLE_MOCK_AI === 'true' || process.env.REPLICATE_API_TOKEN === 'demo_token';
+    
+    if (!this.isDemo) {
+      this.replicate = new Replicate({
+        auth: process.env.REPLICATE_API_TOKEN,
+      });
+    }
     
     // Model configurations for different styles
     this.styleConfigs = {
@@ -53,7 +57,7 @@ class AIService {
   }
 
   /**
-   * Generate professional headshots using Replicate API
+   * Generate professional headshots using Replicate API or demo mode
    */
   async generateHeadshot(imageBase64, styleTemplate, options = {}) {
     try {
@@ -69,10 +73,16 @@ class AIService {
       logger.info('Starting headshot generation:', {
         styleTemplate,
         numOutputs,
+        isDemo: this.isDemo,
         model: config.model
       });
 
-      // Start the prediction
+      // Demo mode - return mock results
+      if (this.isDemo) {
+        return await this.generateDemoHeadshots(imageBase64, styleTemplate, numOutputs);
+      }
+
+      // Real Replicate API mode
       const prediction = await this.replicate.predictions.create({
         version: config.model.split(':')[1],
         input: {
@@ -132,6 +142,75 @@ class AIService {
 
       throw error;
     }
+  }
+
+  /**
+   * Generate demo headshots with sample images
+   */
+  async generateDemoHeadshots(imageBase64, styleTemplate, numOutputs = 4) {
+    const startTime = Date.now();
+    
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 3000));
+    
+    const processingTime = Math.floor((Date.now() - startTime) / 1000);
+    const predictionId = `demo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    // Sample professional headshot images from Unsplash (for demo purposes)
+    const demoImages = {
+      corporate: [
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=400&h=400&fit=crop&crop=face'
+      ],
+      creative: [
+        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face'
+      ],
+      executive: [
+        'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400&h=400&fit=crop&crop=face'
+      ],
+      startup: [
+        'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1558507652-2d9626c4e67a?w=400&h=400&fit=crop&crop=face'
+      ],
+      healthcare: [
+        'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=face',
+        'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=400&h=400&fit=crop&crop=face'
+      ]
+    };
+
+    const styleImages = demoImages[styleTemplate] || demoImages.corporate;
+    const selectedImages = styleImages.slice(0, numOutputs);
+
+    logger.info('Demo headshot generation completed:', {
+      predictionId,
+      styleTemplate,
+      processingTime: `${processingTime}s`,
+      outputCount: selectedImages.length
+    });
+
+    return {
+      success: true,
+      predictionId,
+      generatedImages: selectedImages,
+      processingTime,
+      metadata: {
+        styleTemplate,
+        isDemo: true,
+        parameters: this.styleConfigs[styleTemplate]
+      }
+    };
   }
 
   /**

@@ -1,5 +1,14 @@
 # App Store Compliance Checklist for LinkedIn Headshot Generator
 
+## Developer Information
+
+**Company:** Xciterr Ltd  
+**Director:** Alexander Popov  
+**Registration:** Company Number 206478710 (Bulgaria)  
+**VAT Number:** BG206478710  
+**Address:** Sofia, Bulgaria  
+**Contact:** info@xciterr.com
+
 ## ✅ COMPLIANCE STATUS: READY FOR SUBMISSION
 
 This checklist covers all major compliance requirements for both Apple App Store and Google Play Store submissions.

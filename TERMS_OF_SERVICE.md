@@ -1,11 +1,18 @@
 # Terms of Service for LinkedIn Headshot Generator
 
+**Company:** Xciterr Ltd  
+**Registration:** Bulgaria, Sofia  
+**Company Number:** 206478710  
+**VAT Number:** BG206478710  
+**Director:** Alexander Popov  
+**Contact:** info@xciterr.com
+
 **Effective Date:** January 10, 2025  
 **Last Updated:** January 10, 2025
 
 ## 1. Acceptance of Terms
 
-By downloading, installing, or using LinkedIn Headshot Generator ("the App," "our Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use our Service.
+By downloading, installing, or using LinkedIn Headshot Generator ("the App," "our Service") operated by Xciterr Ltd, a company registered in Bulgaria, Sofia (Company Number: 206478710, VAT: BG206478710), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use our Service.
 
 ### 1.1 Agreement Scope
 These Terms govern your use of:

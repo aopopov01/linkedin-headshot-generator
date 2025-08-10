@@ -33,6 +33,14 @@ router.get('/', async (req, res) => {
       uptime: process.uptime(),
       environment: process.env.NODE_ENV || 'development',
       version: '1.0.0',
+      company: {
+        name: 'Xciterr Ltd',
+        registration: '206478710',
+        vat: 'BG206478710',
+        jurisdiction: 'Bulgaria, Sofia',
+        director: 'Alexander Popov',
+        contact: 'info@xciterr.com'
+      },
       database: {
         connected: true,
         responseTime: `${dbResponseTime}ms`

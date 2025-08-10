@@ -1,12 +1,19 @@
 # Privacy Policy for LinkedIn Headshot Generator
 
+**Company:** Xciterr Ltd  
+**Registration:** Bulgaria, Sofia  
+**Company Number:** 206478710  
+**VAT Number:** BG206478710  
+**Director:** Alexander Popov  
+**Contact:** info@xciterr.com
+
 **Effective Date:** January 10, 2025  
 **Last Updated:** January 10, 2025  
 **Version:** 2.0 - Enhanced for GDPR, CCPA, and App Store Compliance
 
 ## 1. Introduction
 
-LinkedIn Headshot Generator ("we," "our," or "us") respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services.
+Xciterr Ltd, trading as LinkedIn Headshot Generator ("we," "our," or "us"), a company registered in Bulgaria, Sofia (Company Number: 206478710, VAT: BG206478710), respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services.
 
 ## 2. Information We Collect
 

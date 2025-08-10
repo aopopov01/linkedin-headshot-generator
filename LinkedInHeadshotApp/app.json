@@ -6,8 +6,17 @@
   "versionCode": 1,
   "orientation": "portrait",
   "privacy": {
-    "policy_url": "https://yourapp.com/privacy",
-    "terms_url": "https://yourapp.com/terms"
+    "policy_url": "https://xciterr.com/privacy",
+    "terms_url": "https://xciterr.com/terms"
+  },
+  "publisher": {
+    "name": "Xciterr Ltd",
+    "email": "info@xciterr.com",
+    "website": "https://xciterr.com",
+    "director": "Alexander Popov",
+    "registration": "206478710",
+    "vat": "BG206478710",
+    "jurisdiction": "Bulgaria, Sofia"
   },
   "category": "Photography",
   "keywords": ["linkedin", "headshot", "professional", "ai", "photo", "career", "portrait", "business"],
@@ -16,11 +25,13 @@
     "contentRating": "Low Maturity"
   },
   "contact": {
-    "email": "support@linkedinheadshots.com",
-    "website": "https://linkedinheadshots.com",
-    "support": "https://linkedinheadshots.com/support"
+    "email": "info@xciterr.com",
+    "website": "https://xciterr.com",
+    "support": "info@xciterr.com",
+    "company": "Xciterr Ltd",
+    "director": "Alexander Popov"
   },
-  "marketingUrl": "https://linkedinheadshots.com",
+  "marketingUrl": "https://xciterr.com",
   "backgroundColor": "#ffffff",
   "primaryColor": "#0A66C2"
 }

@@ -230,3 +230,17 @@ Photography, Business, Artificial Intelligence, Career, Professional Development
 - Automatic deletion of processed photos
 - No human access to user photos during processing
 - Regular security audits and monitoring
+
+## Developer Information
+
+**Company:** Xciterr Ltd  
+**Director:** Alexander Popov  
+**Registration:** Company Number 206478710 (Bulgaria)  
+**VAT Number:** BG206478710  
+**Address:** Sofia, Bulgaria  
+**Contact:** info@xciterr.com  
+**Website:** https://xciterr.com  
+
+**Support Contact:** info@xciterr.com  
+**Privacy Policy:** https://xciterr.com/privacy  
+**Terms of Service:** https://xciterr.com/terms

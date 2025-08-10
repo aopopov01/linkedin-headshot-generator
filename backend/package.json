@@ -2,6 +2,14 @@
   "name": "linkedin-headshot-backend",
   "version": "1.0.0",
   "description": "Backend API for LinkedIn Headshot Generator mobile app",
+  "author": {
+    "name": "Xciterr Ltd",
+    "email": "info@xciterr.com",
+    "director": "Alexander Popov",
+    "registration": "206478710",
+    "vat": "BG206478710",
+    "jurisdiction": "Bulgaria, Sofia"
+  },
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
@@ -56,5 +64,16 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "homepage": "https://xciterr.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aopopov01/linkedin-headshot-generator.git"
+  },
+  "bugs": {
+    "email": "info@xciterr.com",
+    "url": "https://github.com/aopopov01/linkedin-headshot-generator/issues"
+  },
+  "license": "UNLICENSED",
+  "private": true
 }

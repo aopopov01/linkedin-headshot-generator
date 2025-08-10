@@ -1,0 +1,47 @@
+{
+  "name": "linkedin-headshot-accessibility-testing",
+  "version": "1.0.0",
+  "description": "Accessibility testing suite for LinkedIn Headshot Generator",
+  "main": "accessibility-test-suite.js",
+  "scripts": {
+    "start": "node accessibility-test-suite.js",
+    "test:accessibility": "node accessibility-test-suite.js",
+    "test:axe": "node scripts/run-axe-tests.js",
+    "test:lighthouse": "node scripts/run-lighthouse-accessibility.js",
+    "test:contrast": "node scripts/color-contrast-analyzer.js",
+    "test:keyboard": "node scripts/keyboard-navigation-tests.js",
+    "test:mobile": "node scripts/mobile-accessibility-tests.js",
+    "manual:guidance": "node scripts/generate-manual-test-guide.js",
+    "serve:reports": "python3 -m http.server 8888 --directory reports",
+    "validate:wcag": "node scripts/wcag-validator.js",
+    "clean": "rm -rf reports/* node_modules/.cache"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "testing",
+    "axe-core",
+    "lighthouse"
+  ],
+  "author": "LinkedIn Headshot Generator Team",
+  "license": "MIT",
+  "dependencies": {
+    "axe-core": "^4.8.2",
+    "puppeteer": "^21.5.2",
+    "lighthouse": "^11.3.0",
+    "pa11y": "^6.2.3",
+    "fs-extra": "^11.1.1",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "csv-writer": "^1.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/node": "^20.8.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

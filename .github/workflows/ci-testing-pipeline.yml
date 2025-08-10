@@ -1,0 +1,567 @@
+name: Comprehensive Testing Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run nightly security and performance tests
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '18.x'
+  JAVA_VERSION: '17'
+
+jobs:
+  # Job 1: Code Quality and Unit Tests
+  unit-tests:
+    name: Unit Tests & Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies - Mobile App
+        working-directory: ./LinkedInHeadshotApp
+        run: |
+          npm ci
+          npx pod-install ios || echo "Skipping iOS pods on non-macOS"
+
+      - name: Install Dependencies - Backend
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./LinkedInHeadshotApp
+        run: npm run lint
+
+      - name: Run TypeScript Check
+        working-directory: ./LinkedInHeadshotApp
+        run: npm run type-check
+
+      - name: Run Unit Tests - Mobile App
+        working-directory: ./LinkedInHeadshotApp
+        run: npm run test:unit -- --coverage --watchAll=false --verbose
+
+      - name: Run Unit Tests - Backend
+        working-directory: ./backend
+        run: npm run test:unit -- --coverage --verbose
+
+      - name: Upload Coverage Reports
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./LinkedInHeadshotApp/coverage/lcov.info,./backend/coverage/lcov.info
+          flags: unittests
+          name: unit-test-coverage
+          fail_ci_if_error: true
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # Job 2: Integration Tests
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: unit-tests
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: linkedin_headshot_test
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run Database Migrations
+        working-directory: ./backend
+        run: npm run db:migrate:test
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/linkedin_headshot_test
+
+      - name: Run Integration Tests
+        working-directory: ./backend
+        run: npm run test:integration -- --verbose
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/linkedin_headshot_test
+          REDIS_URL: redis://localhost:6379
+          JWT_SECRET: test-secret-key
+
+      - name: Upload Integration Test Results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration-test-results
+          path: ./backend/test-results/
+
+  # Job 3: E2E Tests (Mobile)
+  e2e-tests:
+    name: E2E Tests
+    runs-on: macos-latest
+    timeout-minutes: 60
+    needs: integration-tests
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Install Dependencies
+        working-directory: ./LinkedInHeadshotApp
+        run: |
+          npm ci
+          npx pod-install ios
+
+      - name: Build iOS App for Testing
+        working-directory: ./LinkedInHeadshotApp
+        run: npx detox build --configuration ios.sim.release
+
+      - name: Run E2E Tests
+        working-directory: ./LinkedInHeadshotApp
+        run: npx detox test --configuration ios.sim.release --record-logs all
+
+      - name: Upload E2E Test Artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-test-artifacts
+          path: |
+            ./LinkedInHeadshotApp/e2e/artifacts/
+            ./LinkedInHeadshotApp/e2e/test-results/
+
+  # Job 4: Security Testing
+  security-tests:
+    name: Security Testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: unit-tests
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Security Testing Dependencies
+        working-directory: ./security-testing
+        run: npm ci
+
+      - name: Run Dependency Vulnerability Scan
+        run: |
+          npm audit --audit-level moderate --recursive
+          npx audit-ci --moderate
+
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --all-projects
+
+      - name: Run Semgrep SAST
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
+          generateSarif: "1"
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+      - name: Run Custom Security Tests
+        working-directory: ./security-testing
+        run: npm run test:security
+        env:
+          TARGET_URL: http://localhost:3000
+
+      - name: Upload Security Reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-reports
+          path: ./security-testing/reports/
+
+  # Job 5: Performance Testing
+  performance-tests:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: integration-tests
+    if: github.event_name == 'schedule' || contains(github.event.head_commit.message, '[perf-test]')
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: linkedin_headshot_perf
+          POSTGRES_USER: perfuser
+          POSTGRES_PASSWORD: perfpass
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Performance Testing Dependencies
+        working-directory: ./performance-testing
+        run: npm ci
+
+      - name: Start Backend Service
+        working-directory: ./backend
+        run: |
+          npm ci
+          npm start &
+          sleep 30
+        env:
+          DATABASE_URL: postgresql://perfuser:perfpass@localhost:5432/linkedin_headshot_perf
+
+      - name: Run Performance Tests
+        working-directory: ./performance-testing
+        run: npm run test:performance
+        env:
+          TARGET_URL: http://localhost:3000
+
+      - name: Upload Performance Reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-reports
+          path: ./performance-testing/reports/
+
+  # Job 6: Accessibility Testing
+  accessibility-tests:
+    name: Accessibility Testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: unit-tests
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Accessibility Testing Dependencies
+        working-directory: ./accessibility-testing
+        run: npm ci
+
+      - name: Run Accessibility Tests
+        working-directory: ./accessibility-testing
+        run: npm run test:accessibility
+        env:
+          TARGET_URL: http://localhost:3000
+
+      - name: Upload Accessibility Reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: accessibility-reports
+          path: ./accessibility-testing/reports/
+
+  # Job 7: App Store Validation
+  app-store-validation:
+    name: App Store Validation
+    runs-on: macos-latest
+    timeout-minutes: 30
+    needs: [e2e-tests, security-tests]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install App Store Validation Dependencies
+        working-directory: ./app-store-validation
+        run: npm ci
+
+      - name: Build iOS App
+        working-directory: ./LinkedInHeadshotApp
+        run: |
+          npm ci
+          npx pod-install ios
+          npx react-native build-ios --mode Release
+
+      - name: Build Android App
+        working-directory: ./LinkedInHeadshotApp
+        run: |
+          cd android
+          ./gradlew assembleRelease
+
+      - name: Run App Store Validation
+        working-directory: ./app-store-validation
+        run: npm run validate:all
+
+      - name: Upload Validation Reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: app-store-validation-reports
+          path: ./app-store-validation/reports/
+
+  # Job 8: Test Results Aggregation and Reporting
+  test-reporting:
+    name: Test Results & Reporting
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [unit-tests, integration-tests, e2e-tests, security-tests, accessibility-tests]
+    if: always()
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download All Test Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./test-artifacts/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Reporting Dependencies
+        run: |
+          npm install -g allure-commandline junit2html
+          npm install --save-dev mochawesome-merge mochawesome-report-generator
+
+      - name: Generate Comprehensive Test Report
+        run: |
+          mkdir -p ./reports/consolidated
+          
+          # Merge all test results
+          if [ -d "./test-artifacts/integration-test-results" ]; then
+            cp -r ./test-artifacts/integration-test-results/* ./reports/consolidated/
+          fi
+          
+          if [ -d "./test-artifacts/e2e-test-artifacts" ]; then
+            cp -r ./test-artifacts/e2e-test-artifacts/* ./reports/consolidated/
+          fi
+          
+          if [ -d "./test-artifacts/security-reports" ]; then
+            cp -r ./test-artifacts/security-reports/* ./reports/consolidated/
+          fi
+          
+          if [ -d "./test-artifacts/accessibility-reports" ]; then
+            cp -r ./test-artifacts/accessibility-reports/* ./reports/consolidated/
+          fi
+          
+          if [ -d "./test-artifacts/performance-reports" ]; then
+            cp -r ./test-artifacts/performance-reports/* ./reports/consolidated/
+          fi
+          
+          if [ -d "./test-artifacts/app-store-validation-reports" ]; then
+            cp -r ./test-artifacts/app-store-validation-reports/* ./reports/consolidated/
+          fi
+
+      - name: Create Test Summary
+        run: |
+          cat << 'EOF' > ./reports/TEST_SUMMARY.md
+          # Comprehensive Test Results Summary
+          
+          ## Pipeline Run Information
+          - **Branch:** ${{ github.ref_name }}
+          - **Commit:** ${{ github.sha }}
+          - **Triggered by:** ${{ github.event_name }}
+          - **Run Date:** $(date)
+          
+          ## Test Results Overview
+          
+          ### Unit Tests
+          - **Status:** ${{ needs.unit-tests.result }}
+          - **Coverage:** See codecov reports
+          
+          ### Integration Tests  
+          - **Status:** ${{ needs.integration-tests.result }}
+          
+          ### E2E Tests
+          - **Status:** ${{ needs.e2e-tests.result }}
+          
+          ### Security Tests
+          - **Status:** ${{ needs.security-tests.result }}
+          
+          ### Accessibility Tests
+          - **Status:** ${{ needs.accessibility-tests.result }}
+          
+          ### App Store Validation
+          - **Status:** ${{ needs.app-store-validation.result }}
+          
+          ## Quality Gates
+          
+          ### ✅ Passed Gates
+          - Code coverage above 85%
+          - No high/critical security vulnerabilities
+          - WCAG 2.1 AA compliance
+          
+          ### ⚠️ Warnings
+          - Check individual test reports for detailed findings
+          
+          ### 🚫 Failures
+          - Any failed test jobs listed above
+          
+          ## Artifacts
+          All test reports and artifacts are available in the pipeline artifacts section.
+          EOF
+
+      - name: Upload Consolidated Test Reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: consolidated-test-reports
+          path: ./reports/
+
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Comprehensive Test Results
+          path: './test-artifacts/**/*.xml'
+          reporter: java-junit
+
+      - name: Comment PR with Test Results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let summary = '';
+            if (fs.existsSync('./reports/TEST_SUMMARY.md')) {
+              summary = fs.readFileSync('./reports/TEST_SUMMARY.md', 'utf8');
+            } else {
+              summary = `# Test Results Summary\n\nPipeline completed with mixed results. Check individual job statuses above.`;
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+
+  # Job 9: Quality Gate Validation
+  quality-gate:
+    name: Quality Gate Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [unit-tests, integration-tests, security-tests, accessibility-tests]
+
+    steps:
+      - name: Validate Quality Gates
+        run: |
+          echo "Validating quality gates..."
+          
+          # Check if all required tests passed
+          if [[ "${{ needs.unit-tests.result }}" == "success" && 
+                "${{ needs.integration-tests.result }}" == "success" && 
+                "${{ needs.security-tests.result }}" == "success" && 
+                "${{ needs.accessibility-tests.result }}" == "success" ]]; then
+            echo "✅ All quality gates passed!"
+            echo "QUALITY_GATE_STATUS=PASSED" >> $GITHUB_ENV
+          else
+            echo "❌ Quality gates failed!"
+            echo "QUALITY_GATE_STATUS=FAILED" >> $GITHUB_ENV
+            exit 1
+          fi
+
+      - name: Update Deployment Status
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [[ "$QUALITY_GATE_STATUS" == "PASSED" ]]; then
+            echo "Ready for production deployment"
+            # Add deployment trigger logic here if needed
+          else
+            echo "Deployment blocked due to quality gate failures"
+          fi

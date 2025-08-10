@@ -4,9 +4,13 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  ActivityIndicator,
   Animated,
+  Platform,
+  AccessibilityInfo,
 } from 'react-native';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import { InfoCard } from '../shared/Card';
+import { COLORS, TYPOGRAPHY, SPACING, RADIUS, SHADOWS, ACCESSIBILITY, responsive } from '../../utils/designSystem';
 
 const ProcessingScreen = ({ navigation, route }) => {
   const { image, selectedStyle } = route.params || {};
@@ -23,6 +27,9 @@ const ProcessingScreen = ({ navigation, route }) => {
   ];
 
   useEffect(() => {
+    // Announce processing started to screen readers
+    AccessibilityInfo.announceForAccessibility(ACCESSIBILITY.announcements.generationStarted);
+    
     const generateMockResults = () => {
       // Mock generated images - in real app these would come from AI service
       return [
@@ -39,7 +46,13 @@ const ProcessingScreen = ({ navigation, route }) => {
         const newProgress = prevProgress + 20;
         
         if (newProgress <= 100) {
-          setCurrentStep(Math.floor(newProgress / 20));
+          const newStep = Math.floor(newProgress / 20);
+          setCurrentStep(newStep);
+          
+          // Announce step changes to screen readers
+          if (newStep < steps.length) {
+            AccessibilityInfo.announceForAccessibility(`Step ${newStep + 1}: ${steps[newStep]}`);
+          }
           
           // Animate progress bar
           Animated.timing(animatedValue, {
@@ -51,6 +64,9 @@ const ProcessingScreen = ({ navigation, route }) => {
           return newProgress;
         } else {
           clearInterval(interval);
+          // Announce completion
+          AccessibilityInfo.announceForAccessibility(ACCESSIBILITY.announcements.generationComplete);
+          
           // Navigate to results after processing is complete
           setTimeout(() => {
             navigation.navigate('ResultsGallery', {
@@ -65,7 +81,7 @@ const ProcessingScreen = ({ navigation, route }) => {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [animatedValue, image, navigation, selectedStyle]);
+  }, [animatedValue, image, navigation, selectedStyle, steps]);
 
 
 
@@ -73,13 +89,31 @@ const ProcessingScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.title}>Creating Your Headshots</Text>
-          <Text style={styles.subtitle}>
+          <Text 
+            style={styles.title}
+            accessible={true}
+            accessibilityRole="header"
+          >
+            Creating Your Headshots
+          </Text>
+          <Text 
+            style={styles.subtitle}
+            accessible={true}
+            accessibilityRole="text"
+          >
             Our AI is generating professional {selectedStyle} style photos for you
           </Text>
         </View>
 
-        <View style={styles.progressContainer}>
+        <View 
+          style={styles.progressContainer}
+          accessible={true}
+          accessibilityRole={ACCESSIBILITY.roles.progressBar}
+          accessibilityLabel={`Progress: ${progress} percent complete`}
+          accessibilityValue={{ min: 0, max: 100, now: progress, text: `${progress} percent` }}
+          accessibilityLiveRegion="polite"
+          importantForAccessibility="yes"
+        >
           <View style={styles.progressBar}>
             <Animated.View
               style={[
@@ -98,11 +132,20 @@ const ProcessingScreen = ({ navigation, route }) => {
         </View>
 
         <View style={styles.stepsContainer}>
-          <Text style={styles.currentStepText}>
+          <Text 
+            style={styles.currentStepText}
+            accessible={true}
+            accessibilityRole="text"
+            accessibilityLiveRegion="polite"
+          >
             {currentStep < steps.length ? steps[currentStep] : 'Complete!'}
           </Text>
           
-          <View style={styles.stepsIndicator}>
+          <View 
+            style={styles.stepsIndicator}
+            accessible={true}
+            accessibilityLabel={`Step ${currentStep + 1} of ${steps.length}`}
+          >
             {steps.map((_, index) => (
               <View
                 key={index}
@@ -110,28 +153,38 @@ const ProcessingScreen = ({ navigation, route }) => {
                   styles.stepDot,
                   index <= currentStep && styles.stepDotActive,
                 ]}
+                accessible={false}
               />
             ))}
           </View>
         </View>
 
-        <View style={styles.spinnerContainer}>
-          <ActivityIndicator size="large" color="#0A66C2" />
-        </View>
+        <LoadingSpinner
+          visible={true}
+          overlay={false}
+          size="large"
+          message="Processing your photo..."
+          subMessage={`Step ${currentStep + 1} of ${steps.length}`}
+          showProgress={true}
+          progress={progress}
+        />
 
         <View style={styles.estimatedTimeContainer}>
-          <Text style={styles.estimatedTimeText}>
+          <Text 
+            style={styles.estimatedTimeText}
+            accessible={true}
+            accessibilityRole="text"
+          >
             Estimated time remaining: {Math.max(0, 10 - Math.floor(progress / 10))}s
           </Text>
         </View>
 
-        <View style={styles.tipsContainer}>
-          <Text style={styles.tipsTitle}>Pro Tip:</Text>
-          <Text style={styles.tipsText}>
-            While we generate your photos, consider how you'll use them - LinkedIn 
-            profiles with professional headshots get 14x more profile views!
-          </Text>
-        </View>
+        <InfoCard
+          icon={<Text style={styles.tipIcon}>💡</Text>}
+          title="Pro Tip"
+          description="LinkedIn profiles with professional headshots get 14x more profile views! Your new photos will help you make a great first impression."
+          style={styles.tipsContainer}
+        />
       </View>
     </SafeAreaView>
   );
@@ -140,105 +193,108 @@ const ProcessingScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.background.primary,
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: responsive.sp(SPACING.lg),
     justifyContent: 'center',
   },
   header: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: responsive.sp(SPACING.xxxl),
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginBottom: 10,
+    fontSize: responsive.fs(TYPOGRAPHY.h1.fontSize),
+    fontWeight: TYPOGRAPHY.h1.fontWeight,
+    color: COLORS.text.primary,
+    marginBottom: responsive.sp(SPACING.md),
     textAlign: 'center',
+    letterSpacing: TYPOGRAPHY.h1.letterSpacing,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#7F8C8D',
+    fontSize: responsive.fs(TYPOGRAPHY.body1.fontSize),
+    color: COLORS.text.secondary,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: TYPOGRAPHY.body1.lineHeight,
+    maxWidth: responsive.wp(85),
   },
   progressContainer: {
-    marginBottom: 30,
+    marginBottom: responsive.sp(SPACING.xl),
   },
   progressBar: {
-    height: 8,
-    backgroundColor: '#E9ECEF',
-    borderRadius: 4,
+    height: 10,
+    backgroundColor: COLORS.neutral[200],
+    borderRadius: RADIUS.sm,
     overflow: 'hidden',
-    marginBottom: 10,
+    marginBottom: responsive.sp(SPACING.md),
+    ...SHADOWS.light,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#0A66C2',
-    borderRadius: 4,
+    backgroundColor: COLORS.primary[500],
+    borderRadius: RADIUS.sm,
+    ...Platform.select({
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   progressText: {
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C3E50',
+    fontSize: responsive.fs(TYPOGRAPHY.h4.fontSize),
+    fontWeight: TYPOGRAPHY.h4.fontWeight,
+    color: COLORS.text.primary,
+    letterSpacing: TYPOGRAPHY.h4.letterSpacing,
   },
   stepsContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: responsive.sp(SPACING.xl),
   },
   currentStepText: {
-    fontSize: 18,
-    color: '#0A66C2',
-    fontWeight: '500',
-    marginBottom: 20,
+    fontSize: responsive.fs(TYPOGRAPHY.h4.fontSize),
+    color: COLORS.primary[500],
+    fontWeight: TYPOGRAPHY.h4.fontWeight,
+    marginBottom: responsive.sp(SPACING.lg),
     textAlign: 'center',
+    letterSpacing: TYPOGRAPHY.h4.letterSpacing,
   },
   stepsIndicator: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   stepDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#E9ECEF',
-    marginHorizontal: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.neutral[300],
+    marginHorizontal: responsive.sp(SPACING.xs),
+    ...Platform.select({
+      android: {
+        elevation: 1,
+      },
+    }),
   },
   stepDotActive: {
-    backgroundColor: '#0A66C2',
-  },
-  spinnerContainer: {
-    alignItems: 'center',
-    marginBottom: 30,
+    backgroundColor: COLORS.primary[500],
+    transform: [{ scale: 1.2 }],
   },
   estimatedTimeContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: responsive.sp(SPACING.xl),
+    marginTop: responsive.sp(SPACING.lg),
   },
   estimatedTimeText: {
-    fontSize: 14,
-    color: '#7F8C8D',
+    fontSize: responsive.fs(TYPOGRAPHY.body2.fontSize),
+    color: COLORS.text.secondary,
+    textAlign: 'center',
   },
   tipsContainer: {
-    backgroundColor: '#F8F9FA',
-    padding: 20,
-    borderRadius: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#0A66C2',
+    marginTop: responsive.sp(SPACING.xl),
   },
-  tipsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  tipsText: {
-    fontSize: 14,
-    color: '#7F8C8D',
-    lineHeight: 20,
+  tipIcon: {
+    fontSize: responsive.fs(24),
   },
 });
 

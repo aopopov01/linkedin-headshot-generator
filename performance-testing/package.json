@@ -1,0 +1,51 @@
+{
+  "name": "linkedin-headshot-performance-testing",
+  "version": "1.0.0",
+  "description": "Performance testing suite for LinkedIn Headshot Generator",
+  "main": "performance-test-runner.js",
+  "scripts": {
+    "start": "node performance-test-runner.js",
+    "test:performance": "node performance-test-runner.js",
+    "test:load": "k6 run load-tests/k6-load-test.js",
+    "test:stress": "node scripts/stress-tests.js",
+    "test:mobile": "node mobile-performance/PerformanceMonitor.js",
+    "test:database": "node backend-benchmarks/api-benchmarks.js",
+    "test:artillery": "artillery run artillery-config.yml",
+    "benchmark": "node backend-benchmarks/api-benchmarks.js",
+    "capacity-plan": "node capacity-planning/capacity-planner.js",
+    "serve:reports": "python3 -m http.server 8888 --directory reports",
+    "docker:up": "docker-compose -f docker-compose.performance.yml up -d",
+    "docker:down": "docker-compose -f docker-compose.performance.yml down",
+    "clean": "rm -rf reports/* node_modules/.cache",
+    "install:tools": "npm install -g k6 artillery"
+  },
+  "keywords": [
+    "performance",
+    "testing",
+    "load-testing",
+    "benchmarking",
+    "k6",
+    "artillery"
+  ],
+  "author": "LinkedIn Headshot Generator Team",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "axios": "^1.6.0",
+    "fs-extra": "^11.1.1",
+    "commander": "^11.1.0",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1",
+    "pg": "^8.11.3",
+    "ioredis": "^5.3.2",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/node": "^20.8.0",
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

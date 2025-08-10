@@ -6,7 +6,10 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Platform,
 } from 'react-native';
+import { PrimaryButton } from '../shared/Button';
+import { COLORS, TYPOGRAPHY, SPACING, RADIUS, SHADOWS, ACCESSIBILITY, responsive } from '../../utils/designSystem';
 
 const StyleSelector = ({ navigation, route }) => {
   const { image } = route.params || {};
@@ -80,10 +83,19 @@ const StyleSelector = ({ navigation, route }) => {
                 selectedStyle === style.id && styles.selectedStyleCard,
               ]}
               onPress={() => handleStyleSelect(style.id)}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={`${style.name} style option`}
+              accessibilityHint={`${style.description}. ${selectedStyle === style.id ? 'Currently selected' : 'Tap to select'}`}
+              accessibilityState={{ selected: selectedStyle === style.id }}
             >
               {style.popular && (
-                <View style={styles.popularBadge}>
+                <View 
+                  style={styles.popularBadge}
+                  accessible={true}
+                  accessibilityLabel="Popular choice"
+                >
                   <Text style={styles.popularText}>POPULAR</Text>
                 </View>
               )}
@@ -109,15 +121,14 @@ const StyleSelector = ({ navigation, route }) => {
           ))}
         </View>
 
-        <TouchableOpacity
-          style={styles.continueButton}
+        <PrimaryButton
+          title="Generate Professional Headshots"
           onPress={proceedToProcessing}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.continueButtonText}>
-            Generate Headshots
-          </Text>
-        </TouchableOpacity>
+          size="large"
+          fullWidth={true}
+          accessibilityHint={`Generate headshots in ${selectedStyle} style`}
+          style={styles.continueButton}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -126,116 +137,122 @@ const StyleSelector = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.background.primary,
   },
   content: {
     flexGrow: 1,
-    padding: 20,
+    padding: responsive.sp(SPACING.lg),
   },
   header: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: responsive.sp(SPACING.xl),
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginBottom: 10,
+    fontSize: responsive.fs(TYPOGRAPHY.h1.fontSize),
+    fontWeight: TYPOGRAPHY.h1.fontWeight,
+    color: COLORS.text.primary,
+    marginBottom: responsive.sp(SPACING.md),
+    textAlign: 'center',
+    letterSpacing: TYPOGRAPHY.h1.letterSpacing,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#7F8C8D',
+    fontSize: responsive.fs(TYPOGRAPHY.body1.fontSize),
+    color: COLORS.text.secondary,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: TYPOGRAPHY.body1.lineHeight,
+    maxWidth: responsive.wp(85),
   },
   stylesGrid: {
-    marginBottom: 30,
+    marginBottom: responsive.sp(SPACING.xl),
   },
   styleCard: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 15,
+    backgroundColor: COLORS.background.secondary,
+    borderRadius: RADIUS.lg,
+    padding: responsive.sp(SPACING.lg),
+    marginBottom: responsive.sp(SPACING.lg),
     borderWidth: 2,
     borderColor: 'transparent',
     position: 'relative',
+    minHeight: ACCESSIBILITY.touchTargetSize * 3,
+    ...SHADOWS.light,
   },
   selectedStyleCard: {
-    borderColor: '#0A66C2',
-    backgroundColor: '#EBF3FD',
+    borderColor: COLORS.primary[500],
+    backgroundColor: COLORS.primary[50],
+    ...SHADOWS.medium,
+    transform: [{ scale: 1.02 }],
   },
   popularBadge: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#E74C3C',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    top: responsive.sp(SPACING.md),
+    right: responsive.sp(SPACING.md),
+    backgroundColor: COLORS.semantic.error,
+    paddingHorizontal: responsive.sp(SPACING.sm),
+    paddingVertical: responsive.sp(SPACING.xs),
+    borderRadius: RADIUS.sm,
     zIndex: 1,
   },
   popularText: {
-    color: '#ffffff',
-    fontSize: 10,
-    fontWeight: 'bold',
+    color: COLORS.text.inverse,
+    fontSize: responsive.fs(TYPOGRAPHY.label.fontSize),
+    fontWeight: TYPOGRAPHY.label.fontWeight,
+    letterSpacing: TYPOGRAPHY.label.letterSpacing,
   },
   stylePreview: {
-    height: 120,
-    marginBottom: 15,
+    height: responsive.hp(15),
+    marginBottom: responsive.sp(SPACING.lg),
   },
   previewPlaceholder: {
     flex: 1,
-    backgroundColor: '#E9ECEF',
-    borderRadius: 8,
+    backgroundColor: COLORS.neutral[200],
+    borderRadius: RADIUS.md,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.neutral[300],
+    borderStyle: 'dashed',
   },
   previewText: {
-    fontSize: 16,
-    color: '#6C757D',
-    fontWeight: '500',
+    fontSize: responsive.fs(TYPOGRAPHY.body2.fontSize),
+    color: COLORS.text.secondary,
+    fontWeight: '600',
   },
   styleInfo: {
     flex: 1,
   },
   styleName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginBottom: 5,
+    fontSize: responsive.fs(TYPOGRAPHY.h4.fontSize),
+    fontWeight: TYPOGRAPHY.h4.fontWeight,
+    color: COLORS.text.primary,
+    marginBottom: responsive.sp(SPACING.xs),
+    letterSpacing: TYPOGRAPHY.h4.letterSpacing,
   },
   styleDescription: {
-    fontSize: 14,
-    color: '#7F8C8D',
-    lineHeight: 20,
+    fontSize: responsive.fs(TYPOGRAPHY.body2.fontSize),
+    color: COLORS.text.secondary,
+    lineHeight: TYPOGRAPHY.body2.lineHeight,
   },
   selectedIndicator: {
     position: 'absolute',
-    top: 15,
-    left: 15,
-    backgroundColor: '#0A66C2',
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    top: responsive.sp(SPACING.lg),
+    left: responsive.sp(SPACING.lg),
+    backgroundColor: COLORS.primary[500],
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.background.primary,
+    ...SHADOWS.light,
   },
   selectedText: {
-    color: '#ffffff',
-    fontSize: 14,
+    color: COLORS.text.inverse,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   continueButton: {
-    backgroundColor: '#0A66C2',
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    borderRadius: 25,
-    alignItems: 'center',
-  },
-  continueButtonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '600',
+    marginTop: responsive.sp(SPACING.md),
   },
 });
 

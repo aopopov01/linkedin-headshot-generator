@@ -1,0 +1,279 @@
+# KEDA (Kubernetes Event-Driven Autoscaling) Configuration
+# Provides advanced scaling based on external metrics and events
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: linkedin-headshot-backend-keda
+  namespace: ${NAMESPACE:-linkedin-headshot-production}
+  labels:
+    app: linkedin-headshot-backend
+    component: autoscaling
+spec:
+  scaleTargetRef:
+    name: linkedin-headshot-backend
+  # Advanced scaling configuration
+  pollingInterval: 30
+  cooldownPeriod: 300
+  idleReplicaCount: 2
+  minReplicaCount: 2
+  maxReplicaCount: 100
+  
+  # Fallback configuration if external metrics fail
+  fallback:
+    failureThreshold: 3
+    replicas: 5
+  
+  # Advanced scaling behavior
+  advanced:
+    restoreToOriginalReplicaCount: true
+    horizontalPodAutoscalerConfig:
+      name: linkedin-headshot-backend-keda-hpa
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies:
+          - type: Percent
+            value: 25
+            periodSeconds: 60
+          - type: Pods
+            value: 2
+            periodSeconds: 60
+          selectPolicy: Min
+        scaleUp:
+          stabilizationWindowSeconds: 60
+          policies:
+          - type: Percent
+            value: 100
+            periodSeconds: 30
+          - type: Pods
+            value: 10
+            periodSeconds: 30
+          selectPolicy: Max
+  
+  # Multiple triggers for comprehensive scaling
+  triggers:
+  # Redis queue length for image processing
+  - type: redis
+    metadata:
+      address: "${REDIS_URL}"
+      listName: "image_processing_queue"
+      listLength: "10"
+      enableTLS: "true"
+      databaseIndex: "0"
+    authenticationRef:
+      name: redis-auth
+  
+  # Prometheus metrics-based scaling
+  - type: prometheus
+    metadata:
+      serverAddress: "http://prometheus:9090"
+      metricName: "http_requests_per_second"
+      query: "sum(rate(http_requests_total{job='linkedin-headshot-backend'}[2m]))"
+      threshold: "50"
+  
+  # Memory utilization from Prometheus
+  - type: prometheus
+    metadata:
+      serverAddress: "http://prometheus:9090"
+      metricName: "memory_utilization_percentage"
+      query: "avg(container_memory_usage_bytes{pod=~'linkedin-headshot-backend-.*'}) / avg(container_spec_memory_limit_bytes{pod=~'linkedin-headshot-backend-.*'}) * 100"
+      threshold: "75"
+  
+  # CPU utilization with custom logic
+  - type: prometheus
+    metadata:
+      serverAddress: "http://prometheus:9090"
+      metricName: "cpu_utilization_percentage"
+      query: "avg(rate(container_cpu_usage_seconds_total{pod=~'linkedin-headshot-backend-.*'}[5m])) * 100"
+      threshold: "70"
+  
+  # External SQS queue (for batch processing)
+  - type: aws-sqs-queue
+    metadata:
+      queueURL: "${SQS_QUEUE_URL}"
+      queueLength: "20"
+      awsRegion: "${AWS_REGION}"
+      identityOwner: "operator"
+    authenticationRef:
+      name: aws-credentials
+  
+  # CloudWatch custom metrics
+  - type: aws-cloudwatch
+    metadata:
+      namespace: "AWS/ApplicationELB"
+      metricName: "RequestCountPerTarget"
+      targetValue: "1000"
+      minMetricValue: "0"
+      dimensionName: "TargetGroup"
+      dimensionValue: "${ALB_TARGET_GROUP_ARN_SUFFIX}"
+      awsRegion: "${AWS_REGION}"
+    authenticationRef:
+      name: aws-credentials
+  
+  # Database connection pool utilization
+  - type: postgresql
+    metadata:
+      connection: "${DATABASE_URL}"
+      query: "SELECT (SELECT count(*) FROM pg_stat_activity WHERE state = 'active') as active_connections"
+      targetQueryValue: "15"
+    authenticationRef:
+      name: postgres-auth
+
+---
+# Authentication for Redis scaling
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: redis-auth
+  namespace: ${NAMESPACE:-linkedin-headshot-production}
+spec:
+  secretTargetRef:
+  - parameter: password
+    name: linkedin-headshot-secrets
+    key: redis-password
+
+---
+# Authentication for AWS services
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: aws-credentials
+  namespace: ${NAMESPACE:-linkedin-headshot-production}
+spec:
+  podIdentity:
+    provider: aws-eks
+
+---
+# Authentication for PostgreSQL
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: postgres-auth
+  namespace: ${NAMESPACE:-linkedin-headshot-production}
+spec:
+  secretTargetRef:
+  - parameter: connection
+    name: linkedin-headshot-secrets
+    key: database-url
+
+---
+# KEDA ScaledObject for Worker Pods (Image Processing)
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: linkedin-headshot-worker-keda
+  namespace: ${NAMESPACE:-linkedin-headshot-production}
+  labels:
+    app: linkedin-headshot-worker
+    component: autoscaling
+spec:
+  scaleTargetRef:
+    name: linkedin-headshot-worker
+  pollingInterval: 15
+  cooldownPeriod: 600
+  idleReplicaCount: 0
+  minReplicaCount: 0
+  maxReplicaCount: 50
+  
+  advanced:
+    restoreToOriginalReplicaCount: false
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 600
+          policies:
+          - type: Percent
+            value: 20
+            periodSeconds: 180
+        scaleUp:
+          stabilizationWindowSeconds: 30
+          policies:
+          - type: Percent
+            value: 200
+            periodSeconds: 30
+          - type: Pods
+            value: 10
+            periodSeconds: 30
+          selectPolicy: Max
+  
+  triggers:
+  # Scale based on Redis queue length
+  - type: redis
+    metadata:
+      address: "${REDIS_URL}"
+      listName: "image_processing_queue"
+      listLength: "2"
+      enableTLS: "true"
+    authenticationRef:
+      name: redis-auth
+  
+  # Scale based on pending Replicate API jobs
+  - type: prometheus
+    metadata:
+      serverAddress: "http://prometheus:9090"
+      metricName: "pending_ai_jobs"
+      query: "sum(replicate_pending_predictions_total)"
+      threshold: "5"
+  
+  # Scale based on worker CPU when active
+  - type: prometheus
+    metadata:
+      serverAddress: "http://prometheus:9090"
+      metricName: "worker_cpu_utilization"
+      query: "avg(rate(container_cpu_usage_seconds_total{pod=~'linkedin-headshot-worker-.*'}[2m])) * 100"
+      threshold: "80"
+
+---
+# ScaledJob for Batch Processing (Cron-like jobs)
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: linkedin-headshot-batch-processor
+  namespace: ${NAMESPACE:-linkedin-headshot-production}
+spec:
+  jobTargetRef:
+    template:
+      spec:
+        template:
+          spec:
+            containers:
+            - name: batch-processor
+              image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+              command: ["npm", "run", "batch-process"]
+              env:
+              - name: DATABASE_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: linkedin-headshot-secrets
+                    key: database-url
+              resources:
+                requests:
+                  memory: "512Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "1Gi"
+                  cpu: "500m"
+            restartPolicy: OnFailure
+        backoffLimit: 3
+  pollingInterval: 60
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  maxReplicaCount: 10
+  
+  triggers:
+  # Process expired records
+  - type: cron
+    metadata:
+      timezone: "UTC"
+      start: "0 2 * * *"  # 2 AM UTC daily
+      end: "0 3 * * *"    # 3 AM UTC daily
+  
+  # Process based on database queue
+  - type: postgresql
+    metadata:
+      connection: "${DATABASE_URL}"
+      query: "SELECT count(*) FROM photo_generations WHERE generation_status = 'pending' AND created_at < NOW() - INTERVAL '10 minutes'"
+      targetQueryValue: "10"
+    authenticationRef:
+      name: postgres-auth

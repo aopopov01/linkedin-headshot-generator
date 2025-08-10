@@ -1,0 +1,529 @@
+# Advanced Security Policies and Standards
+# Implements comprehensive security controls for Kubernetes workloads
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkedin-headshot-production
+  labels:
+    name: linkedin-headshot-production
+    security-policy: restricted
+    istio-injection: enabled
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+---
+# Pod Security Policy (for clusters without Pod Security Standards)
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: linkedin-headshot-restricted
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+    apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  allowedCapabilities:
+    - NET_BIND_SERVICE  # Allow binding to ports < 1024
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'persistentVolumeClaim'
+  runAsUser:
+    rule: 'MustRunAsNonRoot'
+  runAsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 10000
+        max: 65535
+  seLinux:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 10000
+        max: 65535
+  readOnlyRootFilesystem: false  # Set to true when apps support it
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  hostPorts:
+    - min: 0
+      max: 0
+
+---
+# ClusterRole for PSP
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: linkedin-headshot-restricted-psp
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs: ['use']
+  resourceNames:
+  - linkedin-headshot-restricted
+
+---
+# ClusterRoleBinding for PSP
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: linkedin-headshot-restricted-psp
+roleRef:
+  kind: ClusterRole
+  name: linkedin-headshot-restricted-psp
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: linkedin-headshot-backend-sa
+  namespace: linkedin-headshot-production
+
+---
+# Network Policy for micro-segmentation
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: linkedin-headshot-backend-netpol
+  namespace: linkedin-headshot-production
+spec:
+  podSelector:
+    matchLabels:
+      app: linkedin-headshot-backend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    # Allow traffic from ingress controller
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    # Allow traffic from other backend pods (for internal communication)
+    - podSelector:
+        matchLabels:
+          tier: api
+    # Allow traffic from monitoring
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+    ports:
+    - protocol: TCP
+      port: 3000
+    - protocol: TCP
+      port: 8080  # metrics port
+  egress:
+  # Allow DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  # Allow HTTPS to external services
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  # Allow database connections
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: database
+    ports:
+    - protocol: TCP
+      port: 5432
+  # Allow Redis connections
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  # Allow internal Kubernetes API
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+
+---
+# Network Policy for Worker Pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: linkedin-headshot-worker-netpol
+  namespace: linkedin-headshot-production
+spec:
+  podSelector:
+    matchLabels:
+      app: linkedin-headshot-worker
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Workers typically don't receive direct traffic
+  - from: []
+    ports: []
+  egress:
+  # Allow DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  # Allow HTTPS to Replicate API and other external services
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  # Allow Redis connections
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  # Allow database connections
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: database
+    ports:
+    - protocol: TCP
+      port: 5432
+
+---
+# RBAC for Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: linkedin-headshot-backend-sa
+  namespace: linkedin-headshot-production
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::${AWS_ACCOUNT_ID}:role/linkedin-headshot-backend-role
+automountServiceAccountToken: false
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: linkedin-headshot-production
+  name: linkedin-headshot-backend-role
+rules:
+# Allow reading own pod information for health checks
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+  resourceNames: []
+# Allow reading config maps and secrets
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list"]
+# Allow reading services for service discovery
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: linkedin-headshot-backend-rolebinding
+  namespace: linkedin-headshot-production
+subjects:
+- kind: ServiceAccount
+  name: linkedin-headshot-backend-sa
+  namespace: linkedin-headshot-production
+roleRef:
+  kind: Role
+  name: linkedin-headshot-backend-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# OPA Gatekeeper Constraint Template for Security
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredsecuritycontexts
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredSecurityContexts
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            runAsNonRoot:
+              type: boolean
+            runAsUser:
+              type: object
+              properties:
+                min:
+                  type: integer
+                max:
+                  type: integer
+            allowPrivilegeEscalation:
+              type: boolean
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredsecuritycontexts
+        
+        violation[{"msg": msg}] {
+          not input.review.object.spec.securityContext.runAsNonRoot
+          msg := "Containers must run as non-root user"
+        }
+        
+        violation[{"msg": msg}] {
+          user_id := input.review.object.spec.securityContext.runAsUser
+          user_id < input.parameters.runAsUser.min
+          msg := sprintf("runAsUser must be >= %d", [input.parameters.runAsUser.min])
+        }
+        
+        violation[{"msg": msg}] {
+          user_id := input.review.object.spec.securityContext.runAsUser
+          user_id > input.parameters.runAsUser.max
+          msg := sprintf("runAsUser must be <= %d", [input.parameters.runAsUser.max])
+        }
+        
+        violation[{"msg": msg}] {
+          input.review.object.spec.containers[_].securityContext.allowPrivilegeEscalation
+          msg := "Privilege escalation must be disabled"
+        }
+
+---
+# Constraint using the template above
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredSecurityContexts
+metadata:
+  name: security-contexts-required
+spec:
+  match:
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment", "StatefulSet", "DaemonSet"]
+    namespaces: ["linkedin-headshot-production"]
+  parameters:
+    runAsNonRoot: true
+    runAsUser:
+      min: 10000
+      max: 65535
+    allowPrivilegeEscalation: false
+
+---
+# Falco Rules for Runtime Security
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-rules
+  namespace: observability
+data:
+  custom_rules.yaml: |
+    - rule: LinkedIn Headshot Suspicious Network Activity
+      desc: Detect suspicious network activity in LinkedIn Headshot containers
+      condition: >
+        spawned_process and container and
+        (container.image.repository contains "linkedin-headshot" or k8s.pod.label[app] = "linkedin-headshot-backend") and
+        proc.name in (nc, ncat, netcat, nmap, wget, curl) and
+        not proc.args contains "health"
+      output: >
+        Suspicious network activity in LinkedIn Headshot container
+        (user=%user.name command=%proc.cmdline container_id=%container.id image=%container.image.repository)
+      priority: WARNING
+      tags: [network, linkedin-headshot]
+    
+    - rule: LinkedIn Headshot Unexpected File Access
+      desc: Detect unexpected file system access in LinkedIn Headshot containers
+      condition: >
+        open_read and container and
+        (container.image.repository contains "linkedin-headshot" or k8s.pod.label[app] = "linkedin-headshot-backend") and
+        fd.name startswith /etc and
+        not fd.name in (/etc/passwd, /etc/group, /etc/nsswitch.conf, /etc/resolv.conf, /etc/hosts, /etc/hostname)
+      output: >
+        Unexpected sensitive file access in LinkedIn Headshot container
+        (user=%user.name command=%proc.cmdline file=%fd.name container_id=%container.id)
+      priority: WARNING
+      tags: [filesystem, linkedin-headshot]
+    
+    - rule: LinkedIn Headshot Container Privilege Escalation
+      desc: Detect privilege escalation attempts in LinkedIn Headshot containers
+      condition: >
+        spawned_process and container and
+        (container.image.repository contains "linkedin-headshot" or k8s.pod.label[app] = "linkedin-headshot-backend") and
+        proc.name in (sudo, su, newgrp, newuidmap, newgidmap)
+      output: >
+        Privilege escalation attempt in LinkedIn Headshot container
+        (user=%user.name command=%proc.cmdline container_id=%container.id)
+      priority: CRITICAL
+      tags: [process, linkedin-headshot]
+    
+    - rule: LinkedIn Headshot Crypto Mining Activity
+      desc: Detect potential crypto mining activity
+      condition: >
+        spawned_process and container and
+        (container.image.repository contains "linkedin-headshot" or k8s.pod.label[app] = "linkedin-headshot-backend") and
+        (proc.name in (xmrig, minerd, cpuminer) or
+         proc.cmdline contains stratum or
+         proc.cmdline contains mining)
+      output: >
+        Potential crypto mining activity detected in LinkedIn Headshot container
+        (user=%user.name command=%proc.cmdline container_id=%container.id)
+      priority: CRITICAL
+      tags: [process, linkedin-headshot, cryptomining]
+
+---
+# Kyverno Policy for Image Security
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: disallow-unsigned-images
+  namespace: linkedin-headshot-production
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: verify-signature
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          namespaces:
+          - linkedin-headshot-production
+    verifyImages:
+    - imageReferences:
+      - "${ECR_REGISTRY}/${ECR_REPOSITORY}:*"
+      attestors:
+      - entries:
+        - keys:
+            secret:
+              name: cosign-public-key
+              namespace: linkedin-headshot-production
+    - imageReferences:
+      - "docker.io/library/*"
+      - "gcr.io/*"
+      - "quay.io/*"
+      attestors:
+      - entries:
+        - keys:
+            kms: "awskms:///arn:aws:kms:${AWS_REGION}:${AWS_ACCOUNT_ID}:key/${KMS_KEY_ID}"
+
+---
+# Pod Security Standards (for newer Kubernetes versions)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: security-policies
+  namespace: linkedin-headshot-production
+data:
+  pod-security-standards.yaml: |
+    apiVersion: pod-security.kubernetes.io/v1beta1
+    kind: PodSecurityPolicy
+    metadata:
+      name: restricted
+    spec:
+      enforce: restricted
+      audit: restricted
+      warn: restricted
+      enforceVersion: latest
+      auditVersion: latest
+      warnVersion: latest
+
+---
+# External Secrets Operator configuration
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: aws-secrets-manager
+  namespace: linkedin-headshot-production
+spec:
+  provider:
+    aws:
+      service: SecretsManager
+      region: ${AWS_REGION}
+      auth:
+        jwt:
+          serviceAccountRef:
+            name: linkedin-headshot-backend-sa
+
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: linkedin-headshot-secrets
+  namespace: linkedin-headshot-production
+spec:
+  refreshInterval: 15m
+  secretStoreRef:
+    name: aws-secrets-manager
+    kind: SecretStore
+  target:
+    name: linkedin-headshot-secrets
+    creationPolicy: Owner
+  data:
+  - secretKey: database-url
+    remoteRef:
+      key: linkedin-headshot-production
+      property: database_url
+  - secretKey: redis-url
+    remoteRef:
+      key: linkedin-headshot-production
+      property: redis_url
+  - secretKey: jwt-secret
+    remoteRef:
+      key: linkedin-headshot-production
+      property: jwt_secret
+  - secretKey: replicate-api-token
+    remoteRef:
+      key: linkedin-headshot-production
+      property: replicate_api_token
+  - secretKey: cloudinary-cloud-name
+    remoteRef:
+      key: linkedin-headshot-production
+      property: cloudinary_cloud_name
+  - secretKey: cloudinary-api-key
+    remoteRef:
+      key: linkedin-headshot-production
+      property: cloudinary_api_key
+  - secretKey: cloudinary-api-secret
+    remoteRef:
+      key: linkedin-headshot-production
+      property: cloudinary_api_secret
+
+---
+# Admission Controller Webhook for custom validations
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionWebhook
+metadata:
+  name: linkedin-headshot-security-webhook
+webhooks:
+- name: security-validation.linkedin-headshot.com
+  clientConfig:
+    service:
+      name: security-webhook
+      namespace: linkedin-headshot-production
+      path: "/validate"
+  rules:
+  - operations: ["CREATE", "UPDATE"]
+    apiGroups: ["apps"]
+    apiVersions: ["v1"]
+    resources: ["deployments", "statefulsets", "daemonsets"]
+  namespaceSelector:
+    matchLabels:
+      name: linkedin-headshot-production
+  admissionReviewVersions: ["v1", "v1beta1"]
+  sideEffects: None
+  failurePolicy: Fail

@@ -1,4 +1,26 @@
 {
   "name": "LinkedInHeadshotApp",
-  "displayName": "LinkedInHeadshotApp"
+  "displayName": "LinkedIn Headshot Generator",
+  "description": "AI-powered professional headshot generator for LinkedIn profiles. Create stunning professional photos in seconds with our advanced AI technology.",
+  "version": "1.0.0",
+  "versionCode": 1,
+  "orientation": "portrait",
+  "privacy": {
+    "policy_url": "https://yourapp.com/privacy",
+    "terms_url": "https://yourapp.com/terms"
+  },
+  "category": "Photography",
+  "keywords": ["linkedin", "headshot", "professional", "ai", "photo", "career", "portrait", "business"],
+  "rating": {
+    "age": "4+",
+    "contentRating": "Low Maturity"
+  },
+  "contact": {
+    "email": "support@linkedinheadshots.com",
+    "website": "https://linkedinheadshots.com",
+    "support": "https://linkedinheadshots.com/support"
+  },
+  "marketingUrl": "https://linkedinheadshots.com",
+  "backgroundColor": "#ffffff",
+  "primaryColor": "#0A66C2"
 }

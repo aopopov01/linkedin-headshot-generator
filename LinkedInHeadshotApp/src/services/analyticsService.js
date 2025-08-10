@@ -1,5 +1,11 @@
-// Analytics Service for user behavior tracking
-// This service handles user events and analytics using a flexible approach
+// Privacy-Compliant Analytics Service
+// This service handles user events and analytics with full privacy compliance
+// Respects GDPR, CCPA, and user consent preferences
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const CONSENT_STORAGE_KEY = 'user_consent_preferences';
+const ANALYTICS_QUEUE_KEY = 'pending_analytics_events';
 
 class AnalyticsService {
   constructor() {
@@ -7,28 +13,72 @@ class AnalyticsService {
     this.userId = null;
     this.sessionId = this.generateSessionId();
     this.events = [];
+    this.consentPreferences = null;
+    this.hasValidConsent = false;
   }
 
-  // Initialize analytics service
+  // Initialize analytics service with consent checking
   async initialize(config = {}) {
     try {
-      this.isInitialized = true;
       this.config = {
         enableInProduction: true,
         batchSize: 10,
         flushInterval: 30000, // 30 seconds
+        respectDoNotTrack: true,
+        anonymizeData: true,
         ...config,
       };
 
-      // Start event batching
-      if (this.config.flushInterval > 0) {
+      // Load user consent preferences
+      await this.loadConsentPreferences();
+
+      this.isInitialized = true;
+
+      // Start event batching only if user has consented
+      if (this.hasValidConsent && this.config.flushInterval > 0) {
         this.startEventBatching();
       }
 
-      console.log('AnalyticsService initialized successfully');
+      // Process any queued events from before consent was given
+      await this.processQueuedEvents();
+
+      console.log('Privacy-compliant AnalyticsService initialized successfully');
     } catch (error) {
       console.error('Failed to initialize AnalyticsService:', error);
     }
+  }
+
+  // Load and validate user consent preferences
+  async loadConsentPreferences() {
+    try {
+      const storedConsent = await AsyncStorage.getItem(CONSENT_STORAGE_KEY);
+      if (storedConsent) {
+        this.consentPreferences = JSON.parse(storedConsent);
+        this.hasValidConsent = this.validateConsent();
+      }
+    } catch (error) {
+      console.error('Error loading consent preferences:', error);
+      this.hasValidConsent = false;
+    }
+  }
+
+  // Validate if user has given valid consent for analytics
+  validateConsent() {
+    if (!this.consentPreferences) {
+      return false;
+    }
+
+    // Check if user has explicitly consented to analytics
+    const analyticsConsent = this.consentPreferences.analytics === true;
+    
+    // Check if consent is not expired (valid for 12 months per GDPR)
+    const consentDate = new Date(this.consentPreferences.consentDate);
+    const twelveMonthsAgo = new Date();
+    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+    
+    const consentNotExpired = consentDate > twelveMonthsAgo;
+
+    return analyticsConsent && consentNotExpired;
   }
 
   // Set user identification
@@ -40,23 +90,85 @@ class AnalyticsService {
     });
   }
 
-  // Track user events
-  track(eventName, properties = {}) {
-    if (!this.shouldTrack()) {
+  // Update consent preferences and revalidate
+  async updateConsentPreferences(newConsent) {
+    this.consentPreferences = newConsent;
+    this.hasValidConsent = this.validateConsent();
+
+    if (!this.hasValidConsent) {
+      // Clear pending events if consent is withdrawn
+      this.events = [];
+      await this.clearQueuedEvents();
+    }
+  }
+
+  // Queue events when consent is not available
+  async queueEvent(event) {
+    try {
+      const existingQueue = await AsyncStorage.getItem(ANALYTICS_QUEUE_KEY);
+      const queue = existingQueue ? JSON.parse(existingQueue) : [];
+      
+      // Limit queue size to prevent storage overflow
+      if (queue.length < 100) {
+        queue.push(event);
+        await AsyncStorage.setItem(ANALYTICS_QUEUE_KEY, JSON.stringify(queue));
+      }
+    } catch (error) {
+      console.error('Error queuing analytics event:', error);
+    }
+  }
+
+  // Process queued events when consent becomes available
+  async processQueuedEvents() {
+    if (!this.hasValidConsent) {
       return;
     }
 
-    const event = {
-      event: eventName,
-      properties: {
-        ...properties,
-        session_id: this.sessionId,
-        user_id: this.userId,
-        timestamp: new Date().toISOString(),
-        platform: this.getPlatform(),
-      },
-    };
+    try {
+      const queuedEvents = await AsyncStorage.getItem(ANALYTICS_QUEUE_KEY);
+      if (queuedEvents) {
+        const events = JSON.parse(queuedEvents);
+        
+        // Process essential events only (respect retroactive consent limitations)
+        const essentialEvents = events.filter(event => 
+          event.essential || event.event.includes('error') || event.event.includes('crash')
+        );
 
+        this.events.push(...essentialEvents);
+        
+        // Clear the queue
+        await AsyncStorage.removeItem(ANALYTICS_QUEUE_KEY);
+      }
+    } catch (error) {
+      console.error('Error processing queued events:', error);
+    }
+  }
+
+  // Clear queued events when consent is withdrawn
+  async clearQueuedEvents() {
+    try {
+      await AsyncStorage.removeItem(ANALYTICS_QUEUE_KEY);
+    } catch (error) {
+      console.error('Error clearing queued events:', error);
+    }
+  }
+
+  // Privacy-compliant event tracking
+  track(eventName, properties = {}, essential = false) {
+    // Essential events can be tracked without explicit analytics consent
+    // (e.g., security events, errors, crashes for service delivery)
+    if (!essential && !this.hasValidConsent) {
+      // Queue non-essential events for potential future processing
+      const event = this.createEvent(eventName, properties, essential);
+      this.queueEvent(event);
+      return;
+    }
+
+    if (!this.shouldTrack() && !essential) {
+      return;
+    }
+
+    const event = this.createEvent(eventName, properties, essential);
     this.events.push(event);
 
     // Log in development
@@ -68,6 +180,65 @@ class AnalyticsService {
     if (this.events.length >= this.config.batchSize) {
       this.flush();
     }
+  }
+
+  // Create anonymized event object
+  createEvent(eventName, properties = {}, essential = false) {
+    const baseEvent = {
+      event: eventName,
+      essential,
+      properties: {
+        ...this.anonymizeProperties(properties),
+        session_id: this.sessionId,
+        timestamp: new Date().toISOString(),
+        platform: this.getPlatform(),
+        privacy_compliant: true,
+        consent_version: this.consentPreferences?.consentVersion || '1.0'
+      }
+    };
+
+    // Only include user_id if user has consented to personalization
+    if (this.consentPreferences?.personalization && this.userId) {
+      baseEvent.properties.user_id = this.userId;
+    } else if (essential && this.userId) {
+      // For essential events, use hashed user ID
+      baseEvent.properties.user_id_hash = this.hashUserId(this.userId);
+    }
+
+    return baseEvent;
+  }
+
+  // Anonymize sensitive data in properties
+  anonymizeProperties(properties) {
+    const anonymized = { ...properties };
+
+    // Remove or hash PII
+    const piiFields = ['email', 'phone', 'name', 'address', 'ip_address'];
+    piiFields.forEach(field => {
+      if (anonymized[field]) {
+        delete anonymized[field];
+      }
+    });
+
+    // Truncate or generalize location data
+    if (anonymized.location) {
+      // Keep only country/region level location
+      anonymized.location = anonymized.location.split(',')[0];
+    }
+
+    return anonymized;
+  }
+
+  // Hash user ID for essential tracking
+  hashUserId(userId) {
+    // Simple hash function - in production use crypto library
+    let hash = 0;
+    for (let i = 0; i < userId.length; i++) {
+      const char = userId.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return `user_${Math.abs(hash)}`;
   }
 
   // Track screen views

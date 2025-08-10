@@ -1,0 +1,314 @@
+# Comprehensive Testing Configuration
+# This file contains centralized configuration for all testing pipelines
+
+# Test Environment Configuration
+environments:
+  development:
+    database_url: "postgresql://devuser:devpass@localhost:5432/linkedin_headshot_dev"
+    redis_url: "redis://localhost:6379"
+    target_url: "http://localhost:3000"
+    test_timeout: 30000
+  
+  staging:
+    database_url: "postgresql://staginguser:stagingpass@staging-db:5432/linkedin_headshot_staging"
+    redis_url: "redis://staging-redis:6379"
+    target_url: "https://staging.linkedin-headshot.com"
+    test_timeout: 45000
+  
+  production:
+    database_url: "${PROD_DATABASE_URL}"
+    redis_url: "${PROD_REDIS_URL}"
+    target_url: "https://linkedin-headshot.com"
+    test_timeout: 60000
+
+# Test Suite Configuration
+test_suites:
+  unit_tests:
+    enabled: true
+    coverage_threshold:
+      statements: 90
+      branches: 85
+      functions: 90
+      lines: 90
+    timeout: 30
+    retry_attempts: 2
+    parallel: true
+    
+  integration_tests:
+    enabled: true
+    timeout: 45
+    retry_attempts: 1
+    parallel: false
+    require_services:
+      - postgres
+      - redis
+    
+  e2e_tests:
+    enabled: true
+    timeout: 120
+    retry_attempts: 2
+    parallel: false
+    platforms:
+      - ios
+      - android
+    require_services: []
+    
+  security_tests:
+    enabled: true
+    timeout: 60
+    retry_attempts: 1
+    parallel: true
+    tools:
+      - snyk
+      - semgrep
+      - zap
+      - trivy
+    severity_threshold: "high"
+    
+  performance_tests:
+    enabled: true
+    timeout: 90
+    retry_attempts: 1
+    parallel: false
+    load_test:
+      duration: "300s"
+      virtual_users: 50
+    stress_test:
+      duration: "600s"
+      virtual_users: 200
+    thresholds:
+      response_time: 500  # milliseconds
+      error_rate: 0.01    # 1%
+      throughput: 100     # requests/second
+      
+  accessibility_tests:
+    enabled: true
+    timeout: 45
+    retry_attempts: 1
+    parallel: true
+    wcag_level: "AA"
+    standards:
+      - "WCAG21AA"
+      - "Section508"
+    
+  app_store_validation:
+    enabled: true
+    timeout: 30
+    retry_attempts: 1
+    parallel: false
+    platforms:
+      - ios
+      - android
+    validation_types:
+      - metadata
+      - guidelines
+      - privacy
+      - performance
+
+# Quality Gates Configuration
+quality_gates:
+  unit_tests:
+    required: true
+    min_coverage: 85
+    max_failed_tests: 0
+    
+  integration_tests:
+    required: true
+    max_failed_tests: 0
+    
+  security_tests:
+    required: true
+    max_high_vulnerabilities: 0
+    max_critical_vulnerabilities: 0
+    
+  performance_tests:
+    required: true
+    max_response_time: 500
+    max_error_rate: 0.01
+    
+  accessibility_tests:
+    required: true
+    min_wcag_score: 95
+    
+  e2e_tests:
+    required: true
+    max_failed_tests: 0
+
+# Pipeline Triggers
+triggers:
+  pull_request:
+    run_suites:
+      - unit_tests
+      - integration_tests
+      - security_tests
+      - accessibility_tests
+    environments:
+      - development
+      
+  push_main:
+    run_suites:
+      - unit_tests
+      - integration_tests
+      - e2e_tests
+      - security_tests
+      - performance_tests
+      - accessibility_tests
+      - app_store_validation
+    environments:
+      - development
+      - staging
+      
+  nightly:
+    run_suites:
+      - unit_tests
+      - integration_tests
+      - e2e_tests
+      - security_tests
+      - performance_tests
+      - accessibility_tests
+      - app_store_validation
+    environments:
+      - staging
+    comprehensive_mode: true
+    
+  deployment:
+    run_suites:
+      - unit_tests
+      - integration_tests
+      - security_tests
+      - performance_tests
+      - app_store_validation
+    environments:
+      - staging
+      - production
+    require_approval: true
+
+# Notification Settings
+notifications:
+  slack:
+    enabled: true
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+    channels:
+      success: "#testing-success"
+      failure: "#testing-alerts"
+      deployment: "#deployments"
+    
+  email:
+    enabled: false
+    recipients:
+      - "qa-team@linkedin-headshot.com"
+      - "dev-team@linkedin-headshot.com"
+    
+  github:
+    enabled: true
+    create_issues_on_failure: true
+    comment_on_pr: true
+
+# Artifact Management
+artifacts:
+  retention_days:
+    test_results: 30
+    coverage_reports: 60
+    security_reports: 90
+    performance_reports: 60
+    accessibility_reports: 30
+    build_artifacts: 7
+    
+  storage:
+    provider: "github_actions"
+    backup_enabled: true
+    backup_retention_days: 180
+
+# Tool Configurations
+tools:
+  jest:
+    version: "29.7.0"
+    config_file: "jest.config.js"
+    
+  detox:
+    version: "20.13.0"
+    config_file: ".detoxrc.js"
+    
+  puppeteer:
+    version: "21.5.2"
+    headless: true
+    
+  k6:
+    version: "0.47.0"
+    
+  lighthouse:
+    version: "11.3.0"
+    
+  axe_core:
+    version: "4.8.2"
+    
+  snyk:
+    version: "1.1248.0"
+    
+  semgrep:
+    version: "1.45.0"
+
+# Resource Limits
+resource_limits:
+  cpu_cores: 2
+  memory_gb: 7
+  storage_gb: 14
+  
+  timeouts:
+    job_timeout_minutes: 180
+    step_timeout_minutes: 30
+    
+  concurrency:
+    max_parallel_jobs: 10
+    max_matrix_jobs: 5
+
+# Security Settings
+security:
+  secret_scanning: true
+  dependency_review: true
+  code_scanning: true
+  
+  required_secrets:
+    - SNYK_TOKEN
+    - SLACK_WEBHOOK_URL
+    - SONAR_TOKEN
+    
+  optional_secrets:
+    - PROD_DATABASE_URL
+    - PROD_REDIS_URL
+    - APP_STORE_CONNECT_KEY
+
+# Compliance Settings
+compliance:
+  gdpr:
+    data_retention_days: 30
+    anonymize_test_data: true
+    
+  sox:
+    audit_trail: true
+    change_approval_required: true
+    
+  hipaa:
+    encryption_required: true
+    access_logging: true
+
+# Feature Flags
+feature_flags:
+  experimental_tests: false
+  parallel_e2e: false
+  advanced_security_scanning: true
+  performance_profiling: true
+  accessibility_automation: true
+  
+# Maintenance Settings
+maintenance:
+  auto_update_dependencies: false
+  clean_artifacts_daily: true
+  optimize_caches: true
+  
+  scheduled_maintenance:
+    - cron: "0 3 * * SUN"
+      tasks:
+        - clean_old_artifacts
+        - update_test_data
+        - optimize_test_cache

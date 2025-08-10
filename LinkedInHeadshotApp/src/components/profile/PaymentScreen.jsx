@@ -111,6 +111,24 @@ const PaymentScreen = ({ navigation }) => {
     );
   };
 
+  const openTermsOfService = () => {
+    // In production, open terms URL in browser
+    Alert.alert(
+      'Terms of Service',
+      'Opening Terms of Service...',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const openPrivacyPolicy = () => {
+    // In production, open privacy policy URL in browser
+    Alert.alert(
+      'Privacy Policy', 
+      'Opening Privacy Policy...',
+      [{ text: 'OK' }]
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -206,8 +224,27 @@ const PaymentScreen = ({ navigation }) => {
 
         <View style={styles.termsContainer}>
           <Text style={styles.termsText}>
-            By purchasing, you agree to our Terms of Service and Privacy Policy. 
-            Subscriptions auto-renew unless canceled 24 hours before the period ends.
+            By purchasing, you agree to our{' '}
+            <Text style={styles.linkText} onPress={() => openTermsOfService()}>
+              Terms of Service
+            </Text>{' '}
+            and{' '}
+            <Text style={styles.linkText} onPress={() => openPrivacyPolicy()}>
+              Privacy Policy
+            </Text>.{'\n\n'}
+            
+            {selectedPlan === 'monthly_sub' && (
+              <>Payment will be charged to your iTunes Account or Google Play Store account at confirmation of purchase. 
+              Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period. 
+              Account will be charged for renewal within 24-hours prior to the end of the current period. 
+              Subscriptions may be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase. 
+              Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription to that publication.{'\n\n'}
+              </>
+            )}
+            
+            Prices are in US Dollars and may vary in countries other than the U.S. and are subject to change without notice.{'\n\n'}
+            
+            For customer support, email us at support@linkedinheadshots.com or use the support feature in app settings.
           </Text>
         </View>
       </ScrollView>
@@ -381,6 +418,11 @@ const styles = StyleSheet.create({
     color: '#7F8C8D',
     textAlign: 'center',
     lineHeight: 16,
+  },
+  linkText: {
+    fontSize: 12,
+    color: '#0A66C2',
+    textDecorationLine: 'underline',
   },
 });
 

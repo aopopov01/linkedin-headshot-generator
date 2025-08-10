@@ -7,7 +7,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
+import { COLORS, TYPOGRAPHY, SPACING, RADIUS, SHADOWS, ACCESSIBILITY } from '../../utils/designSystem';
 
 // Import screens
 import PhotoCapture from '../camera/PhotoCapture';
@@ -19,7 +21,7 @@ import PaymentScreen from '../profile/PaymentScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Custom Tab Bar Icon Component
+// Enhanced Tab Bar Icon Component with proper accessibility
 const TabIcon = ({ focused, iconName, label }) => {
   const icons = {
     capture: focused ? '📷' : '📷',
@@ -28,7 +30,13 @@ const TabIcon = ({ focused, iconName, label }) => {
   };
 
   return (
-    <View style={styles.tabIcon}>
+    <View 
+      style={styles.tabIcon}
+      accessible={true}
+      accessibilityRole="tab"
+      accessibilityLabel={`${label} tab`}
+      accessibilityState={{ selected: focused }}
+    >
       <Text style={[styles.tabIconText, focused && styles.tabIconFocused]}>
         {icons[iconName]}
       </Text>
@@ -46,23 +54,24 @@ const AppStack = () => {
       initialRouteName="PhotoCapture"
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#ffffff',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 5,
+          backgroundColor: COLORS.background.primary,
+          ...SHADOWS.light,
+          borderBottomWidth: Platform.OS === 'android' ? 1 : 0,
+          borderBottomColor: COLORS.border.light,
         },
-        headerTintColor: '#2C3E50',
+        headerTintColor: COLORS.text.primary,
         headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 18,
+          fontWeight: TYPOGRAPHY.h4.fontWeight,
+          fontSize: TYPOGRAPHY.h4.fontSize,
+          color: COLORS.text.primary,
         },
         headerBackTitleVisible: false,
-        cardStyle: { backgroundColor: '#ffffff' },
+        headerLeftContainerStyle: {
+          paddingLeft: Platform.OS === 'ios' ? SPACING.md : SPACING.sm,
+        },
+        cardStyle: { backgroundColor: COLORS.background.primary },
+        gestureEnabled: Platform.OS === 'ios',
+        animationEnabled: true,
       }}
     >
       <Stack.Screen
@@ -135,12 +144,13 @@ const TabNavigator = () => {
         },
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: '#ffffff',
-          borderTopColor: '#E9ECEF',
-          borderTopWidth: 1,
-          height: 80,
-          paddingBottom: 10,
-          paddingTop: 10,
+          backgroundColor: COLORS.background.primary,
+          borderTopColor: COLORS.border.light,
+          borderTopWidth: Platform.OS === 'ios' ? 0.5 : 1,
+          height: Platform.OS === 'ios' ? 80 : 70,
+          paddingBottom: Platform.OS === 'ios' ? SPACING.md : SPACING.sm,
+          paddingTop: SPACING.sm,
+          ...SHADOWS.light,
         },
         headerShown: false,
       })}
@@ -183,7 +193,7 @@ const Navigation = () => {
   );
 };
 
-// Custom Header Components
+// Enhanced Custom Header Component with accessibility
 export const CustomHeader = ({ title, showBack = true, onBackPress, rightComponent }) => {
   return (
     <View style={styles.customHeader}>
@@ -193,13 +203,28 @@ export const CustomHeader = ({ title, showBack = true, onBackPress, rightCompone
             style={styles.backButton}
             onPress={onBackPress}
             activeOpacity={0.7}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={ACCESSIBILITY.labels.back}
+            accessibilityHint="Navigate to the previous screen"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text style={styles.backButtonText}>←</Text>
+            <Text style={styles.backButtonText}>
+              {Platform.OS === 'ios' ? '←' : '←'}
+            </Text>
           </TouchableOpacity>
         )}
       </View>
       
-      <Text style={styles.headerTitle}>{title}</Text>
+      <Text 
+        style={styles.headerTitle}
+        accessible={true}
+        accessibilityRole="header"
+        numberOfLines={1}
+        ellipsizeMode="tail"
+      >
+        {title}
+      </Text>
       
       <View style={styles.headerRight}>
         {rightComponent}
@@ -209,67 +234,73 @@ export const CustomHeader = ({ title, showBack = true, onBackPress, rightCompone
 };
 
 const styles = StyleSheet.create({
-  // Tab Navigation Styles
+  // Enhanced Tab Navigation Styles
   tabIcon: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 5,
+    paddingVertical: SPACING.sm,
+    minHeight: ACCESSIBILITY.touchTargetSize,
+    minWidth: ACCESSIBILITY.touchTargetSize,
   },
   
   tabIconText: {
-    fontSize: 24,
-    marginBottom: 4,
+    fontSize: Platform.OS === 'ios' ? 26 : 24,
+    marginBottom: SPACING.xs,
   },
   
   tabIconFocused: {
-    transform: [{ scale: 1.1 }],
+    transform: [{ scale: Platform.OS === 'ios' ? 1.1 : 1.05 }],
   },
   
   tabLabel: {
-    fontSize: 12,
-    color: '#7F8C8D',
-    fontWeight: '500',
+    fontSize: TYPOGRAPHY.caption.fontSize,
+    color: COLORS.text.secondary,
+    fontWeight: TYPOGRAPHY.caption.fontWeight,
+    letterSpacing: TYPOGRAPHY.caption.letterSpacing,
   },
   
   tabLabelFocused: {
-    color: '#0A66C2',
+    color: COLORS.primary[500],
     fontWeight: '600',
   },
 
-  // Placeholder Screen Styles
+  // Enhanced Placeholder Screen Styles
   placeholderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
-    backgroundColor: '#ffffff',
+    padding: SPACING.xxxl,
+    backgroundColor: COLORS.background.primary,
   },
   
   placeholderTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginBottom: 16,
+    fontSize: TYPOGRAPHY.h2.fontSize,
+    fontWeight: TYPOGRAPHY.h2.fontWeight,
+    color: COLORS.text.primary,
+    marginBottom: SPACING.lg,
     textAlign: 'center',
+    letterSpacing: TYPOGRAPHY.h2.letterSpacing,
   },
   
   placeholderSubtitle: {
-    fontSize: 16,
-    color: '#7F8C8D',
+    fontSize: TYPOGRAPHY.body1.fontSize,
+    color: COLORS.text.secondary,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: TYPOGRAPHY.body1.lineHeight,
+    maxWidth: 280,
   },
 
-  // Custom Header Styles
+  // Enhanced Custom Header Styles
   customHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#ffffff',
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    backgroundColor: COLORS.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#E9ECEF',
+    borderBottomColor: COLORS.border.light,
+    minHeight: Platform.OS === 'ios' ? 44 : 56, // Platform-specific heights
   },
   
   headerLeft: {
@@ -278,10 +309,12 @@ const styles = StyleSheet.create({
   },
   
   headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2C3E50',
+    fontSize: TYPOGRAPHY.h4.fontSize,
+    fontWeight: TYPOGRAPHY.h4.fontWeight,
+    color: COLORS.text.primary,
     textAlign: 'center',
+    letterSpacing: TYPOGRAPHY.h4.letterSpacing,
+    flex: 2,
   },
   
   headerRight: {
@@ -290,14 +323,18 @@ const styles = StyleSheet.create({
   },
   
   backButton: {
-    padding: 8,
-    borderRadius: 20,
+    padding: SPACING.sm,
+    borderRadius: RADIUS.full,
+    minHeight: ACCESSIBILITY.touchTargetSize,
+    minWidth: ACCESSIBILITY.touchTargetSize,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   
   backButtonText: {
-    fontSize: 24,
-    color: '#0A66C2',
-    fontWeight: 'bold',
+    fontSize: Platform.OS === 'ios' ? 28 : 24,
+    color: COLORS.primary[500],
+    fontWeight: Platform.OS === 'ios' ? '300' : 'normal',
   },
 });
 

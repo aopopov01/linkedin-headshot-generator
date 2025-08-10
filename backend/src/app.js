@@ -19,6 +19,7 @@ const userRoutes = require('./routes/users');
 const photoRoutes = require('./routes/photos');
 const paymentRoutes = require('./routes/payments');
 const analyticsRoutes = require('./routes/analytics');
+const privacyRoutes = require('./routes/privacy');
 const healthRoutes = require('./routes/health');
 
 const logger = require('./config/logger');
@@ -55,6 +56,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/photos', photoRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/privacy', privacyRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {

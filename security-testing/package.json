@@ -1,0 +1,53 @@
+{
+  "name": "linkedin-headshot-security-testing",
+  "version": "1.0.0",
+  "description": "Security testing suite for LinkedIn Headshot Generator",
+  "main": "security-test-runner.js",
+  "scripts": {
+    "start": "node security-test-runner.js",
+    "test:security": "node security-test-runner.js",
+    "test:zap": "node scripts/run-zap-scan.js",
+    "test:snyk": "snyk test --all-projects --json",
+    "test:trivy": "docker run --rm -v $(pwd)/../:/workspace aquasec/trivy fs /workspace",
+    "test:semgrep": "semgrep --config=auto ../LinkedInHeadshotApp/src ../backend/src",
+    "test:owasp-dep-check": "docker run --rm -v $(pwd)/../:/src owasp/dependency-check --scan /src --format HTML --out /src/security-testing/reports",
+    "test:mobsf": "node scripts/run-mobsf-scan.js",
+    "serve:reports": "python3 -m http.server 8888 --directory reports",
+    "docker:up": "docker-compose -f docker-compose.security.yml up -d",
+    "docker:down": "docker-compose -f docker-compose.security.yml down",
+    "docker:logs": "docker-compose -f docker-compose.security.yml logs -f",
+    "setup": "node scripts/setup-security-tools.js",
+    "clean": "rm -rf reports/* && docker system prune -f"
+  },
+  "keywords": [
+    "security",
+    "testing",
+    "owasp",
+    "vulnerability",
+    "scanning"
+  ],
+  "author": "LinkedIn Headshot Generator Team",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "axios": "^1.6.0",
+    "fs-extra": "^11.1.1",
+    "commander": "^11.1.0",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1",
+    "inquirer": "^8.2.6",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/node": "^20.8.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linkedin-headshot/security-testing.git"
+  }
+}

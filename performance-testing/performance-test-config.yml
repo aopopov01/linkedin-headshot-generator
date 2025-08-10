@@ -1,0 +1,411 @@
+# Performance Testing Configuration
+# Comprehensive performance testing setup for LinkedIn Headshot Generator
+
+# K6 Load Testing Configuration
+k6:
+  base_url: "http://localhost:3001"
+  virtual_users: 100
+  duration: "10m"
+  
+  scenarios:
+    baseline_load:
+      executor: "ramping-vus"
+      start_vus: 10
+      target_vus: 50
+      duration: "5m"
+      graceful_stop: "30s"
+    
+    stress_test:
+      executor: "ramping-vus"
+      start_vus: 50
+      target_vus: 200
+      duration: "10m"
+      graceful_stop: "1m"
+    
+    spike_test:
+      executor: "ramping-vus"
+      stages:
+        - duration: "2m"
+          target: 10
+        - duration: "30s"
+          target: 500
+        - duration: "2m"
+          target: 10
+    
+    volume_test:
+      executor: "constant-vus"
+      vus: 100
+      duration: "30m"
+
+  thresholds:
+    http_req_duration:
+      - "p(95)<2000"    # 95% of requests under 2s
+      - "p(99)<5000"    # 99% of requests under 5s
+    http_req_failed:
+      - "rate<0.05"     # Error rate under 5%
+    http_reqs:
+      - "rate>50"       # At least 50 requests per second
+    
+  checks:
+    - "status is 200"
+    - "response time acceptable"
+    - "content is valid"
+
+# Artillery Configuration
+artillery:
+  enabled: true
+  target: "http://localhost:3001"
+  
+  phases:
+    - duration: 300
+      arrivalRate: 10
+      name: "Warm up"
+    - duration: 600
+      arrivalRate: 50
+      name: "Load test"
+    - duration: 300
+      arrivalRate: 100
+      name: "Stress test"
+  
+  processor: "./artillery-processor.js"
+  
+  scenarios:
+    - name: "API endpoints test"
+      weight: 70
+      flow:
+        - post:
+            url: "/api/auth/login"
+            json:
+              email: "test@example.com"
+              password: "TestPassword123!"
+            capture:
+              json: "$.token"
+              as: "authToken"
+        - get:
+            url: "/api/auth/me"
+            headers:
+              Authorization: "Bearer {{ authToken }}"
+        - get:
+            url: "/api/photos"
+            headers:
+              Authorization: "Bearer {{ authToken }}"
+    
+    - name: "Photo upload test"
+      weight: 20
+      flow:
+        - post:
+            url: "/api/auth/login"
+            json:
+              email: "test@example.com"
+              password: "TestPassword123!"
+            capture:
+              json: "$.token"
+              as: "authToken"
+        - post:
+            url: "/api/photos/upload"
+            headers:
+              Authorization: "Bearer {{ authToken }}"
+            formData:
+              styleId: "professional"
+    
+    - name: "Payment processing test"
+      weight: 10
+      flow:
+        - post:
+            url: "/api/auth/login"
+            json:
+              email: "test@example.com" 
+              password: "TestPassword123!"
+            capture:
+              json: "$.token"
+              as: "authToken"
+        - post:
+            url: "/api/payments/subscribe"
+            headers:
+              Authorization: "Bearer {{ authToken }}"
+            json:
+              paymentMethodId: "pm_test_4242424242424242"
+              plan: "premium"
+
+# Database Performance Testing
+database:
+  connection_string: "postgresql://test:test@localhost:5432/linkedin_headshot_test"
+  
+  tests:
+    connection_pool:
+      max_connections: 100
+      test_duration: "5m"
+      query_types:
+        - "SELECT * FROM users LIMIT 100"
+        - "SELECT * FROM generated_photos WHERE user_id = $1"
+        - "INSERT INTO analytics_events (user_id, event_type, data) VALUES ($1, $2, $3)"
+    
+    query_performance:
+      - name: "User lookup by email"
+        query: "SELECT * FROM users WHERE email = $1"
+        target_time_ms: 50
+        test_iterations: 10000
+      
+      - name: "Photo listing with pagination"
+        query: "SELECT * FROM generated_photos WHERE user_id = $1 ORDER BY created_at DESC LIMIT 20 OFFSET $2"
+        target_time_ms: 100
+        test_iterations: 5000
+      
+      - name: "Analytics event insertion"
+        query: "INSERT INTO analytics_events (user_id, event_type, data, created_at) VALUES ($1, $2, $3, NOW())"
+        target_time_ms: 25
+        test_iterations: 20000
+    
+    concurrent_operations:
+      - name: "Concurrent user registration"
+        concurrent_users: 50
+        operations_per_user: 100
+        target_success_rate: 0.95
+      
+      - name: "Concurrent photo processing"
+        concurrent_users: 20
+        operations_per_user: 50
+        target_success_rate: 0.98
+
+# Mobile Performance Testing
+mobile:
+  platforms:
+    - android
+    - ios
+  
+  metrics:
+    startup_time:
+      cold_start_threshold_ms: 3000
+      warm_start_threshold_ms: 1000
+      hot_start_threshold_ms: 500
+    
+    memory_usage:
+      max_heap_mb: 256
+      max_native_mb: 512
+      memory_leak_threshold_mb: 50
+    
+    cpu_usage:
+      max_cpu_percentage: 80
+      sustained_cpu_threshold: 60
+    
+    network_performance:
+      api_response_threshold_ms: 2000
+      image_load_threshold_ms: 5000
+      timeout_threshold_ms: 30000
+    
+    battery_usage:
+      max_drain_per_hour: 10
+      background_drain_per_hour: 2
+    
+    ui_performance:
+      frame_rate_fps: 60
+      frame_drop_threshold: 5
+      jank_threshold_ms: 16
+  
+  test_scenarios:
+    - name: "App launch and navigation"
+      duration: "5m"
+      actions:
+        - launch_app
+        - navigate_to_camera
+        - navigate_to_gallery
+        - navigate_to_profile
+    
+    - name: "Photo capture and processing"
+      duration: "10m"
+      iterations: 20
+      actions:
+        - capture_photo
+        - select_style
+        - process_photo
+        - view_result
+    
+    - name: "Continuous usage simulation"
+      duration: "30m"
+      actions:
+        - random_navigation
+        - periodic_photo_processing
+        - background_foreground_cycles
+
+# Infrastructure Performance Testing
+infrastructure:
+  docker_compose_file: "../docker-compose.test.yml"
+  
+  container_metrics:
+    backend:
+      cpu_limit: "2"
+      memory_limit: "2g"
+      target_cpu_usage: 70
+      target_memory_usage: 80
+    
+    database:
+      cpu_limit: "2"
+      memory_limit: "4g"
+      target_cpu_usage: 60
+      target_memory_usage: 75
+    
+    redis:
+      cpu_limit: "0.5"
+      memory_limit: "1g"
+      target_cpu_usage: 40
+      target_memory_usage: 60
+  
+  network_tests:
+    bandwidth_mbps: 100
+    latency_ms: 50
+    packet_loss_rate: 0.01
+    concurrent_connections: 1000
+  
+  storage_tests:
+    disk_io_ops_per_second: 1000
+    read_throughput_mbps: 100
+    write_throughput_mbps: 50
+    storage_capacity_gb: 100
+
+# API Performance Benchmarks
+api_benchmarks:
+  endpoints:
+    "/api/auth/login":
+      target_response_time_ms: 200
+      target_throughput_rps: 100
+      max_error_rate: 0.01
+    
+    "/api/auth/register":
+      target_response_time_ms: 500
+      target_throughput_rps: 50
+      max_error_rate: 0.02
+    
+    "/api/photos/upload":
+      target_response_time_ms: 5000
+      target_throughput_rps: 20
+      max_error_rate: 0.05
+    
+    "/api/photos":
+      target_response_time_ms: 300
+      target_throughput_rps: 200
+      max_error_rate: 0.01
+    
+    "/api/payments/subscribe":
+      target_response_time_ms: 3000
+      target_throughput_rps: 10
+      max_error_rate: 0.01
+  
+  test_data:
+    users_count: 1000
+    photos_per_user: 10
+    concurrent_requests: 100
+
+# Browser Performance Testing (for web demo)
+browser:
+  enabled: true
+  browsers:
+    - chrome
+    - firefox
+    - safari
+  
+  lighthouse_metrics:
+    performance_score: 90
+    accessibility_score: 95
+    best_practices_score: 90
+    seo_score: 85
+    
+    core_web_vitals:
+      largest_contentful_paint_ms: 2500
+      first_input_delay_ms: 100
+      cumulative_layout_shift: 0.1
+      first_contentful_paint_ms: 1800
+      time_to_interactive_ms: 3800
+  
+  load_testing:
+    page_load_time_ms: 3000
+    dom_content_loaded_ms: 1500
+    time_to_first_byte_ms: 500
+    resource_load_time_ms: 2000
+
+# Monitoring and Alerting
+monitoring:
+  metrics_collection:
+    interval_seconds: 15
+    retention_days: 30
+    
+  dashboards:
+    - name: "Performance Overview"
+      panels:
+        - "Response Time Percentiles"
+        - "Request Rate"
+        - "Error Rate"
+        - "Database Performance"
+        - "Memory Usage"
+        - "CPU Usage"
+    
+    - name: "Mobile Performance"
+      panels:
+        - "App Launch Times"
+        - "Memory Usage"
+        - "CPU Usage"
+        - "Network Performance"
+        - "Battery Consumption"
+  
+  alerts:
+    - name: "High Response Time"
+      condition: "p95_response_time > 3000"
+      severity: "warning"
+      notification_channels: ["slack", "email"]
+    
+    - name: "High Error Rate"
+      condition: "error_rate > 0.05"
+      severity: "critical"
+      notification_channels: ["slack", "email", "pagerduty"]
+    
+    - name: "Database Connection Pool Exhausted"
+      condition: "db_connections_used > 0.9"
+      severity: "warning"
+      notification_channels: ["slack"]
+
+# Reporting Configuration
+reporting:
+  output_directory: "./reports"
+  
+  formats:
+    - "html"
+    - "json"
+    - "junit"
+    - "csv"
+  
+  include_sections:
+    - "executive_summary"
+    - "performance_metrics"
+    - "bottleneck_analysis"
+    - "capacity_planning"
+    - "recommendations"
+    - "historical_trends"
+  
+  benchmarking:
+    compare_with_previous: true
+    regression_threshold: 0.1  # 10% degradation
+    improvement_threshold: 0.05  # 5% improvement
+  
+  historical_data:
+    retention_days: 90
+    trend_analysis: true
+    baseline_comparison: true
+
+# Test Environment Configuration
+test_environment:
+  services:
+    backend_url: "http://localhost:3001"
+    database_url: "postgresql://test:test@localhost:5432/linkedin_headshot_test"
+    redis_url: "redis://localhost:6379"
+  
+  test_data:
+    users_csv: "./test-data/users.csv"
+    photos_directory: "./test-data/photos/"
+    cleanup_after_tests: true
+  
+  parallel_execution:
+    enabled: true
+    max_workers: 4
+    worker_allocation:
+      load_tests: 2
+      stress_tests: 1
+      mobile_tests: 1

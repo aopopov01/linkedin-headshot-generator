@@ -17,8 +17,10 @@ import 'react-native-gesture-handler'; // Required for React Navigation
 
 // Import navigation and services
 import Navigation from './src/components/shared/Navigation';
+import Alert from './src/components/shared/Alert';
 import analyticsService from './src/services/analyticsService';
 import paymentService from './src/services/paymentService';
+import { COLORS } from './src/utils/designSystem';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -64,10 +66,11 @@ function App(): React.JSX.Element {
     <SafeAreaView style={styles.container}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor="#ffffff"
+        backgroundColor={COLORS.background.primary}
         translucent={false}
       />
       <Navigation />
+      <Alert />
     </SafeAreaView>
   );
 }
@@ -75,7 +78,7 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.background.primary,
   },
 });
 

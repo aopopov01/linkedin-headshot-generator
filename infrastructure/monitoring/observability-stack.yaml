@@ -1,0 +1,743 @@
+# Advanced Observability Stack
+# Comprehensive monitoring, logging, tracing, and alerting for mobile applications
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    name: observability
+    istio-injection: enabled
+
+---
+# OpenTelemetry Collector for unified telemetry
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  mode: deployment
+  replicas: 3
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: 'otel-collector'
+              scrape_interval: 10s
+              static_configs:
+                - targets: ['0.0.0.0:8888']
+      jaeger:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:14250
+          thrift_http:
+            endpoint: 0.0.0.0:14268
+          thrift_compact:
+            endpoint: 0.0.0.0:6831
+      zipkin:
+        endpoint: 0.0.0.0:9411
+      filelog:
+        include: ["/var/log/pods/*/*/*.log"]
+        exclude: ["/var/log/pods/*/otc-container/*.log"]
+        start_at: end
+        include_file_path: true
+        include_file_name: false
+        operators:
+          - type: router
+            id: get-format
+            routes:
+              - output: parser-docker
+                expr: 'body matches "^\\{"'
+              - output: parser-crio
+                expr: 'body matches "^[^ ]+ "'
+              - output: parser-containerd
+                expr: 'true'
+          - type: regex_parser
+            id: parser-crio
+            regex: '^(?P<time>[^ ]+) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+            output: extract_metadata_from_filepath
+            timestamp:
+              parse_from: attributes.time
+              layout_type: gotime
+              layout: '2006-01-02T15:04:05.999999999Z07:00'
+          - type: regex_parser
+            id: parser-containerd
+            regex: '^(?P<time>[^ ]+) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+            output: extract_metadata_from_filepath
+            timestamp:
+              parse_from: attributes.time
+              layout_type: gotime
+              layout: '2006-01-02T15:04:05.999999999Z07:00'
+          - type: json_parser
+            id: parser-docker
+            output: extract_metadata_from_filepath
+            timestamp:
+              parse_from: attributes.time
+              layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+          - type: regex_parser
+            id: extract_metadata_from_filepath
+            regex: '^.*\/(?P<namespace>[^_]+)_(?P<pod_name>[^_]+)_(?P<uid>[a-f0-9\-]{36})\/(?P<container_name>[^\._]+)\/(?P<restart_count>\d+)\.log$'
+            parse_from: attributes["log.file.path"]
+            cache:
+              size: 128
+          - type: move
+            from: attributes.log
+            to: body
+          - type: move
+            from: attributes.stream
+            to: attributes["log.iostream"]
+          - type: move
+            from: attributes.container_name
+            to: resource["k8s.container.name"]
+          - type: move
+            from: attributes.namespace
+            to: resource["k8s.namespace.name"]
+          - type: move
+            from: attributes.pod_name
+            to: resource["k8s.pod.name"]
+          - type: move
+            from: attributes.restart_count
+            to: resource["k8s.container.restart_count"]
+          - type: move
+            from: attributes.uid
+            to: resource["k8s.pod.uid"]
+
+    processors:
+      batch:
+        timeout: 1s
+        send_batch_size: 1024
+        send_batch_max_size: 2048
+      memory_limiter:
+        limit_mib: 768
+        spike_limit_mib: 256
+      resource:
+        attributes:
+          - key: service.name
+            from_attribute: k8s.pod.labels.app
+            action: insert
+          - key: service.version
+            from_attribute: k8s.pod.labels.version
+            action: insert
+          - key: deployment.environment
+            from_attribute: k8s.pod.labels.environment
+            action: insert
+      k8sattributes:
+        auth_type: "serviceAccount"
+        passthrough: false
+        filter:
+          node_from_env_var: KUBE_NODE_NAME
+        extract:
+          metadata:
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.deployment.name
+            - k8s.namespace.name
+            - k8s.node.name
+            - k8s.pod.start_time
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.ip
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.uid
+          - sources:
+              - from: connection
+      transform:
+        trace_statements:
+          - context: span
+            statements:
+              - set(attributes["http.user_agent.original"], attributes["http.user_agent"])
+              - delete_key(attributes, "http.user_agent")
+        metric_statements:
+          - context: metric
+            statements:
+              - set(description, "Request duration") where name == "http_request_duration"
+
+    exporters:
+      prometheus:
+        endpoint: "0.0.0.0:8889"
+        const_labels:
+          cluster: "linkedin-headshot-cluster"
+      jaeger:
+        endpoint: jaeger-collector.observability.svc.cluster.local:14250
+        tls:
+          insecure: true
+      loki:
+        endpoint: http://loki.observability.svc.cluster.local:3100/loki/api/v1/push
+        headers:
+          "X-Scope-OrgID": "tenant1"
+      awsxray:
+        region: us-east-1
+        no_verify_ssl: false
+        local_mode: false
+      awscloudwatchmetrics:
+        region: us-east-1
+        namespace: LinkedInHeadshot/Application
+        dimension_rollup_option: NoDimensionRollup
+        metric_declarations:
+          - dimensions: [[service.name], [service.name, deployment.environment]]
+            metric_name_selectors:
+              - http_requests_total
+              - http_request_duration_seconds
+              - process_cpu_seconds_total
+              - process_resident_memory_bytes
+
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
+      pprof:
+        endpoint: 0.0.0.0:1777
+      zpages:
+        endpoint: 0.0.0.0:55679
+
+    service:
+      extensions: [health_check, pprof, zpages]
+      pipelines:
+        traces:
+          receivers: [otlp, jaeger, zipkin]
+          processors: [memory_limiter, k8sattributes, resource, batch, transform]
+          exporters: [jaeger, awsxray]
+        metrics:
+          receivers: [otlp, prometheus]
+          processors: [memory_limiter, k8sattributes, resource, batch, transform]
+          exporters: [prometheus, awscloudwatchmetrics]
+        logs:
+          receivers: [otlp, filelog]
+          processors: [memory_limiter, k8sattributes, resource, batch]
+          exporters: [loki]
+
+---
+# Jaeger for distributed tracing
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger
+  namespace: observability
+spec:
+  strategy: production
+  storage:
+    type: elasticsearch
+    options:
+      es:
+        server-urls: http://elasticsearch.observability.svc.cluster.local:9200
+        index-prefix: jaeger
+        username: elastic
+        password-file: /etc/jaeger/elasticsearch/password
+    secretName: jaeger-elasticsearch
+  collector:
+    maxReplicas: 5
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+  query:
+    replicas: 2
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "250m"
+  ingress:
+    enabled: true
+    hosts:
+      - jaeger.${DOMAIN_NAME}
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/auth-url: "https://oauth2-proxy.${DOMAIN_NAME}/oauth2/auth"
+      nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.${DOMAIN_NAME}/oauth2/start?rd=$escaped_request_uri"
+    tls:
+      - secretName: jaeger-tls
+        hosts:
+          - jaeger.${DOMAIN_NAME}
+
+---
+# Loki for log aggregation
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-config
+  namespace: observability
+data:
+  loki.yml: |
+    auth_enabled: false
+    
+    server:
+      http_listen_port: 3100
+      grpc_listen_port: 9096
+    
+    common:
+      path_prefix: /loki
+      storage:
+        filesystem:
+          chunks_directory: /loki/chunks
+          rules_directory: /loki/rules
+      replication_factor: 1
+      ring:
+        instance_addr: 127.0.0.1
+        kvstore:
+          store: inmemory
+    
+    query_range:
+      results_cache:
+        cache:
+          embedded_cache:
+            enabled: true
+            max_size_mb: 100
+    
+    schema_config:
+      configs:
+        - from: 2020-10-24
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
+    
+    ruler:
+      alertmanager_url: http://alertmanager.observability.svc.cluster.local:9093
+    
+    limits_config:
+      ingestion_rate_mb: 16
+      ingestion_burst_size_mb: 32
+      max_query_parallelism: 16
+      max_streams_per_user: 10000
+      max_global_streams_per_user: 10000
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: loki
+  namespace: observability
+spec:
+  serviceName: loki
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+  template:
+    metadata:
+      labels:
+        app: loki
+    spec:
+      serviceAccountName: loki
+      containers:
+      - name: loki
+        image: grafana/loki:2.9.0
+        args:
+          - -config.file=/etc/loki/loki.yml
+        ports:
+        - containerPort: 3100
+          name: http
+        - containerPort: 9096
+          name: grpc
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        volumeMounts:
+        - name: config
+          mountPath: /etc/loki
+        - name: storage
+          mountPath: /loki
+        securityContext:
+          runAsUser: 10001
+          runAsGroup: 10001
+          runAsNonRoot: true
+        livenessProbe:
+          httpGet:
+            path: /ready
+            port: 3100
+          initialDelaySeconds: 45
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3100
+          initialDelaySeconds: 45
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: loki-config
+  volumeClaimTemplates:
+  - metadata:
+      name: storage
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 50Gi
+      storageClassName: gp3
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: loki
+  namespace: observability
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki
+  namespace: observability
+  labels:
+    app: loki
+spec:
+  selector:
+    app: loki
+  ports:
+  - name: http
+    port: 3100
+    targetPort: 3100
+  - name: grpc
+    port: 9096
+    targetPort: 9096
+
+---
+# Grafana for visualization
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: observability
+data:
+  prometheus.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus.observability.svc.cluster.local:9090
+      access: proxy
+      isDefault: true
+      editable: true
+    - name: Loki
+      type: loki
+      url: http://loki.observability.svc.cluster.local:3100
+      access: proxy
+      editable: true
+    - name: Jaeger
+      type: jaeger
+      url: http://jaeger-query.observability.svc.cluster.local:16686
+      access: proxy
+      editable: true
+    - name: Tempo
+      type: tempo
+      url: http://tempo.observability.svc.cluster.local:3100
+      access: proxy
+      editable: true
+    - name: CloudWatch
+      type: cloudwatch
+      jsonData:
+        authType: default
+        defaultRegion: us-east-1
+      access: proxy
+      editable: true
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: observability
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      serviceAccountName: grafana
+      containers:
+      - name: grafana
+        image: grafana/grafana:10.1.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-credentials
+              key: admin-password
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-piechart-panel,grafana-worldmap-panel,grafana-clock-panel"
+        - name: GF_FEATURE_TOGGLES_ENABLE
+          value: "publicDashboards,tempoSearch,tempoBackendSearch,tempoServiceGraph"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        volumeMounts:
+        - name: grafana-storage
+          mountPath: /var/lib/grafana
+        - name: datasources
+          mountPath: /etc/grafana/provisioning/datasources
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: grafana-storage
+        emptyDir: {}
+      - name: datasources
+        configMap:
+          name: grafana-datasources
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grafana
+  namespace: observability
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: observability
+spec:
+  selector:
+    app: grafana
+  ports:
+  - port: 3000
+    targetPort: 3000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: observability
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - grafana.${DOMAIN_NAME}
+    secretName: grafana-tls
+  rules:
+  - host: grafana.${DOMAIN_NAME}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 3000
+
+---
+# AlertManager for alert routing
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: observability
+data:
+  alertmanager.yml: |
+    global:
+      smtp_smarthost: 'localhost:587'
+      smtp_from: 'alerts@${DOMAIN_NAME}'
+      slack_api_url: '${SLACK_WEBHOOK_URL}'
+    
+    templates:
+      - '/etc/alertmanager/templates/*.tmpl'
+    
+    route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 1h
+      receiver: 'web.hook'
+      routes:
+      - match:
+          severity: critical
+        receiver: 'critical-alerts'
+      - match:
+          severity: warning
+        receiver: 'warning-alerts'
+      - match_re:
+          service: .*linkedin-headshot.*
+        receiver: 'app-alerts'
+    
+    receivers:
+    - name: 'web.hook'
+      webhook_configs:
+      - url: 'http://webhook-service.observability.svc.cluster.local:8080/webhook'
+        send_resolved: true
+    
+    - name: 'critical-alerts'
+      slack_configs:
+      - channel: '#alerts-critical'
+        title: 'Critical Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+        actions:
+        - type: button
+          text: 'View in Grafana'
+          url: '{{ (index .Alerts 0).GeneratorURL }}'
+      email_configs:
+      - to: 'devops-team@${DOMAIN_NAME}'
+        subject: 'Critical Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+      pagerduty_configs:
+      - service_key: '${PAGERDUTY_SERVICE_KEY}'
+        description: 'Critical Alert: {{ .GroupLabels.alertname }}'
+    
+    - name: 'warning-alerts'
+      slack_configs:
+      - channel: '#alerts-warning'
+        title: 'Warning: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+    
+    - name: 'app-alerts'
+      slack_configs:
+      - channel: '#app-alerts'
+        title: 'App Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+
+---
+# Service Monitor for custom metrics
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: linkedin-headshot-backend
+  namespace: observability
+  labels:
+    app: linkedin-headshot-backend
+spec:
+  selector:
+    matchLabels:
+      app: linkedin-headshot-backend
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+    honorLabels: true
+  namespaceSelector:
+    matchNames:
+    - linkedin-headshot-production
+    - linkedin-headshot-staging
+
+---
+# Custom PrometheusRule for application-specific alerts
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: linkedin-headshot-alerts
+  namespace: observability
+  labels:
+    app: linkedin-headshot
+spec:
+  groups:
+  - name: linkedin-headshot.rules
+    rules:
+    - alert: HighErrorRate
+      expr: sum(rate(http_requests_total{job="linkedin-headshot-backend",status=~"5.."}[5m])) / sum(rate(http_requests_total{job="linkedin-headshot-backend"}[5m])) > 0.1
+      for: 5m
+      labels:
+        severity: critical
+        service: linkedin-headshot
+      annotations:
+        summary: "High error rate detected"
+        description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+    
+    - alert: HighLatency
+      expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job="linkedin-headshot-backend"}[5m])) by (le)) > 2.0
+      for: 5m
+      labels:
+        severity: warning
+        service: linkedin-headshot
+      annotations:
+        summary: "High latency detected"
+        description: "95th percentile latency is {{ $value }}s for the last 5 minutes"
+    
+    - alert: PodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{container="backend",namespace=~"linkedin-headshot.*"}[5m]) * 60 * 5 > 0
+      for: 5m
+      labels:
+        severity: critical
+        service: linkedin-headshot
+      annotations:
+        summary: "Pod is crash looping"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping"
+    
+    - alert: DatabaseConnectionPoolExhausted
+      expr: sum(database_connections_active) / sum(database_connections_max) > 0.9
+      for: 2m
+      labels:
+        severity: warning
+        service: linkedin-headshot
+      annotations:
+        summary: "Database connection pool nearly exhausted"
+        description: "Database connection pool utilization is at {{ $value | humanizePercentage }}"
+    
+    - alert: RedisQueueBacklog
+      expr: redis_queue_length{queue="image_processing"} > 100
+      for: 5m
+      labels:
+        severity: warning
+        service: linkedin-headshot
+      annotations:
+        summary: "Redis queue backlog detected"
+        description: "Image processing queue has {{ $value }} pending jobs"
+    
+    - alert: HighMemoryUsage
+      expr: (container_memory_usage_bytes{container="backend",namespace=~"linkedin-headshot.*"} / container_spec_memory_limit_bytes{container="backend",namespace=~"linkedin-headshot.*"}) > 0.9
+      for: 5m
+      labels:
+        severity: warning
+        service: linkedin-headshot
+      annotations:
+        summary: "High memory usage"
+        description: "Container memory usage is at {{ $value | humanizePercentage }} of limit"

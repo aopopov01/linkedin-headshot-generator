@@ -1,0 +1,358 @@
+# Security Testing Configuration
+# Comprehensive security testing setup for LinkedIn Headshot Generator
+
+# OWASP ZAP Configuration
+zap:
+  proxy:
+    host: localhost
+    port: 8080
+  
+  active_scan:
+    enabled: true
+    policy: default
+    max_rule_duration_minutes: 10
+    max_scan_duration_minutes: 60
+  
+  passive_scan:
+    enabled: true
+    max_alerts_per_rule: 10
+  
+  spider:
+    enabled: true
+    max_depth: 5
+    max_children: 10
+    max_duration_minutes: 10
+  
+  ajax_spider:
+    enabled: true
+    max_duration_minutes: 5
+    max_crawl_depth: 10
+  
+  authentication:
+    login_url: "http://localhost:3001/api/auth/login"
+    username_field: "email"
+    password_field: "password"
+    test_credentials:
+      username: "security-test@example.com"
+      password: "SecurityTest123!"
+  
+  contexts:
+    - name: "API Context"
+      urls:
+        - "http://localhost:3001/api/*"
+      exclude_urls:
+        - "http://localhost:3001/api/health"
+    
+    - name: "Web App Context"
+      urls:
+        - "http://localhost:3000/*"
+      exclude_urls:
+        - "http://localhost:3000/static/*"
+
+# SonarQube Configuration
+sonarqube:
+  server_url: "http://localhost:9000"
+  project_key: "linkedin-headshot-generator"
+  project_name: "LinkedIn Headshot Generator"
+  
+  quality_gate:
+    conditions:
+      - metric: "security_rating"
+        operator: "GT"
+        threshold: "1"
+      - metric: "reliability_rating"
+        operator: "GT"
+        threshold: "1"
+      - metric: "maintainability_rating"
+        operator: "GT"
+        threshold: "1"
+      - metric: "coverage"
+        operator: "LT"
+        threshold: "80"
+  
+  exclusions:
+    - "**/node_modules/**"
+    - "**/build/**"
+    - "**/dist/**"
+    - "**/*.test.*"
+    - "**/tests/**"
+    - "**/e2e/**"
+
+# Snyk Configuration
+snyk:
+  api_token_env: "SNYK_TOKEN"
+  organization: "linkedin-headshot-org"
+  
+  policies:
+    fail_on:
+      - high
+      - critical
+    
+    ignore_policies:
+      - id: "SNYK-JS-*"
+        reason: "False positive - reviewed and accepted"
+        expires: "2025-12-31"
+  
+  monitor:
+    enabled: true
+    frequency: "daily"
+  
+  test_options:
+    dev_dependencies: true
+    fail_on_issues: true
+    severity_threshold: "high"
+
+# OWASP Dependency Check Configuration
+dependency_check:
+  project_name: "LinkedIn Headshot Generator"
+  scan_directories:
+    - "./LinkedInHeadshotApp"
+    - "./backend"
+    - "./demo-web"
+  
+  databases:
+    auto_update: true
+    update_frequency: "daily"
+  
+  suppressions_file: "./security-testing/dependency-check-suppressions.xml"
+  
+  fail_on_cvss: 7.0
+  
+  formats:
+    - HTML
+    - JSON
+    - XML
+  
+  exclude_patterns:
+    - "**/node_modules/**"
+    - "**/test/**"
+    - "**/*.test.*"
+
+# Trivy Configuration
+trivy:
+  cache_dir: ".trivycache"
+  
+  image_scanning:
+    enabled: true
+    images:
+      - "linkedin-headshot-backend:latest"
+      - "linkedin-headshot-demo:latest"
+  
+  filesystem_scanning:
+    enabled: true
+    paths:
+      - "./backend"
+      - "./LinkedInHeadshotApp"
+  
+  severity_levels:
+    - CRITICAL
+    - HIGH
+    - MEDIUM
+  
+  ignore_unfixed: false
+  
+  exit_code: 1  # Fail on vulnerabilities
+
+# Semgrep Configuration
+semgrep:
+  rules:
+    - "p/owasp-top-ten"
+    - "p/security-audit"
+    - "p/javascript"
+    - "p/typescript"
+    - "p/react"
+    - "p/nodejs"
+  
+  exclude_rules:
+    - "javascript.lang.security.audit.unsafe-html-string"  # If using sanitized HTML
+  
+  paths:
+    include:
+      - "./LinkedInHeadshotApp/src"
+      - "./backend/src"
+      - "./demo-web/src"
+    exclude:
+      - "**/node_modules"
+      - "**/build"
+      - "**/test"
+      - "**/*.test.*"
+  
+  output_format: "json"
+  severity: "WARNING"
+
+# Mobile Security Testing (MobSF)
+mobsf:
+  server_url: "http://localhost:8000"
+  
+  android:
+    apk_path: "./LinkedInHeadshotApp/android/app/build/outputs/apk/debug/app-debug.apk"
+    
+  ios:
+    ipa_path: "./LinkedInHeadshotApp/ios/build/LinkedInHeadshotApp.ipa"
+  
+  scan_options:
+    static_analysis: true
+    dynamic_analysis: false  # Requires instrumented app
+  
+  fail_on_severity: "high"
+
+# Network Security Testing
+nmap:
+  targets:
+    - "localhost:3001"  # Backend API
+    - "localhost:3000"  # Web app
+  
+  scan_types:
+    - "sS"  # SYN scan
+    - "sV"  # Version detection
+    - "sC"  # Default scripts
+  
+  output_format: "xml"
+
+# SSL/TLS Testing
+sslyze:
+  targets:
+    - hostname: "api.linkedinheadshot.com"
+      port: 443
+    - hostname: "app.linkedinheadshot.com" 
+      port: 443
+  
+  scan_commands:
+    - "ssl_2_0_cipher_suites"
+    - "ssl_3_0_cipher_suites" 
+    - "tls_1_0_cipher_suites"
+    - "tls_1_1_cipher_suites"
+    - "tls_1_2_cipher_suites"
+    - "tls_1_3_cipher_suites"
+    - "certificate_info"
+    - "heartbleed"
+    - "openssl_ccs_injection"
+
+# API Security Testing
+postman_newman:
+  collections:
+    - "./security-testing/api-security-tests.json"
+  
+  environments:
+    - "./security-testing/security-test-environment.json"
+  
+  reporters:
+    - "cli"
+    - "junit"
+    - "htmlextra"
+  
+  fail_on:
+    - assertion_failures
+    - request_failures
+
+# Security Headers Testing
+security_headers:
+  urls:
+    - "http://localhost:3000"
+    - "http://localhost:3001"
+    - "https://api.linkedinheadshot.com"
+  
+  required_headers:
+    - "Strict-Transport-Security"
+    - "Content-Security-Policy"
+    - "X-Content-Type-Options"
+    - "X-Frame-Options"
+    - "X-XSS-Protection"
+    - "Referrer-Policy"
+  
+  forbidden_headers:
+    - "X-Powered-By"
+    - "Server"
+
+# Penetration Testing Configuration
+penetration_testing:
+  scope:
+    - "http://localhost:3000/*"
+    - "http://localhost:3001/api/*"
+  
+  out_of_scope:
+    - "http://localhost:3001/api/health"
+    - "http://localhost:3000/static/*"
+  
+  test_categories:
+    - "authentication"
+    - "authorization" 
+    - "session_management"
+    - "input_validation"
+    - "error_handling"
+    - "business_logic"
+    - "cryptography"
+  
+  credentials:
+    regular_user:
+      username: "pentest@example.com"
+      password: "PenTest123!"
+    admin_user:
+      username: "admin@example.com"
+      password: "AdminTest123!"
+
+# Compliance Testing
+compliance:
+  standards:
+    - "OWASP_TOP_10"
+    - "PCI_DSS"
+    - "GDPR"
+    - "SOC2"
+  
+  requirements:
+    data_encryption:
+      - "data_at_rest"
+      - "data_in_transit"
+    
+    access_controls:
+      - "authentication"
+      - "authorization"
+      - "session_management"
+    
+    audit_logging:
+      - "security_events"
+      - "data_access"
+      - "system_changes"
+
+# Reporting Configuration
+reporting:
+  output_directory: "./security-testing/reports"
+  
+  formats:
+    - "html"
+    - "json"
+    - "pdf"
+    - "sarif"
+  
+  include_sections:
+    - "executive_summary"
+    - "vulnerability_details"
+    - "risk_assessment"
+    - "remediation_recommendations"
+    - "compliance_status"
+  
+  severity_mapping:
+    critical: "9.0-10.0"
+    high: "7.0-8.9"
+    medium: "4.0-6.9"
+    low: "0.1-3.9"
+    info: "0.0"
+
+# Notification Configuration
+notifications:
+  slack:
+    webhook_url_env: "SLACK_WEBHOOK_URL"
+    channel: "#security-alerts"
+    
+  email:
+    smtp_server: "smtp.company.com"
+    recipients:
+      - "security-team@company.com"
+      - "dev-team@company.com"
+  
+  conditions:
+    - severity: "critical"
+      immediate: true
+    - severity: "high"
+      immediate: true
+    - new_vulnerabilities: true

@@ -1,0 +1,203 @@
+version: '3.8'
+
+services:
+  # OWASP ZAP Proxy for dynamic security testing
+  zap:
+    image: owasp/zap2docker-stable:latest
+    container_name: zap-proxy
+    ports:
+      - "8080:8080"
+      - "8090:8090"
+    volumes:
+      - ./reports:/zap/reports
+      - ./zap-scripts:/zap/scripts
+    environment:
+      - ZAP_HOST=0.0.0.0
+      - ZAP_PORT=8080
+    command: zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+    networks:
+      - security-testing
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/JSON/core/view/version/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # SonarQube for static code analysis
+  sonarqube:
+    image: sonarqube:9.9-community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+      - SONAR_JDBC_URL=jdbc:postgresql://postgres-sonar:5432/sonarqube
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar123
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+    depends_on:
+      - postgres-sonar
+    networks:
+      - security-testing
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/api/system/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # PostgreSQL for SonarQube
+  postgres-sonar:
+    image: postgres:13
+    container_name: postgres-sonar
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar123
+      - POSTGRES_DB=sonarqube
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - security-testing
+
+  # MobSF for mobile security testing
+  mobsf:
+    image: opensecurity/mobsf:latest
+    container_name: mobsf
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./mobile-apps:/home/mobsf/Mobile-Security-Framework-MobSF/uploads
+      - ./reports/mobsf:/home/mobsf/Mobile-Security-Framework-MobSF/StaticAnalyzer/tools/
+    environment:
+      - MOBSF_ANALYZER_IDENTIFIER=security-test
+    networks:
+      - security-testing
+
+  # Trivy for vulnerability scanning
+  trivy:
+    image: aquasec/trivy:latest
+    container_name: trivy-scanner
+    volumes:
+      - ./reports:/reports
+      - ../:/workspace:ro
+      - trivy-cache:/root/.cache/trivy
+    working_dir: /workspace
+    command: ["sleep", "3600"]  # Keep container running
+    networks:
+      - security-testing
+
+  # Semgrep for static analysis
+  semgrep:
+    image: returntocorp/semgrep:latest
+    container_name: semgrep-analyzer
+    volumes:
+      - ../:/src:ro
+      - ./reports:/reports
+    working_dir: /src
+    command: ["sleep", "3600"]  # Keep container running
+    networks:
+      - security-testing
+
+  # OWASP Dependency Check
+  dependency-check:
+    image: owasp/dependency-check:latest
+    container_name: dependency-check
+    volumes:
+      - ../:/src:ro
+      - ./reports/dependency-check:/reports
+      - dependency-check-data:/usr/share/dependency-check/data
+    environment:
+      - JAVA_OPTS=-Xmx4g
+    command: ["sleep", "3600"]  # Keep container running
+    networks:
+      - security-testing
+
+  # Custom security test runner
+  security-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.security-runner
+    container_name: security-test-runner
+    volumes:
+      - ../:/workspace:ro
+      - ./reports:/reports
+      - ./security-test-config.yml:/config/security-test-config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - SNYK_TOKEN=${SNYK_TOKEN:-}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+    working_dir: /workspace
+    depends_on:
+      - zap
+      - sonarqube
+      - trivy
+      - semgrep
+    networks:
+      - security-testing
+    command: ["node", "/usr/local/bin/security-test-runner.js"]
+
+  # Nginx for serving security reports
+  security-reports:
+    image: nginx:alpine
+    container_name: security-reports-server
+    ports:
+      - "8888:80"
+    volumes:
+      - ./reports:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - security-testing
+    depends_on:
+      - security-runner
+
+  # SSL Labs test (for production URLs)
+  sslyze:
+    image: nablac0d3/sslyze:latest
+    container_name: sslyze-scanner
+    volumes:
+      - ./reports/ssl:/reports
+    command: ["sleep", "3600"]
+    networks:
+      - security-testing
+
+  # Network scanning with Nmap
+  nmap:
+    image: instrumentisto/nmap:latest
+    container_name: nmap-scanner
+    volumes:
+      - ./reports/network:/reports
+    command: ["sleep", "3600"]
+    networks:
+      - security-testing
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+  # Nikto web scanner
+  nikto:
+    image: sullo/nikto:latest
+    container_name: nikto-scanner
+    volumes:
+      - ./reports/nikto:/reports
+    command: ["sleep", "3600"]
+    networks:
+      - security-testing
+
+volumes:
+  sonarqube_data:
+  sonarqube_logs:
+  sonarqube_extensions:
+  postgresql_data:
+  trivy-cache:
+  dependency-check-data:
+
+networks:
+  security-testing:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16

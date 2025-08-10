@@ -1,0 +1,52 @@
+{
+  "name": "linkedin-headshot-test-scripts",
+  "version": "1.0.0",
+  "description": "Test orchestration and automation scripts",
+  "main": "test-runner.js",
+  "bin": {
+    "test-runner": "./test-runner.js"
+  },
+  "scripts": {
+    "test:all": "node test-runner.js run",
+    "test:pr": "node test-runner.js run --trigger pull_request",
+    "test:main": "node test-runner.js run --trigger push_main",
+    "test:nightly": "node test-runner.js run --trigger nightly",
+    "test:deployment": "node test-runner.js run --trigger deployment",
+    "test:unit": "node test-runner.js suite unit_tests",
+    "test:integration": "node test-runner.js suite integration_tests",
+    "test:e2e": "node test-runner.js suite e2e_tests",
+    "test:security": "node test-runner.js suite security_tests",
+    "test:performance": "node test-runner.js suite performance_tests",
+    "test:accessibility": "node test-runner.js suite accessibility_tests",
+    "test:validation": "node test-runner.js suite app_store_validation",
+    "config:show": "node test-runner.js config",
+    "health:check": "node health-check.js",
+    "health:report": "node health-check.js && python3 -m http.server 8888 --directory ../reports/health-check",
+    "reports:serve": "python3 -m http.server 8888 --directory ../reports"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "js-yaml": "^4.1.0",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1",
+    "commander": "^11.1.0",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [
+    "testing",
+    "automation",
+    "ci-cd",
+    "test-orchestration",
+    "quality-assurance"
+  ],
+  "author": "LinkedIn Headshot Generator Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

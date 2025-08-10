@@ -6,13 +6,15 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Alert,
   Share,
-  Dimensions,
+  Image,
+  Platform,
 } from 'react-native';
-
-const { width } = Dimensions.get('window');
-const imageSize = (width - 60) / 2;
+import Grid, { RESPONSIVE_CONFIGS } from '../shared/Grid';
+import { PrimaryButton, SecondaryButton, TertiaryButton } from '../shared/Button';
+import Card, { ActionCard, InfoCard } from '../shared/Card';
+import { showAlert, showSuccessAlert, showErrorAlert } from '../shared/Alert';
+import { COLORS, TYPOGRAPHY, SPACING, RADIUS, SHADOWS, ACCESSIBILITY, responsive } from '../../utils/designSystem';
 
 const ResultsGallery = ({ navigation, route }) => {
   const { originalImage, selectedStyle, generatedImages } = route.params || {};
@@ -25,13 +27,17 @@ const ResultsGallery = ({ navigation, route }) => {
   const handleDownload = () => {
     if (selectedImage) {
       // In a real app, this would download the selected image
-      Alert.alert(
+      showSuccessAlert(
         'Download Started',
         'Your professional headshot is being saved to your gallery.',
-        [{ text: 'OK' }]
+        [{ text: 'OK', style: 'default' }]
       );
     } else {
-      Alert.alert('Error', 'Please select an image first');
+      showErrorAlert(
+        'No Image Selected',
+        'Please select an image before downloading.',
+        [{ text: 'OK', style: 'default' }]
+      );
     }
   };
 
@@ -39,15 +45,23 @@ const ResultsGallery = ({ navigation, route }) => {
     if (selectedImage) {
       try {
         await Share.share({
-          message: 'Check out my new professional headshot created with AI!',
+          message: 'Check out my new professional headshot created with AI! Perfect for LinkedIn and professional profiles.',
           // In a real app, would include the actual image URL
           url: selectedImage.uri,
         });
       } catch (error) {
-        Alert.alert('Error', 'Failed to share image');
+        showErrorAlert(
+          'Share Failed',
+          'Unable to share the image at this time. Please try again.',
+          [{ text: 'OK', style: 'default' }]
+        );
       }
     } else {
-      Alert.alert('Error', 'Please select an image first');
+      showErrorAlert(
+        'No Image Selected',
+        'Please select an image before sharing.',
+        [{ text: 'OK', style: 'default' }]
+      );
     }
   };
 
@@ -77,81 +91,84 @@ const ResultsGallery = ({ navigation, route }) => {
           </Text>
         </View>
 
-        <View style={styles.resultsGrid}>
+        <Grid
+          responsive={RESPONSIVE_CONFIGS.gallery}
+          spacing={responsive.sp(SPACING.lg)}
+          style={styles.resultsGrid}
+        >
           {mockResults.map((image) => (
-            <TouchableOpacity
+            <Card
               key={image.id}
-              style={[
-                styles.imageCard,
-                selectedImage?.id === image.id && styles.selectedImageCard,
-              ]}
+              selected={selectedImage?.id === image.id}
               onPress={() => handleImageSelect(image)}
-              activeOpacity={0.7}
+              variant="elevated"
+              padding="none"
+              accessibilityLabel={`${selectedStyle} headshot ${image.id}`}
+              accessibilityHint={selectedImage?.id === image.id ? 'Currently selected' : 'Tap to select this headshot'}
+              style={styles.imageCard}
             >
               <View style={styles.imagePlaceholder}>
                 <Text style={styles.imagePlaceholderText}>
                   {selectedStyle} #{image.id}
                 </Text>
-              </View>
-
-              {selectedImage?.id === image.id && (
-                <View style={styles.selectedOverlay}>
-                  <View style={styles.selectedIndicator}>
-                    <Text style={styles.selectedText}>✓</Text>
-                  </View>
+                
+                <View style={styles.qualityBadge}>
+                  <Text style={styles.qualityBadgeText}>HD</Text>
                 </View>
-              )}
-            </TouchableOpacity>
+              </View>
+            </Card>
           ))}
-        </View>
+        </Grid>
 
         {selectedImage && (
           <View style={styles.actionContainer}>
-            <Text style={styles.selectedImageText}>
-              Image {selectedImage.id} selected
-            </Text>
+            <InfoCard
+              icon={<Text style={styles.selectionIcon}>✓</Text>}
+              title={`${selectedStyle} Headshot #${selectedImage.id} Selected`}
+              description="Ready to download or share your professional headshot"
+              style={styles.selectionCard}
+            />
             
             <View style={styles.buttonRow}>
-              <TouchableOpacity
-                style={[styles.actionButton, styles.downloadButton]}
+              <SecondaryButton
+                title="Download"
                 onPress={handleDownload}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.downloadButtonText}>Download</Text>
-              </TouchableOpacity>
+                size="large"
+                icon={<Text style={styles.buttonIcon}>⬇️</Text>}
+                accessibilityHint="Download selected headshot to device"
+                style={styles.downloadButton}
+              />
 
-              <TouchableOpacity
-                style={[styles.actionButton, styles.shareButton]}
+              <PrimaryButton
+                title="Share"
                 onPress={handleShare}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.shareButtonText}>Share</Text>
-              </TouchableOpacity>
+                size="large"
+                icon={<Text style={styles.buttonIcon}>📤</Text>}
+                accessibilityHint="Share selected headshot with others"
+                style={styles.shareButton}
+              />
             </View>
           </View>
         )}
 
         <View style={styles.bottomActions}>
-          <TouchableOpacity
-            style={styles.createMoreButton}
+          <TertiaryButton
+            title="Create More Photos"
             onPress={handleCreateMore}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.createMoreButtonText}>Create More Photos</Text>
-          </TouchableOpacity>
+            size="large"
+            fullWidth
+            accessibilityHint="Return to photo capture to create more headshots"
+            style={styles.createMoreButton}
+          />
 
-          <View style={styles.upgradeContainer}>
-            <Text style={styles.upgradeText}>
-              Want unlimited headshots? Upgrade to Premium!
-            </Text>
-            <TouchableOpacity
-              style={styles.upgradeButton}
-              onPress={handleUpgrade}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.upgradeButtonText}>Upgrade Now</Text>
-            </TouchableOpacity>
-          </View>
+          <ActionCard
+            icon={<Text style={styles.upgradeIcon}>👑</Text>}
+            title="Upgrade to Premium"
+            description="Get unlimited professional headshots, priority processing, and premium styles"
+            actionText="Upgrade Now"
+            onActionPress={handleUpgrade}
+            style={styles.upgradeContainer}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -161,163 +178,104 @@ const ResultsGallery = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.background.primary,
   },
   content: {
     flexGrow: 1,
-    padding: 20,
+    padding: responsive.sp(SPACING.lg),
   },
   header: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: responsive.sp(SPACING.xl),
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginBottom: 10,
+    fontSize: responsive.fs(TYPOGRAPHY.h1.fontSize),
+    fontWeight: TYPOGRAPHY.h1.fontWeight,
+    color: COLORS.text.primary,
+    marginBottom: responsive.sp(SPACING.md),
+    textAlign: 'center',
+    letterSpacing: TYPOGRAPHY.h1.letterSpacing,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#7F8C8D',
+    fontSize: responsive.fs(TYPOGRAPHY.body1.fontSize),
+    color: COLORS.text.secondary,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: TYPOGRAPHY.body1.lineHeight,
+    maxWidth: responsive.wp(85),
   },
   resultsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 30,
+    marginBottom: responsive.sp(SPACING.xl),
   },
   imageCard: {
-    width: imageSize,
-    height: imageSize,
-    marginBottom: 15,
-    borderRadius: 12,
+    aspectRatio: 1,
+    borderRadius: RADIUS.lg,
     overflow: 'hidden',
-    position: 'relative',
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  selectedImageCard: {
-    borderColor: '#0A66C2',
   },
   imagePlaceholder: {
     flex: 1,
-    backgroundColor: '#E9ECEF',
+    backgroundColor: COLORS.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+    padding: responsive.sp(SPACING.md),
   },
   imagePlaceholderText: {
-    fontSize: 14,
-    color: '#6C757D',
-    fontWeight: '500',
+    fontSize: responsive.fs(TYPOGRAPHY.body2.fontSize),
+    color: COLORS.text.secondary,
+    fontWeight: '600',
     textAlign: 'center',
   },
-  selectedOverlay: {
+  qualityBadge: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(10, 102, 194, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    top: responsive.sp(SPACING.sm),
+    right: responsive.sp(SPACING.sm),
+    backgroundColor: COLORS.primary[500],
+    paddingHorizontal: responsive.sp(SPACING.sm),
+    paddingVertical: responsive.sp(SPACING.xs),
+    borderRadius: RADIUS.sm,
   },
-  selectedIndicator: {
-    backgroundColor: '#0A66C2',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  selectedText: {
-    color: '#ffffff',
-    fontSize: 20,
+  qualityBadgeText: {
+    color: COLORS.text.inverse,
+    fontSize: responsive.fs(TYPOGRAPHY.caption.fontSize),
     fontWeight: 'bold',
+  },
+  selectionIcon: {
+    fontSize: responsive.fs(24),
+    color: COLORS.secondary[500],
+  },
+  selectionCard: {
+    marginBottom: responsive.sp(SPACING.lg),
   },
   actionContainer: {
     alignItems: 'center',
-    marginBottom: 30,
-    padding: 20,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-  },
-  selectedImageText: {
-    fontSize: 16,
-    color: '#2C3E50',
-    fontWeight: '500',
-    marginBottom: 20,
+    marginBottom: responsive.sp(SPACING.xl),
   },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     width: '100%',
+    gap: responsive.sp(SPACING.md),
   },
-  actionButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 20,
-    minWidth: 120,
-    alignItems: 'center',
+  buttonIcon: {
+    fontSize: 16,
   },
   downloadButton: {
-    backgroundColor: '#27AE60',
-  },
-  downloadButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+    flex: 1,
   },
   shareButton: {
-    backgroundColor: '#0A66C2',
-  },
-  shareButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+    flex: 1,
   },
   bottomActions: {
     alignItems: 'center',
   },
   createMoreButton: {
-    backgroundColor: '#34495E',
-    paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    marginBottom: 20,
-  },
-  createMoreButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+    marginBottom: responsive.sp(SPACING.xl),
   },
   upgradeContainer: {
-    alignItems: 'center',
-    backgroundColor: '#FFF3CD',
-    padding: 20,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#FFEAA7',
+    width: '100%',
   },
-  upgradeText: {
-    fontSize: 16,
-    color: '#856404',
-    textAlign: 'center',
-    marginBottom: 15,
-    fontWeight: '500',
-  },
-  upgradeButton: {
-    backgroundColor: '#F39C12',
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 20,
-  },
-  upgradeButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+  upgradeIcon: {
+    fontSize: responsive.fs(32),
   },
 });
 

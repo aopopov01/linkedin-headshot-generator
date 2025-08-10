@@ -1,0 +1,960 @@
+{
+  "info": {
+    "name": "LinkedIn Headshot Generator - API Security Tests",
+    "description": "Comprehensive API security test suite covering authentication, authorization, input validation, and business logic vulnerabilities",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication Security Tests",
+      "item": [
+        {
+          "name": "SQL Injection in Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com' OR '1'='1\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not allow SQL injection', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    pm.expect(pm.response.json().success).to.be.false;",
+                  "    pm.expect(pm.response.json().error).to.not.include('database');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "NoSQL Injection in Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": {\"$ne\": null},\n  \"password\": {\"$ne\": null}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not allow NoSQL injection', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    pm.expect(pm.response.json().success).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Brute Force Protection Test",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"wrongpassword{{$randomInt}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// This test should be run multiple times to trigger rate limiting",
+                  "pm.test('Should implement rate limiting after multiple failed attempts', function () {",
+                  "    if (pm.info.iteration > 5) {",
+                  "        pm.response.to.have.status(429);",
+                  "    } else {",
+                  "        pm.response.to.have.status(401);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "JWT Token Manipulation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpYXQiOjE2MzQ1Njc4OTAsImV4cCI6MTYzNDU3MTQ5MH0.invalid_signature"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should reject manipulated JWT tokens', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "    pm.expect(pm.response.json().error).to.include('token');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Password Reset Token Enumeration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nonexistent@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "forgot-password"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not reveal if email exists', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.expect(pm.response.json().message).to.not.include('not found');",
+                  "    pm.expect(pm.response.json().message).to.not.include('does not exist');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Authorization Security Tests",
+      "item": [
+        {
+          "name": "Access Other User's Photos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/photos/{{other_user_photo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos", "{{other_user_photo_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not allow access to other users photos', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "    pm.expect(pm.response.json().success).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Other User's Photos",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/photos/{{other_user_photo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos", "{{other_user_photo_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not allow deleting other users photos', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "    pm.expect(pm.response.json().success).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Access Admin Endpoints",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "users"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not allow regular users to access admin endpoints', function () {",
+                  "    pm.response.to.have.status(403);",
+                  "    pm.expect(pm.response.json().error).to.include('forbidden');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Privilege Escalation via Role Parameter",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"role\": \"admin\",\n  \"permissions\": [\"admin\", \"user\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "profile"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not allow privilege escalation', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    var user = pm.response.json().user;",
+                  "    pm.expect(user.role).to.not.equal('admin');",
+                  "    pm.expect(user.permissions).to.not.include('admin');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Input Validation Security Tests",
+      "item": [
+        {
+          "name": "XSS in User Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<script>alert('XSS')</script>\",\n  \"email\": \"xss@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should sanitize XSS in input', function () {",
+                  "    if (pm.response.code === 201) {",
+                  "        var user = pm.response.json().user;",
+                  "        pm.expect(user.name).to.not.include('<script>');",
+                  "        pm.expect(user.name).to.not.include('alert');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Command Injection in Photo Processing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "styleId",
+                  "value": "professional; rm -rf /",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/photos/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos", "upload"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should prevent command injection', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    pm.expect(pm.response.json().error).to.include('invalid');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Path Traversal in File Operations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/files/../../../etc/passwd",
+              "host": ["{{base_url}}"],
+              "path": ["api", "files", "..", "..", "..", "etc", "passwd"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should prevent path traversal', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "    pm.expect(pm.response.text()).to.not.include('root:');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Large File Upload DoS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "photo",
+                  "value": "{{$randomAlphaNumeric}}".repeat(1000000),
+                  "type": "file"
+                },
+                {
+                  "key": "styleId",
+                  "value": "professional",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/photos/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos", "upload"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should reject oversized files', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    pm.expect(pm.response.json().error).to.include('size');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid JSON Structure",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"malformed\": json,\n  \"test\": \n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "profile"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should handle malformed JSON gracefully', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    pm.expect(pm.response.json().error).to.include('invalid');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Business Logic Security Tests",
+      "item": [
+        {
+          "name": "Bypass Photo Generation Limits",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{free_user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "styleId",
+                  "value": "professional",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/photos/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos", "upload"]
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// This test should be run after the user has exceeded their monthly limit"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should enforce generation limits for free users', function () {",
+                  "    pm.response.to.have.status(403);",
+                  "    pm.expect(pm.response.json().error).to.include('limit');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Access Premium Styles as Free User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{free_user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "styleId",
+                  "value": "executive",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/photos/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos", "upload"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should prevent free users from using premium styles', function () {",
+                  "    pm.response.to.have.status(403);",
+                  "    pm.expect(pm.response.json().error).to.include('premium');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Race Condition in Payment Processing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentMethodId\": \"pm_test_4242424242424242\",\n  \"plan\": \"premium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/subscribe",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payments", "subscribe"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should handle concurrent payment requests safely', function () {",
+                  "    pm.response.to.have.status.oneOf([200, 409]);",
+                  "    if (pm.response.code === 409) {",
+                  "        pm.expect(pm.response.json().error).to.include('already');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Negative Price Manipulation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentMethodId\": \"pm_test_4242424242424242\",\n  \"plan\": \"premium\",\n  \"amount\": -999\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/subscribe",
+              "host": ["{{base_url}}"],
+              "path": ["api", "payments", "subscribe"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should reject negative payment amounts', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    pm.expect(pm.response.json().error).to.include('amount');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Session Management Security Tests",
+      "item": [
+        {
+          "name": "Session Fixation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "sessionid=fixed_session_id"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"password\": \"{{test_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should regenerate session ID on login', function () {",
+                  "    if (pm.response.code === 200) {",
+                  "        var cookies = pm.response.headers.get('Set-Cookie');",
+                  "        if (cookies) {",
+                  "            pm.expect(cookies).to.not.include('fixed_session_id');",
+                  "        }",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token Replay Attack",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{expired_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should reject expired tokens', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "    pm.expect(pm.response.json().error).to.include('expired');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "API Rate Limiting Tests",
+      "item": [
+        {
+          "name": "API Rate Limit Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/photos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should implement API rate limiting', function () {",
+                  "    // After multiple rapid requests, should get rate limited",
+                  "    if (pm.info.iteration > 100) {",
+                  "        pm.response.to.have.status(429);",
+                  "        pm.expect(pm.response.headers.get('Retry-After')).to.exist;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Error Handling Security Tests",
+      "item": [
+        {
+          "name": "Information Disclosure in Errors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/nonexistent-endpoint",
+              "host": ["{{base_url}}"],
+              "path": ["api", "nonexistent-endpoint"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not expose sensitive information in errors', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "    var response = pm.response.text();",
+                  "    pm.expect(response).to.not.include('stack trace');",
+                  "    pm.expect(response).to.not.include('database');",
+                  "    pm.expect(response).to.not.include('password');",
+                  "    pm.expect(response).to.not.include('secret');",
+                  "    pm.expect(response).to.not.include('token');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Database Error Information Disclosure",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/photos/99999999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "photos", "99999999"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should not expose database details in error responses', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "    var response = pm.response.text();",
+                  "    pm.expect(response).to.not.include('postgresql');",
+                  "    pm.expect(response).to.not.include('SELECT');",
+                  "    pm.expect(response).to.not.include('table');",
+                  "    pm.expect(response).to.not.include('column');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global pre-request script for security tests",
+          "console.log('Running security test:', pm.info.requestName);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script for security validations",
+          "pm.test('Should not expose server information', function () {",
+          "    pm.expect(pm.response.headers.get('X-Powered-By')).to.be.undefined;",
+          "    pm.expect(pm.response.headers.get('Server')).to.be.undefined;",
+          "});",
+          "",
+          "pm.test('Should include security headers', function () {",
+          "    pm.expect(pm.response.headers.get('X-Content-Type-Options')).to.equal('nosniff');",
+          "    pm.expect(pm.response.headers.get('X-Frame-Options')).to.exist;",
+          "    pm.expect(pm.response.headers.get('X-XSS-Protection')).to.exist;",
+          "});",
+          "",
+          "pm.test('Response time should be reasonable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001",
+      "type": "string"
+    },
+    {
+      "key": "test_email",
+      "value": "security-test@example.com",
+      "type": "string"
+    },
+    {
+      "key": "test_password",
+      "value": "SecurityTest123!",
+      "type": "string"
+    }
+  ]
+}

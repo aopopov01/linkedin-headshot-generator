@@ -1,0 +1,59 @@
+# Security Test Runner Docker Image
+FROM node:18-alpine
+
+# Install system dependencies for security tools
+RUN apk add --no-cache \
+    curl \
+    wget \
+    bash \
+    git \
+    python3 \
+    py3-pip \
+    openjdk11-jre \
+    docker \
+    && rm -rf /var/cache/apk/*
+
+# Install Node.js dependencies
+WORKDIR /usr/local/lib
+COPY package.json package-lock.json ./
+RUN npm ci --production
+
+# Install Python security tools
+RUN pip3 install --no-cache-dir \
+    safety \
+    bandit \
+    semgrep
+
+# Install additional security tools
+RUN wget -q -O /usr/local/bin/sonar-scanner-cli.zip \
+    https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip \
+    && unzip -q /usr/local/bin/sonar-scanner-cli.zip -d /usr/local/bin/ \
+    && rm /usr/local/bin/sonar-scanner-cli.zip \
+    && ln -s /usr/local/bin/sonar-scanner-4.8.0.2856-linux/bin/sonar-scanner /usr/local/bin/sonar-scanner
+
+# Install Snyk CLI
+RUN npm install -g snyk
+
+# Install Newman for API testing
+RUN npm install -g newman newman-reporter-htmlextra
+
+# Copy security test runner
+COPY security-test-runner.js /usr/local/bin/
+RUN chmod +x /usr/local/bin/security-test-runner.js
+
+# Copy additional test scripts
+COPY scripts/ /usr/local/bin/scripts/
+RUN chmod +x /usr/local/bin/scripts/*
+
+# Create directories
+RUN mkdir -p /reports /config /workspace
+
+# Set working directory
+WORKDIR /workspace
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Default command
+CMD ["node", "/usr/local/bin/security-test-runner.js"]

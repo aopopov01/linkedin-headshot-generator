@@ -141,46 +141,60 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #f0f9ff, #e0e7ff)' }}>
+      {/* Skip link for keyboard navigation */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
         
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <header style={{ textAlign: 'center', marginBottom: '2rem' }} role="banner">
           <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '0.5rem' }}>
             LinkedIn Headshot Generator
           </h1>
           <p style={{ fontSize: '1.125rem', color: '#6b7280' }}>
             Create professional headshots with AI in seconds
           </p>
-          <div style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            padding: '0.5rem 1rem', 
-            borderRadius: '9999px',
-            fontSize: '0.875rem',
-            fontWeight: '500',
-            marginTop: '1rem',
-            backgroundColor: apiStatus === 'connected' ? '#dcfce7' : apiStatus === 'disconnected' ? '#fef2f2' : '#fef3c7',
-            color: apiStatus === 'connected' ? '#166534' : apiStatus === 'disconnected' ? '#991b1b' : '#92400e'
-          }}>
-            <div style={{
-              width: '0.5rem',
-              height: '0.5rem',
-              borderRadius: '50%',
-              marginRight: '0.5rem',
-              backgroundColor: apiStatus === 'connected' ? '#4ade80' : apiStatus === 'disconnected' ? '#f87171' : '#fbbf24'
-            }}></div>
+          <div 
+            style={{ 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              padding: '0.5rem 1rem', 
+              borderRadius: '9999px',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              marginTop: '1rem',
+              backgroundColor: apiStatus === 'connected' ? '#dcfce7' : apiStatus === 'disconnected' ? '#fef2f2' : '#fef3c7',
+              color: apiStatus === 'connected' ? '#166534' : apiStatus === 'disconnected' ? '#991b1b' : '#92400e'
+            }}
+            role="status"
+            aria-live="polite"
+            aria-label={`API Status: ${apiStatus === 'connected' ? 'Connected' : apiStatus === 'disconnected' ? 'Disconnected' : 'Checking'}`}
+          >
+            <div 
+              style={{
+                width: '0.5rem',
+                height: '0.5rem',
+                borderRadius: '50%',
+                marginRight: '0.5rem',
+                backgroundColor: apiStatus === 'connected' ? '#4ade80' : apiStatus === 'disconnected' ? '#f87171' : '#fbbf24'
+              }}
+              aria-hidden="true"
+            ></div>
             API Status: {apiStatus === 'connected' ? 'Connected' : 
                        apiStatus === 'disconnected' ? 'Disconnected' : 'Checking...'}
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '1024px', margin: '0 auto' }}>
-          
-          {/* Upload Section */}
-          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>
-              1. Upload Your Photo
-            </h2>
+        <main role="main" id="main-content">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '1024px', margin: '0 auto' }}>
+            
+            {/* Upload Section */}
+            <section style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '1.5rem' }} aria-labelledby="upload-heading">
+              <h2 id="upload-heading" style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>
+                1. Upload Your Photo
+              </h2>
             
             <div 
               style={{
@@ -192,22 +206,32 @@ function App() {
                 transition: 'border-color 0.2s'
               }}
               onClick={() => fileInputRef.current?.click()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  fileInputRef.current?.click();
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label="Click to upload a photo or press Enter"
+              aria-describedby="upload-instructions"
             >
               {previewUrl ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
                   <img 
                     src={previewUrl} 
-                    alt="Preview" 
+                    alt="Selected photo preview" 
                     style={{ width: '8rem', height: '8rem', objectFit: 'cover', borderRadius: '0.5rem' }}
                   />
-                  <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>Click to change photo</p>
+                  <p style={{ fontSize: '0.875rem', color: '#6b7280' }} id="upload-instructions">Click to change photo</p>
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                  <PhotoIcon />
+                  <PhotoIcon aria-hidden="true" />
                   <div>
                     <p style={{ fontSize: '1.125rem', fontWeight: '500', color: '#1f2937' }}>Upload a selfie</p>
-                    <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>PNG, JPG up to 10MB</p>
+                    <p style={{ fontSize: '0.875rem', color: '#6b7280' }} id="upload-instructions">PNG, JPG up to 10MB</p>
                   </div>
                 </div>
               )}
@@ -219,16 +243,23 @@ function App() {
               accept="image/*"
               onChange={handleFileSelect}
               style={{ display: 'none' }}
+              aria-label="Upload photo file"
             />
 
             {/* Style Selection */}
-            <div style={{ marginTop: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: '500', color: '#1f2937', marginBottom: '0.75rem' }}>
+            <fieldset style={{ marginTop: '1.5rem', border: 'none', padding: 0 }}>
+              <legend style={{ fontSize: '1.125rem', fontWeight: '500', color: '#1f2937', marginBottom: '0.75rem' }}>
                 2. Choose Your Style
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              </legend>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }} role="radiogroup" aria-labelledby="style-legend">
                 {styles.map((style) => (
-                  <label key={style.key} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <label key={style.key} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '0.5rem', borderRadius: '0.25rem' }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedStyle(style.key);
+                      }
+                    }}>
                     <input
                       type="radio"
                       name="style"
@@ -236,15 +267,16 @@ function App() {
                       checked={selectedStyle === style.key}
                       onChange={(e) => setSelectedStyle(e.target.value)}
                       style={{ width: '1rem', height: '1rem', marginRight: '0.75rem' }}
+                      aria-describedby={`style-${style.key}-desc`}
                     />
                     <div>
                       <div style={{ fontSize: '0.875rem', fontWeight: '500', color: '#1f2937' }}>{style.name}</div>
-                      <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{style.description}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280' }} id={`style-${style.key}-desc`}>{style.description}</div>
                     </div>
                   </label>
                 ))}
               </div>
-            </div>
+            </fieldset>
 
             {/* Generate Button */}
             <button
@@ -264,8 +296,12 @@ function App() {
                 backgroundColor: (!selectedFile || isGenerating || apiStatus !== 'connected') ? '#9ca3af' : '#4f46e5',
                 border: 'none',
                 cursor: (!selectedFile || isGenerating || apiStatus !== 'connected') ? 'not-allowed' : 'pointer',
-                transition: 'background-color 0.2s'
+                transition: 'background-color 0.2s',
+                minHeight: '44px' // WCAG AA touch target size
               }}
+              aria-label={isGenerating ? 'Generating headshots, please wait' : 'Generate professional headshots'}
+              aria-disabled={!selectedFile || isGenerating || apiStatus !== 'connected'}
+              type="button"
             >
               {isGenerating ? (
                 <>
@@ -290,19 +326,19 @@ function App() {
           </div>
 
           {/* Results Section */}
-          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>
+          <section style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', padding: '1.5rem' }} aria-labelledby="results-heading">
+            <h2 id="results-heading" style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>
               3. Your Professional Headshots
             </h2>
 
             {error && (
-              <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.5rem' }}>
+              <div role="alert" aria-live="assertive" style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.5rem' }}>
                 <p style={{ fontSize: '0.875rem', color: '#dc2626' }}>{error}</p>
               </div>
             )}
 
             {isGenerating && (
-              <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+              <div role="status" aria-live="polite" style={{ textAlign: 'center', padding: '2rem 0' }}>
                 <div style={{ 
                   display: 'inline-block',
                   width: '2rem',
@@ -311,7 +347,7 @@ function App() {
                   borderBottom: '2px solid #4f46e5',
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite'
-                }}></div>
+                }} aria-hidden="true"></div>
                 <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
                   Creating your professional headshots...
                 </p>
@@ -320,12 +356,12 @@ function App() {
             )}
 
             {generatedImages.length > 0 && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }} role="region" aria-label="Generated headshot images">
                 {generatedImages.map((image, index) => (
                   <div key={index} style={{ position: 'relative', group: true }}>
                     <img
                       src={image.url}
-                      alt={`Generated headshot ${index + 1}`}
+                      alt={`Generated professional headshot ${index + 1} of ${generatedImages.length}`}
                       style={{ width: '100%', height: '10rem', objectFit: 'cover', borderRadius: '0.5rem' }}
                     />
                     <button
@@ -342,8 +378,12 @@ function App() {
                         fontWeight: '500',
                         border: 'none',
                         cursor: 'pointer',
-                        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+                        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        minHeight: '32px',
+                        minWidth: '32px'
                       }}
+                      aria-label={`Download headshot ${index + 1}`}
+                      type="button"
                     >
                       Download
                     </button>
@@ -354,36 +394,37 @@ function App() {
 
             {!isGenerating && generatedImages.length === 0 && (
               <div style={{ textAlign: 'center', padding: '2rem 0', color: '#6b7280' }}>
-                <CloudIcon />
+                <CloudIcon aria-hidden="true" />
                 <p style={{ marginTop: '1rem' }}>Upload a photo and select a style to get started</p>
               </div>
             )}
+            </section>
           </div>
-        </div>
+        </main>
 
         {/* Features */}
-        <div style={{ marginTop: '4rem', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '2rem' }}>
+        <section style={{ marginTop: '4rem', textAlign: 'center' }} aria-labelledby="features-heading">
+          <h2 id="features-heading" style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '2rem' }}>
             Why Choose Our AI Headshots?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', maxWidth: '1024px', margin: '0 auto' }}>
-            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' }}>
-              <SparklesIcon />
+            <article style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' }}>
+              <SparklesIcon aria-hidden="true" />
               <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937', margin: '1rem 0 0.5rem' }}>AI-Powered</h3>
               <p style={{ color: '#6b7280' }}>Advanced AI creates professional headshots in seconds</p>
-            </div>
-            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' }}>
-              <PhotoIcon />
+            </article>
+            <article style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' }}>
+              <PhotoIcon aria-hidden="true" />
               <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937', margin: '1rem 0 0.5rem' }}>Multiple Styles</h3>
               <p style={{ color: '#6b7280' }}>Choose from 5 professional styles for any industry</p>
-            </div>
-            <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' }}>
-              <CloudIcon />
+            </article>
+            <article style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)' }}>
+              <CloudIcon aria-hidden="true" />
               <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937', margin: '1rem 0 0.5rem' }}>Instant Results</h3>
               <p style={{ color: '#6b7280' }}>Get 4 high-quality headshots in under a minute</p>
-            </div>
+            </article>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

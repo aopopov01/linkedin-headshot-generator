@@ -1,0 +1,502 @@
+# Advanced CI/CD Pipeline for LinkedIn Headshot Generator
+# Implements GitOps, security scanning, performance testing, and canary deployments
+
+name: Advanced CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop, release/*]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '.gitignore'
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+      deployment_strategy:
+        description: 'Deployment strategy'
+        required: true
+        default: 'rolling'
+        type: choice
+        options:
+        - rolling
+        - canary
+        - blue-green
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: linkedin-headshot-generator
+  CLUSTER_NAME: linkedin-headshot-cluster
+  NODE_VERSION: '18.x'
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+jobs:
+  # Security and Quality Gates
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    outputs:
+      security-score: ${{ steps.security-scan.outputs.score }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: |
+          backend/package-lock.json
+          LinkedInHeadshotApp/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd backend && npm ci
+        cd ../LinkedInHeadshotApp && npm ci
+
+    - name: Run npm audit
+      run: |
+        cd backend && npm audit --audit-level moderate --json > ../security-audit-backend.json || true
+        cd ../LinkedInHeadshotApp && npm audit --audit-level moderate --json > ../security-audit-frontend.json || true
+
+    - name: Run Snyk security scan
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high --json-file-output=snyk-results.json
+        command: test
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH'
+
+    - name: Upload Trivy results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    - name: Calculate security score
+      id: security-scan
+      run: |
+        # Custom script to calculate security score based on scan results
+        python3 -c "
+        import json, sys
+        score = 100
+        try:
+            with open('security-audit-backend.json') as f:
+                backend_audit = json.load(f)
+                score -= len(backend_audit.get('vulnerabilities', [])) * 5
+            with open('security-audit-frontend.json') as f:
+                frontend_audit = json.load(f)
+                score -= len(frontend_audit.get('vulnerabilities', [])) * 5
+        except:
+            pass
+        print(f'score={max(0, score)}')
+        " >> $GITHUB_OUTPUT
+
+  # Code Quality and Testing
+  test-and-quality:
+    name: Test & Quality Analysis
+    runs-on: ubuntu-latest
+    needs: security-audit
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    outputs:
+      test-coverage: ${{ steps.test-results.outputs.coverage }}
+      quality-gate: ${{ steps.quality-check.outputs.status }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        cd backend && npm ci
+        cd ../LinkedInHeadshotApp && npm ci
+
+    - name: Run backend tests
+      env:
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379
+        NODE_ENV: test
+      run: |
+        cd backend
+        npm run test:unit -- --coverage --coverageReporters=lcov --coverageReporters=json-summary
+        npm run test:integration
+
+    - name: Run mobile app tests
+      run: |
+        cd LinkedInHeadshotApp
+        npm test -- --coverage --coverageReporters=lcov --watchAll=false
+
+    - name: Run E2E tests
+      run: |
+        cd backend && npm start &
+        sleep 30
+        npm run test:e2e
+        
+    - name: Upload test results
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./backend/coverage/lcov.info,./LinkedInHeadshotApp/coverage/lcov.info
+        flags: backend,frontend
+        name: codecov-umbrella
+
+    - name: Extract test coverage
+      id: test-results
+      run: |
+        COVERAGE=$(jq -r '.total.lines.pct' backend/coverage/coverage-summary.json)
+        echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+
+    - name: Quality gate check
+      id: quality-check
+      run: |
+        COVERAGE=${{ steps.test-results.outputs.coverage }}
+        SECURITY_SCORE=${{ needs.security-audit.outputs.security-score }}
+        if (( $(echo "$COVERAGE >= 80" | bc -l) )) && (( $SECURITY_SCORE >= 90 )); then
+          echo "status=passed" >> $GITHUB_OUTPUT
+        else
+          echo "status=failed" >> $GITHUB_OUTPUT
+        fi
+
+  # Performance Testing
+  performance-test:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    needs: [security-audit, test-and-quality]
+    if: github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'performance-test')
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install k6
+      run: |
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+
+    - name: Run load tests
+      run: |
+        cd performance-testing/load-tests
+        k6 run --out json=results.json k6-load-test.js
+
+    - name: Upload performance results
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-results
+        path: performance-testing/load-tests/results.json
+
+  # Build and Push Container Images
+  build-and-push:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+    needs: [test-and-quality]
+    if: needs.test-and-quality.outputs.quality-gate == 'passed'
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push backend image
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: ./backend
+        file: ./backend/Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+        build-args: |
+          NODE_VERSION=${{ env.NODE_VERSION }}
+          BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          VCS_REF=${{ github.sha }}
+
+    - name: Run container security scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        format: 'sarif'
+        output: 'trivy-container-results.sarif'
+
+    - name: Upload container scan results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-container-results.sarif'
+
+  # GitOps Deployment
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build-and-push]
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    environment: staging
+    steps:
+    - name: Checkout GitOps repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository_owner }}/linkedin-headshot-gitops
+        token: ${{ secrets.GITOPS_TOKEN }}
+        path: gitops
+
+    - name: Update staging manifests
+      run: |
+        cd gitops/environments/staging
+        # Update image tag in Kustomization
+        sed -i "s|newTag:.*|newTag: ${{ github.sha }}|" kustomization.yaml
+        
+        # Update deployment timestamp
+        kubectl patch --local -f deployment.yaml -p '{"spec":{"template":{"metadata":{"annotations":{"deployment.kubernetes.io/revision":"'$(date +%s)'"}}}}}' --type=merge --dry-run=client -o yaml > deployment.yaml.tmp
+        mv deployment.yaml.tmp deployment.yaml
+
+    - name: Commit and push changes
+      run: |
+        cd gitops
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "Update staging to ${{ github.sha }}" || exit 0
+        git push
+
+  # Production Deployment with Approval
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-and-push, deploy-staging]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+    - name: Checkout GitOps repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository_owner }}/linkedin-headshot-gitops
+        token: ${{ secrets.GITOPS_TOKEN }}
+        path: gitops
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
+
+    - name: Deploy with Canary Strategy
+      if: github.event.inputs.deployment_strategy == 'canary' || contains(github.event.head_commit.message, '[canary]')
+      run: |
+        # Install Flagger for canary deployments
+        kubectl apply -k github.com/fluxcd/flagger//kustomize/linkerd
+        
+        # Create canary deployment
+        cat <<EOF | kubectl apply -f -
+        apiVersion: flagger.app/v1beta1
+        kind: Canary
+        metadata:
+          name: linkedin-headshot-backend
+          namespace: linkedin-headshot-production
+        spec:
+          targetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: linkedin-headshot-backend
+          progressDeadlineSeconds: 60
+          service:
+            port: 3000
+            targetPort: 3000
+          analysis:
+            interval: 1m
+            threshold: 5
+            maxWeight: 50
+            stepWeight: 10
+            metrics:
+            - name: request-success-rate
+              threshold: 99
+              interval: 1m
+            - name: request-duration
+              threshold: 500
+              interval: 30s
+            webhooks:
+            - name: acceptance-test
+              type: pre-rollout
+              url: http://flagger-loadtester.test/
+              timeout: 30s
+              metadata:
+                type: bash
+                cmd: "curl -sd 'test' http://linkedin-headshot-backend-canary:3000/health | grep OK"
+            - name: load-test
+              url: http://flagger-loadtester.test/
+              timeout: 5s
+              metadata:
+                cmd: "hey -z 1m -q 10 -c 2 http://linkedin-headshot-backend-canary.linkedin-headshot-production:3000/health"
+        EOF
+
+    - name: Deploy with Rolling Update (Default)
+      if: github.event.inputs.deployment_strategy != 'canary' && !contains(github.event.head_commit.message, '[canary]')
+      run: |
+        cd gitops/environments/production
+        # Update image tag
+        sed -i "s|newTag:.*|newTag: ${{ github.sha }}|" kustomization.yaml
+        
+        # Commit and push
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "Deploy ${{ github.sha }} to production"
+        git push
+
+    - name: Wait for deployment
+      run: |
+        kubectl rollout status deployment/linkedin-headshot-backend -n linkedin-headshot-production --timeout=600s
+
+    - name: Run post-deployment tests
+      run: |
+        # Health check
+        kubectl run --rm -i --tty --restart=Never test-pod --image=curlimages/curl -- curl -f http://linkedin-headshot-backend.linkedin-headshot-production:3000/health
+        
+        # Performance check
+        kubectl run --rm -i --tty --restart=Never load-test --image=fortio/fortio -- load -c 8 -qps 100 -t 30s http://linkedin-headshot-backend.linkedin-headshot-production:3000/health
+
+  # Rollback capability
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: failure() && (github.ref == 'refs/heads/main')
+    needs: [deploy-production]
+    environment: production
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
+
+    - name: Rollback deployment
+      run: |
+        kubectl rollout undo deployment/linkedin-headshot-backend -n linkedin-headshot-production
+        kubectl rollout status deployment/linkedin-headshot-backend -n linkedin-headshot-production --timeout=300s
+
+    - name: Notify rollback
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        text: "🚨 Production deployment failed and was rolled back!"
+
+  # Notification
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [security-audit, test-and-quality, build-and-push, deploy-production]
+    steps:
+    - name: Notify success
+      if: needs.deploy-production.result == 'success'
+      uses: 8398a7/action-slack@v3
+      with:
+        status: success
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        text: "✅ Successfully deployed to production!"
+
+    - name: Notify failure
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        text: "❌ Deployment pipeline failed!"

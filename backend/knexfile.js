@@ -20,8 +20,15 @@ module.exports = {
     },
     pool: {
       min: 2,
-      max: 10
-    }
+      max: 20,
+      acquireTimeoutMillis: 30000,
+      idleTimeoutMillis: 600000,
+      reapIntervalMillis: 1000,
+      createRetryIntervalMillis: 200,
+      propagateCreateError: false
+    },
+    acquireConnectionTimeout: 30000,
+    asyncStackTraces: true
   },
 
   testing: {
@@ -56,8 +63,15 @@ module.exports = {
       directory: path.join(__dirname, 'migrations')
     },
     pool: {
-      min: 2,
-      max: 20
-    }
+      min: 10,
+      max: 50,
+      acquireTimeoutMillis: 60000,
+      idleTimeoutMillis: 900000,
+      reapIntervalMillis: 1000,
+      createRetryIntervalMillis: 200,
+      propagateCreateError: false
+    },
+    acquireConnectionTimeout: 60000,
+    asyncStackTraces: false // Disabled in production for performance
   }
 };

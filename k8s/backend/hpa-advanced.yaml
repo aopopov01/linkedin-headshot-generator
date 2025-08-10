@@ -1,0 +1,210 @@
+# Advanced Horizontal Pod Autoscaler for LinkedIn Headshot Backend
+# Scales based on CPU, memory, and custom metrics for optimal performance
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: linkedin-headshot-backend-hpa
+  namespace: linkedin-headshot
+  labels:
+    app: linkedin-headshot-backend
+    component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: linkedin-headshot-backend
+  
+  minReplicas: 2
+  maxReplicas: 50
+  
+  # Scaling behavior configuration
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5 minutes
+      policies:
+      - type: Percent
+        value: 25  # Scale down max 25% of current replicas
+        periodSeconds: 60
+      - type: Pods
+        value: 2   # Scale down max 2 pods at once
+        periodSeconds: 60
+      selectPolicy: Min  # Use the more conservative policy
+    
+    scaleUp:
+      stabilizationWindowSeconds: 60   # 1 minute
+      policies:
+      - type: Percent
+        value: 50  # Scale up max 50% of current replicas
+        periodSeconds: 30
+      - type: Pods
+        value: 4   # Scale up max 4 pods at once
+        periodSeconds: 30
+      selectPolicy: Max  # Use the more aggressive policy
+  
+  # Metrics for scaling decisions
+  metrics:
+  # CPU utilization
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  
+  # Memory utilization
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  
+  # Custom metric: Request rate per second
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "100"
+  
+  # Custom metric: Response time P95
+  - type: Pods
+    pods:
+      metric:
+        name: http_request_duration_p95_seconds
+      target:
+        type: AverageValue
+        averageValue: "2"
+  
+  # External metric: Queue length (for image processing)
+  - type: External
+    external:
+      metric:
+        name: redis_queue_length
+        selector:
+          matchLabels:
+            queue: "image_processing"
+      target:
+        type: AverageValue
+        averageValue: "20"
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: linkedin-headshot-worker-hpa
+  namespace: linkedin-headshot
+  labels:
+    app: linkedin-headshot-worker
+    component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: linkedin-headshot-worker
+  
+  minReplicas: 1
+  maxReplicas: 20
+  
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 600  # 10 minutes (longer for workers)
+      policies:
+      - type: Percent
+        value: 20
+        periodSeconds: 120
+    
+    scaleUp:
+      stabilizationWindowSeconds: 30   # Quick scale up for processing
+      policies:
+      - type: Percent
+        value: 100  # Double the replicas quickly
+        periodSeconds: 30
+      - type: Pods
+        value: 5    # Or add 5 pods, whichever is less aggressive
+        periodSeconds: 30
+      selectPolicy: Max
+  
+  metrics:
+  # CPU for image processing workloads
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 85
+  
+  # Memory for image processing
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 90
+  
+  # Queue length for image processing jobs
+  - type: External
+    external:
+      metric:
+        name: redis_queue_length
+        selector:
+          matchLabels:
+            queue: "image_processing"
+      target:
+        type: AverageValue
+        averageValue: "10"  # Scale up when more than 10 jobs per worker
+
+---
+# Vertical Pod Autoscaler for automatic resource optimization
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: linkedin-headshot-backend-vpa
+  namespace: linkedin-headshot
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: linkedin-headshot-backend
+  
+  updatePolicy:
+    updateMode: "Auto"  # Automatically apply recommendations
+  
+  resourcePolicy:
+    containerPolicies:
+    - containerName: backend
+      maxAllowed:
+        cpu: "4"
+        memory: "8Gi"
+      minAllowed:
+        cpu: "100m"
+        memory: "256Mi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+
+---
+# Pod Disruption Budget to ensure availability during scaling
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: linkedin-headshot-backend-pdb
+  namespace: linkedin-headshot
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: linkedin-headshot-backend
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: linkedin-headshot-worker-pdb
+  namespace: linkedin-headshot
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: linkedin-headshot-worker

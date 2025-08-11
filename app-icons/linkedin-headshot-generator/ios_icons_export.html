@@ -1,0 +1,2514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>linkedin-headshot-generator - IOS Icon Export</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .icon-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .icon-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .icon-svg {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+        }
+        .icon-info {
+            margin-top: 12px;
+        }
+        .icon-size {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+        .icon-usage {
+            color: #666;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .export-instructions {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .export-instructions h3 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        .export-instructions ol {
+            color: #333;
+        }
+        .download-btn {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .download-btn:hover {
+            background: #1976d2;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Linkedin Headshot Generator Icons</h1>
+        <div class="subtitle">IOS Platform - All Required Sizes</div>
+        
+        <div class="export-instructions">
+            <h3>📱 How to Export Icons</h3>
+            <ol>
+                <li><strong>Right-click</strong> on any icon below</li>
+                <li>Select <strong>"Save image as..."</strong> or <strong>"Copy image"</strong></li>
+                <li>Save with the suggested filename for proper organization</li>
+                <li>For best results, use a vector-based browser export or screenshot tool</li>
+                <li>Ensure the exported image matches the exact pixel dimensions shown</li>
+            </ol>
+            <p><strong>Note:</strong> These icons are designed to meet Apple Human Interface Guidelines and Google Material Design specifications.</p>
+        </div>
+
+        <div class="icon-grid">
+
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 20px; height: 20px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="20" height="20" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">20×20px</div>
+                    <div class="icon-usage">Settings, Notifications</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_20x20.png', 20)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 29px; height: 29px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="29" height="29" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">29×29px</div>
+                    <div class="icon-usage">Settings (2x), Spotlight</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_29x29.png', 29)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 40px; height: 40px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="40" height="40" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">40×40px</div>
+                    <div class="icon-usage">Spotlight (2x), Settings (3x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_40x40.png', 40)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 58px; height: 58px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="58" height="58" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">58×58px</div>
+                    <div class="icon-usage">Settings (2x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_58x58.png', 58)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 60px; height: 60px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="60" height="60" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">60×60px</div>
+                    <div class="icon-usage">Home Screen (2x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_60x60.png', 60)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 76px; height: 76px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="76" height="76" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">76×76px</div>
+                    <div class="icon-usage">iPad Home Screen</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_76x76.png', 76)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 80px; height: 80px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">80×80px</div>
+                    <div class="icon-usage">Spotlight (2x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_80x80.png', 80)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 87px; height: 87px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="87" height="87" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">87×87px</div>
+                    <div class="icon-usage">Settings (3x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_87x87.png', 87)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 120px; height: 120px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">120×120px</div>
+                    <div class="icon-usage">Home Screen (2x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_120x120.png', 120)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 150px; height: 150px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="152" height="152" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">152×152px</div>
+                    <div class="icon-usage">iPad Home Screen (2x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_152x152.png', 152)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 150px; height: 150px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="167" height="167" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">167×167px</div>
+                    <div class="icon-usage">iPad Pro Home Screen (2x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_167x167.png', 167)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 150px; height: 150px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="180" height="180" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">180×180px</div>
+                    <div class="icon-usage">Home Screen (3x)</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_180x180.png', 180)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+            <div class="icon-item">
+                <div class="icon-svg" style="width: 150px; height: 150px; margin: 0 auto;">
+                    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- LinkedIn blue gradient -->
+    <linearGradient id="linkedinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Camera body gradient -->
+    <linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Lens gradient -->
+    <linearGradient id="lensGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4B5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Portrait frame gradient -->
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F3F4F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- AI enhancement gradient -->
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Person silhouette gradient -->
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#005885;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with LinkedIn gradient -->
+  <circle cx="512" cy="512" r="480" fill="url(#linkedinGradient)" filter="url(#dropshadow)"/>
+  
+  <!-- Professional grid pattern (subtle) -->
+  <g opacity="0.1" stroke="white" stroke-width="1">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+  </g>
+  
+  <!-- Camera body -->
+  <g transform="translate(512, 420)">
+    <!-- Main camera body -->
+    <rect x="-140" y="-60" width="280" height="120" rx="20" fill="url(#cameraGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Camera top -->
+    <rect x="-120" y="-80" width="240" height="40" rx="15" fill="url(#cameraGradient)"/>
+    
+    <!-- Viewfinder -->
+    <rect x="-30" y="-70" width="60" height="20" rx="8" fill="#1F2937"/>
+    
+    <!-- Camera lens -->
+    <circle cx="0" cy="0" r="70" fill="url(#lensGradient)" filter="url(#innerShadow)"/>
+    <circle cx="0" cy="0" r="55" fill="#1F2937"/>
+    <circle cx="0" cy="0" r="40" fill="url(#lensGradient)"/>
+    <circle cx="0" cy="0" r="25" fill="#000000"/>
+    
+    <!-- Lens reflection -->
+    <circle cx="-15" cy="-15" r="12" fill="white" opacity="0.3"/>
+    <circle cx="-18" cy="-18" r="6" fill="white" opacity="0.6"/>
+    
+    <!-- Camera buttons/details -->
+    <circle cx="80" cy="-30" r="8" fill="#DC2626"/>
+    <rect x="60" y="10" width="25" height="12" rx="6" fill="#374151"/>
+  </g>
+  
+  <!-- Portrait frame -->
+  <g transform="translate(512, 680)">
+    <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#frameGradient)" stroke="#D1D5DB" stroke-width="4" filter="url(#dropshadow)"/>
+    
+    <!-- Professional person silhouette -->
+    <g transform="translate(0, -20)" fill="url(#personGradient)">
+      <!-- Head -->
+      <circle cx="0" cy="-20" r="28"/>
+      <!-- Shoulders/suit -->
+      <path d="M-35,20 C-35,0 -25,-10 -15,-10 C-8,-15 8,-15 15,-10 C25,-10 35,0 35,20 L35,60 L-35,60 Z"/>
+      <!-- Suit lapels -->
+      <path d="M-15,-10 L-25,10 L-15,15 Z" fill="#005885"/>
+      <path d="M15,-10 L25,10 L15,15 Z" fill="#005885"/>
+      <!-- Tie -->
+      <path d="M-8,-5 L8,-5 L6,25 L-6,25 Z" fill="#DC2626"/>
+    </g>
+  </g>
+  
+  <!-- AI enhancement indicators -->
+  <g opacity="0.9">
+    <!-- AI processing rings around camera -->
+    <circle cx="512" cy="420" r="110" fill="none" stroke="url(#aiGradient)" stroke-width="3" stroke-dasharray="20,10" opacity="0.8">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 512 420" to="360 512 420" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="512" cy="420" r="130" fill="none" stroke="url(#aiGradient)" stroke-width="2" stroke-dasharray="15,15" opacity="0.6">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 512 420" to="0 512 420" dur="12s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Professional enhancement sparkles -->
+  <g fill="white" opacity="0.8">
+    <g transform="translate(350, 320) rotate(45)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(680, 380) rotate(45) scale(0.7)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(400, 580) rotate(45) scale(0.6)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+    <g transform="translate(650, 520) rotate(45) scale(0.8)">
+      <rect x="-2" y="-10" width="4" height="20"/>
+      <rect x="-10" y="-2" width="20" height="4"/>
+    </g>
+  </g>
+  
+  <!-- Quality indicators -->
+  <g transform="translate(680, 680)" opacity="0.7">
+    <!-- Quality bars -->
+    <rect x="0" y="15" width="8" height="20" fill="url(#aiGradient)" rx="2"/>
+    <rect x="12" y="10" width="8" height="25" fill="url(#aiGradient)" rx="2"/>
+    <rect x="24" y="5" width="8" height="30" fill="url(#aiGradient)" rx="2"/>
+    <rect x="36" y="0" width="8" height="35" fill="url(#aiGradient)" rx="2"/>
+  </g>
+  
+  <!-- LinkedIn connection indicator -->
+  <g transform="translate(380, 750)" opacity="0.6">
+    <circle cx="0" cy="0" r="12" fill="white"/>
+    <text x="0" y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#linkedinGradient)">in</text>
+  </g>
+</svg>
+                </div>
+                <div class="icon-info">
+                    <div class="icon-size">1024×1024px</div>
+                    <div class="icon-usage">App Store</div>
+                    <button class="download-btn" onclick="downloadIcon('linkedin-headshot-generator_icon_1024x1024.png', 1024)">
+                        📥 Download PNG
+                    </button>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+    <script>
+        function downloadIcon(filename, size) {
+            // This would require a more complex implementation with canvas
+            // For now, users should right-click and save
+            alert('Please right-click on the icon above and select "Save image as..." to download.\n\nSuggested filename: ' + filename);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+
+        <svg width="1284" height="2778" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="1284" height="2778" fill="#F3F6F8"/>
+            
+            <!-- Header -->
+            <rect x="0" y="0" width="1284" height="100" fill="#0077B5"/>
+            <text x="642" y="60" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="white">
+                Upload & Analyze
+            </text>
+            
+            <!-- Upload area -->
+            <rect x="20" y="140" width="1244" height="340" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            
+            <!-- Photo placeholder -->
+            <circle cx="642" cy="280" r="80" fill="#E5E7EB" stroke="#0077B5" stroke-width="3"/>
+            <text x="642" y="295" text-anchor="middle" font-family="Arial" font-size="60" fill="#9CA3AF">👤</text>
+            
+            <!-- Analysis status -->
+            <rect x="20" y="520" width="1244" height="140" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="642" y="560" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="#000000">
+                Analyzing your photo...
+            </text>
+            
+            <!-- Progress bar -->
+            <rect x="60" y="590" width="1164" height="20" rx="10" ry="10" fill="#E5E7EB"/>
+            <rect x="60" y="590" width="873" height="20" rx="10" ry="10" fill="#0077B5"/>
+            
+            <text x="642" y="640" text-anchor="middle" font-family="Arial" font-size="16" fill="#666666">
+                Checking lighting, background, and composition... 75%
+            </text>
+            
+            <!-- Analysis points -->
+            <text x="40" y="720" font-family="Arial" font-size="16" fill="#00A0DC">✓ Facial recognition complete</text>
+            <text x="40" y="755" font-family="Arial" font-size="16" fill="#F59E0B">⏳ Optimizing lighting balance</text>
+            <text x="40" y="790" font-family="Arial" font-size="16" fill="#F59E0B">⏳ Background enhancement</text>
+            <text x="40" y="825" font-family="Arial" font-size="16" fill="#F59E0B">⏳ Professional styling</text>
+        </svg>

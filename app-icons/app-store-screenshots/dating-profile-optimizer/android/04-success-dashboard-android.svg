@@ -1,0 +1,54 @@
+
+        <svg width="1080" height="1920" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="1080" height="1920" fill="#F8FAFC"/>
+            
+            <!-- Header -->
+            <rect x="0" y="0" width="1080" height="100" fill="#FFFFFF"/>
+            <text x="540" y="60" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#1F2937">
+                Your Success
+            </text>
+            
+            <!-- Success metric card -->
+            <rect x="20" y="130" width="1040" height="140" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="540" y="170" text-anchor="middle" font-family="Arial" font-size="32" font-weight="bold" fill="#10B981">
+                3x More Matches
+            </text>
+            <text x="540" y="205" text-anchor="middle" font-family="Arial" font-size="18" fill="#16A34A">
+                This Week ↗️
+            </text>
+            <text x="540" y="235" text-anchor="middle" font-family="Arial" font-size="16" fill="#1F2937">
+                Keep up the great work!
+            </text>
+            
+            <!-- Stats grid -->
+            <rect x="20" y="300" width="333" height="110" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="186" y="340" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold" fill="#2563EB">127</text>
+            <text x="186" y="365" text-anchor="middle" font-family="Arial" font-size="14" fill="#1F2937">Profile Views</text>
+            
+            <rect x="373" y="300" width="333" height="110" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="540" y="340" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold" fill="#2563EB">45</text>
+            <text x="540" y="365" text-anchor="middle" font-family="Arial" font-size="14" fill="#1F2937">Likes</text>
+            
+            <rect x="726" y="300" width="333" height="110" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="893" y="340" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold" fill="#2563EB">12</text>
+            <text x="893" y="365" text-anchor="middle" font-family="Arial" font-size="14" fill="#1F2937">Matches</text>
+            
+            <!-- Chart card -->
+            <rect x="20" y="450" width="1040" height="220" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="40" y="480" font-family="Arial" font-size="18" font-weight="bold" fill="#1F2937">
+                Weekly Performance
+            </text>
+            
+            <!-- Simple chart line -->
+            <polyline points="60,620 140,600 220,560 300,540 380,520 460,510" 
+                     fill="none" stroke="#10B981" stroke-width="3"/>
+            
+            <!-- Chart points -->
+            <circle cx="60" cy="620" r="4" fill="#10B981"/>
+            <circle cx="140" cy="600" r="4" fill="#10B981"/>
+            <circle cx="220" cy="560" r="4" fill="#10B981"/>
+            <circle cx="300" cy="540" r="4" fill="#10B981"/>
+            <circle cx="380" cy="520" r="4" fill="#10B981"/>
+            <circle cx="460" cy="510" r="4" fill="#10B981"/>
+        </svg>

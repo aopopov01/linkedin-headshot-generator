@@ -1,0 +1,78 @@
+
+    <svg width="1384" height="2978" xmlns="http://www.w3.org/2000/svg">
+        <!-- Phone body -->
+        <rect x="25" y="50" width="1334" height="2878" rx="40" ry="40" fill="#1F2937"/>
+        
+        <!-- Screen area -->
+        <rect x="50" y="100" width="1284" height="2778" rx="30" ry="30" fill="#000000"/>
+        
+        <!-- Screen content -->
+        <rect x="50" y="100" width="1284" height="2778" rx="30" ry="30" fill="url(#screen-content)"/>
+        
+        
+        <svg width="1284" height="2778" xmlns="http://www.w3.org/2000/svg">
+            
+    <defs>
+        <linearGradient id="header-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+            
+            <!-- Background -->
+            <rect width="1284" height="2778" fill="#F8FAFC"/>
+            
+            <!-- Header with gradient -->
+            <rect x="0" y="0" width="1284" height="140" fill="url(#header-grad)"/>
+            <text x="642" y="80" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold" fill="white">
+                Go Premium
+            </text>
+            
+            <!-- Comparison headers -->
+            <text x="321" y="200" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="#1F2937">
+                Free
+            </text>
+            <text x="963" y="200" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="#2563EB">
+                Premium
+            </text>
+            
+            <!-- Feature rows -->
+            <rect x="20" y="230" width="1244" height="60" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="40" y="265" font-family="Arial" font-size="16" fill="#1F2937">Photo Analysis</text>
+            <text x="321" y="280" text-anchor="middle" font-family="Arial" font-size="14" fill="#6B7280">5 per week</text>
+            <text x="963" y="280" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2563EB">Unlimited</text>
+            
+            <rect x="20" y="310" width="1244" height="60" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="40" y="345" font-family="Arial" font-size="16" fill="#1F2937">Bio Templates</text>
+            <text x="321" y="360" text-anchor="middle" font-family="Arial" font-size="14" fill="#6B7280">3 basic</text>
+            <text x="963" y="360" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2563EB">50+ advanced</text>
+            
+            <rect x="20" y="390" width="1244" height="60" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="40" y="425" font-family="Arial" font-size="16" fill="#1F2937">Success Analytics</text>
+            <text x="321" y="440" text-anchor="middle" font-family="Arial" font-size="14" fill="#6B7280">Basic</text>
+            <text x="963" y="440" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2563EB">Detailed</text>
+            
+            <rect x="20" y="470" width="1244" height="60" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="40" y="505" font-family="Arial" font-size="16" fill="#1F2937">Priority Support</text>
+            <text x="321" y="520" text-anchor="middle" font-family="Arial" font-size="16" fill="#6B7280">❌</text>
+            <text x="963" y="520" text-anchor="middle" font-family="Arial" font-size="16" fill="#2563EB">✅</text>
+            
+            <!-- Pricing card -->
+            <rect x="20" y="570" width="1244" height="110" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="642" y="610" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold" fill="#2563EB">
+                $9.99/month
+            </text>
+            <text x="642" y="640" text-anchor="middle" font-family="Arial" font-size="16" fill="#6B7280">
+                Cancel anytime
+            </text>
+            
+            <!-- CTA Button -->
+            <rect x="40" y="720" width="1204" height="60" rx="30" ry="30" fill="#2563EB"/>
+            <text x="642" y="755" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="white">
+                Start Free Trial
+            </text>
+        </svg>
+        
+        <!-- Home indicator -->
+        <rect x="622" y="2938" width="140" height="4" rx="2" ry="2" fill="#666666"/>
+    </svg>

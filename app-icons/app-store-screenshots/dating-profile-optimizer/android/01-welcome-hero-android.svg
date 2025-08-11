@@ -1,0 +1,38 @@
+
+        <svg width="1080" height="1920" xmlns="http://www.w3.org/2000/svg">
+            
+    <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+            
+            <!-- Background -->
+            <rect width="1080" height="1920" fill="url(#grad1)"/>
+            
+            <!-- App icon -->
+            <circle cx="540" cy="400" r="60" fill="#FFFFFF" stroke="#EC4899" stroke-width="4"/>
+            
+            <!-- Heart icon -->
+            <text x="540" y="415" text-anchor="middle" font-family="Arial" font-size="40" fill="#EC4899">💕</text>
+            
+            <!-- Main title -->
+            <text x="540" y="550" text-anchor="middle" font-family="Arial" font-size="32" font-weight="bold" fill="white">
+                Get 3x More Matches with
+            </text>
+            <text x="540" y="590" text-anchor="middle" font-family="Arial" font-size="32" font-weight="bold" fill="white">
+                AI-Powered Dating Optimization
+            </text>
+            
+            <!-- Subtitle -->
+            <text x="540" y="650" text-anchor="middle" font-family="Arial" font-size="20" fill="white">
+                AI Dating Coach in Your Pocket
+            </text>
+            
+            <!-- CTA Button -->
+            <rect x="400" y="1720" width="280" height="60" rx="30" ry="30" fill="#EC4899"/>
+            <text x="540" y="1755" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold" fill="white">
+                Get Started
+            </text>
+        </svg>

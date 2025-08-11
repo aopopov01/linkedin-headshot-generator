@@ -1,0 +1,15 @@
+{
+  "dating_profile_optimizer": {
+    "ios_screenshots": 10,
+    "android_screenshots": 5,
+    "total": 15
+  },
+  "linkedin_headshot_generator": {
+    "ios_screenshots": 10,
+    "android_screenshots": 5,
+    "total": 15
+  },
+  "format": "SVG (scalable vector graphics)",
+  "ios_dimensions": "1284x2778 (iPhone 14 Pro Max)",
+  "android_dimensions": "1080x1920 (Standard Android)"
+}

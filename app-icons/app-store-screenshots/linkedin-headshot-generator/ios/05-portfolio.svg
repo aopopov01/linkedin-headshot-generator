@@ -1,0 +1,67 @@
+
+        <svg width="1284" height="2778" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="1284" height="2778" fill="#F3F6F8"/>
+            
+            <!-- Header -->
+            <rect x="0" y="0" width="1284" height="100" fill="#0077B5"/>
+            <text x="642" y="60" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="white">
+                Your Professional Library
+            </text>
+            
+            <!-- Gallery grid (2x3) -->
+            <!-- Row 1 -->
+            <rect x="20" y="120" width="612" height="612" rx="16" ry="16" fill="#0077B5" stroke="white" stroke-width="3"/>
+            <text x="326" y="426" text-anchor="middle" font-family="Arial" font-size="40" fill="white">👔</text>
+            <text x="326" y="762" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#000000">Corporate</text>
+            <text x="326" y="782" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Style 1</text>
+            
+            <rect x="652" y="120" width="612" height="612" rx="16" ry="16" fill="#16A34A" stroke="white" stroke-width="3"/>
+            <text x="958" y="426" text-anchor="middle" font-family="Arial" font-size="40" fill="white">🎨</text>
+            <text x="958" y="762" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#000000">Creative</text>
+            <text x="958" y="782" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Style 2</text>
+            
+            <!-- Row 2 -->
+            <rect x="20" y="812" width="612" height="612" rx="16" ry="16" fill="#DC2626" stroke="white" stroke-width="3"/>
+            <text x="326" y="1118" text-anchor="middle" font-family="Arial" font-size="40" fill="white">💼</text>
+            <text x="326" y="1454" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#000000">Executive</text>
+            <text x="326" y="1474" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Style 3</text>
+            
+            <rect x="652" y="812" width="612" height="612" rx="16" ry="16" fill="#F59E0B" stroke="white" stroke-width="3"/>
+            <text x="958" y="1118" text-anchor="middle" font-family="Arial" font-size="40" fill="white">🚀</text>
+            <text x="958" y="1454" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#000000">Startup</text>
+            <text x="958" y="1474" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Style 4</text>
+            
+            <!-- Row 3 -->
+            <rect x="20" y="1504" width="612" height="612" rx="16" ry="16" fill="#8B5CF6" stroke="white" stroke-width="3"/>
+            <text x="326" y="1810" text-anchor="middle" font-family="Arial" font-size="40" fill="white">👕</text>
+            <text x="326" y="2146" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#000000">Casual</text>
+            <text x="326" y="2166" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Style 5</text>
+            
+            <rect x="652" y="1504" width="612" height="612" rx="16" ry="16" fill="#1F2937" stroke="white" stroke-width="3"/>
+            <text x="958" y="1810" text-anchor="middle" font-family="Arial" font-size="40" fill="white">🤵</text>
+            <text x="958" y="2146" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#000000">Formal</text>
+            <text x="958" y="2166" text-anchor="middle" font-family="Arial" font-size="14" fill="#666666">Style 6</text>
+            
+            <!-- Stats section -->
+            <rect x="20" y="2216" width="1244" height="120" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="642" y="2246" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="#000000">
+                Your Professional Impact
+            </text>
+            
+            <!-- Impact stats -->
+            <text x="240" y="2276" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#16A34A">+234%</text>
+            <text x="240" y="2301" text-anchor="middle" font-family="Arial" font-size="12" fill="#666666">Profile Views</text>
+            
+            <text x="642" y="2276" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#16A34A">+156%</text>
+            <text x="642" y="2301" text-anchor="middle" font-family="Arial" font-size="12" fill="#666666">Connection Requests</text>
+            
+            <text x="1044" y="2276" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#16A34A">+89%</text>
+            <text x="1044" y="2301" text-anchor="middle" font-family="Arial" font-size="12" fill="#666666">Engagement</text>
+            
+            <!-- Create New Style button -->
+            <rect x="40" y="2678" width="1204" height="60" rx="30" ry="30" fill="#0077B5"/>
+            <text x="642" y="2713" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="white">
+                Create New Style
+            </text>
+        </svg>

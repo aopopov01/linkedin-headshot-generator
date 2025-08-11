@@ -1,0 +1,55 @@
+
+        <svg width="1080" height="1920" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="1080" height="1920" fill="#F3F6F8"/>
+            
+            <!-- Success header -->
+            <rect x="0" y="0" width="1080" height="120" fill="#16A34A"/>
+            <text x="540" y="50" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="white">
+                ✓ LinkedIn Ready!
+            </text>
+            <text x="540" y="80" text-anchor="middle" font-family="Arial" font-size="16" fill="white">
+                Your professional headshot is ready
+            </text>
+            
+            <!-- Before photo -->
+            <rect x="20" y="150" width="510" height="300" rx="16" ry="16" fill="#E5E7EB"/>
+            <text x="275" y="280" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#6B7280">
+                ORIGINAL
+            </text>
+            <text x="275" y="320" text-anchor="middle" font-family="Arial" font-size="60" fill="#9CA3AF">👤</text>
+            
+            <!-- After photo -->
+            <rect x="550" y="150" width="510" height="300" rx="16" ry="16" fill="#DCFCE7"/>
+            <text x="805" y="280" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#16A34A">
+                ENHANCED
+            </text>
+            <text x="805" y="320" text-anchor="middle" font-family="Arial" font-size="60" fill="#16A34A">👔</text>
+            
+            <!-- Quality score -->
+            <rect x="20" y="480" width="1040" height="100" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="540" y="510" text-anchor="middle" font-family="Arial" font-size="18" fill="#000000">
+                Professional Quality Score
+            </text>
+            <text x="540" y="545" text-anchor="middle" font-family="Arial" font-size="32" font-weight="bold" fill="#16A34A">
+                9.2/10
+            </text>
+            
+            <!-- Enhancement details -->
+            <text x="40" y="620" font-family="Arial" font-size="16" fill="#00A0DC">✓ Lighting optimized for professional look</text>
+            <text x="40" y="650" font-family="Arial" font-size="16" fill="#00A0DC">✓ Background replaced with clean gradient</text>
+            <text x="40" y="680" font-family="Arial" font-size="16" fill="#00A0DC">✓ Facial features enhanced subtly</text>
+            <text x="40" y="710" font-family="Arial" font-size="16" fill="#00A0DC">✓ Color balance adjusted for LinkedIn</text>
+            
+            <!-- Download button -->
+            <rect x="20" y="750" width="510" height="60" rx="30" ry="30" fill="#0077B5"/>
+            <text x="275" y="785" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="white">
+                Download HD
+            </text>
+            
+            <!-- Share button -->
+            <rect x="550" y="750" width="510" height="60" rx="30" ry="30" fill="#FFFFFF" stroke="#0077B5" stroke-width="2"/>
+            <text x="805" y="785" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#0077B5">
+                Share to LinkedIn
+            </text>
+        </svg>

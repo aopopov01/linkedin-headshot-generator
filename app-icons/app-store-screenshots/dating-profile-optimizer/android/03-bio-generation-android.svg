@@ -1,0 +1,57 @@
+
+        <svg width="1080" height="1920" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="1080" height="1920" fill="#F8FAFC"/>
+            
+            <!-- Header -->
+            <rect x="0" y="0" width="1080" height="100" fill="#FFFFFF"/>
+            <text x="540" y="60" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#1F2937">
+                Bio Generator
+            </text>
+            
+            <!-- Style selector -->
+            <rect x="20" y="130" width="250" height="50" rx="25" ry="25" fill="#2563EB"/>
+            <text x="145" y="160" text-anchor="middle" font-family="Arial" font-size="14" fill="white">Funny</text>
+            
+            <rect x="280" y="130" width="250" height="50" rx="25" ry="25" fill="#FFFFFF" stroke="#D1D5DB"/>
+            <text x="400" y="160" text-anchor="middle" font-family="Arial" font-size="14" fill="#1F2937">Professional</text>
+            
+            <rect x="540" y="130" width="250" height="50" rx="25" ry="25" fill="#FFFFFF" stroke="#D1D5DB"/>
+            <text x="660" y="160" text-anchor="middle" font-family="Arial" font-size="14" fill="#1F2937">Creative</text>
+            
+            <rect x="800" y="130" width="250" height="50" rx="25" ry="25" fill="#FFFFFF" stroke="#D1D5DB"/>
+            <text x="920" y="160" text-anchor="middle" font-family="Arial" font-size="14" fill="#1F2937">Romantic</text>
+            
+            <!-- Generated bio card -->
+            <rect x="20" y="220" width="1040" height="280" rx="16" ry="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+            <text x="40" y="250" font-family="Arial" font-size="16" fill="#1F2937">
+                Adventure seeker who believes the best stories
+            </text>
+            <text x="40" y="275" font-family="Arial" font-size="16" fill="#1F2937">
+                start with 'So there I was...' ☕ Coffee enthusiast,
+            </text>
+            <text x="40" y="300" font-family="Arial" font-size="16" fill="#1F2937">
+                weekend hiker, and someone who still gets
+            </text>
+            <text x="40" y="325" font-family="Arial" font-size="16" fill="#1F2937">
+                excited about finding the perfect playlist.
+            </text>
+            <text x="40" y="365" font-family="Arial" font-size="16" fill="#1F2937">
+                Let's grab coffee and see if we can make
+            </text>
+            <text x="40" y="390" font-family="Arial" font-size="16" fill="#1F2937">
+                each other laugh! 😊
+            </text>
+            
+            <!-- Edit button -->
+            <rect x="20" y="530" width="510" height="50" rx="25" ry="25" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+            <text x="275" y="560" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#2563EB">
+                Edit
+            </text>
+            
+            <!-- Save button -->
+            <rect x="550" y="530" width="510" height="50" rx="25" ry="25" fill="#2563EB"/>
+            <text x="805" y="560" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="white">
+                Save to Profile
+            </text>
+        </svg>

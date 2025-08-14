@@ -2,7 +2,7 @@
     <string name="app_name">LinkedIn Headshot Generator</string>
     <string name="app_description">AI-powered professional headshot generator</string>
     <string name="app_short_description">Create professional LinkedIn headshots with AI</string>
-    <string name="privacy_policy_url">https://yourapp.com/privacy</string>
-    <string name="terms_service_url">https://yourapp.com/terms</string>
+    <string name="privacy_policy_url">https://xciterr.com/privacy</string>
+    <string name="terms_service_url">https://xciterr.com/terms-and-conditions</string>
     <string name="support_email">support@linkedinheadshots.com</string>
 </resources>

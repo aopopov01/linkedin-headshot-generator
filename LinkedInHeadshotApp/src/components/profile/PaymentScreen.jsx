@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  Linking,
 } from 'react-native';
 
 const PaymentScreen = ({ navigation }) => {
@@ -112,21 +113,15 @@ const PaymentScreen = ({ navigation }) => {
   };
 
   const openTermsOfService = () => {
-    // In production, open terms URL in browser
-    Alert.alert(
-      'Terms of Service',
-      'Opening Terms of Service...',
-      [{ text: 'OK' }]
-    );
+    Linking.openURL('https://xciterr.com/terms-and-conditions').catch(err => {
+      Alert.alert('Error', 'Unable to open Terms of Service');
+    });
   };
 
   const openPrivacyPolicy = () => {
-    // In production, open privacy policy URL in browser
-    Alert.alert(
-      'Privacy Policy', 
-      'Opening Privacy Policy...',
-      [{ text: 'OK' }]
-    );
+    Linking.openURL('https://xciterr.com/privacy').catch(err => {
+      Alert.alert('Error', 'Unable to open Privacy Policy');
+    });
   };
 
   return (

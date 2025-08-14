@@ -1,8 +1,3 @@
-/**
- * LinkedIn Headshot Generator - Professional App Entry Point
- * Production-ready React Native app with professional mock services
- */
-
 import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
@@ -14,17 +9,27 @@ import {
   Alert,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { PaperProvider } from 'react-native-paper';
+
+// Screens
+import HomeScreen from './src/screens/HomeScreen';
+import PhotoCapture from './src/components/camera/PhotoCapture';
+import ProcessingScreen from './src/components/ai/ProcessingScreen';
+import PaymentScreen from './src/components/profile/PaymentScreen';
 
 // Professional Mock Services
 import { ProfessionalMockServiceCoordinator } from './src/services/mock/ProfessionalMockServices';
 import { PROFESSIONAL_CONFIG, PROFESSIONAL_FEATURE_FLAGS } from './src/config/professional.config';
 
+// Navigation Stack
+const Stack = createStackNavigator();
+
 // Professional Theme
 const professionalTheme = {
   colors: {
-    primary: '#0077B5', // LinkedIn Blue
-    secondary: '#2C3E50', // Professional Dark
+    primary: '#0077B5',
+    secondary: '#2C3E50',
     success: '#059669',
     warning: '#D97706',
     error: '#DC2626',
@@ -52,21 +57,18 @@ function App(): JSX.Element {
     try {
       console.log('🎯 Starting LinkedIn Headshot Generator...');
       
-      // Initialize professional mock services
       if (PROFESSIONAL_CONFIG.enabled) {
         console.log('👔 Initializing professional mock services...');
         await ProfessionalMockServiceCoordinator.initializeProfessionalServices();
         console.log('✅ Professional services initialized successfully');
       }
 
-      // Verify professional features
       const enabledFeatures = Object.entries(PROFESSIONAL_FEATURE_FLAGS)
         .filter(([_, enabled]) => enabled)
         .map(([feature, _]) => feature);
       
       console.log('🏢 Professional features enabled:', enabledFeatures);
 
-      // Professional app initialization complete
       setIsInitialized(true);
       console.log('✨ LinkedIn Headshot Generator ready for professional use!');
       
@@ -124,98 +126,69 @@ function App(): JSX.Element {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <SafeAreaView style={styles.container}>
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor={professionalTheme.colors.background}
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor={professionalTheme.colors.background}
+        />
+        
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: professionalTheme.colors.primary,
+            },
+            headerTintColor: '#FFFFFF',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        >
+          <Stack.Screen 
+            name="Home" 
+            component={HomeScreen} 
+            options={{ headerShown: false }}
           />
-          
-          {/* Professional App Content */}
-          <View style={styles.appContainer}>
-            <View style={styles.professionalHeader}>
-              <Text style={styles.professionalHeaderTitle}>LinkedIn Headshot Generator</Text>
-              <Text style={styles.professionalHeaderSubtitle}>AI-Powered Professional Photos</Text>
-            </View>
-            
-            <View style={styles.content}>
-              <Text style={styles.welcomeTitle}>Professional Headshots Made Simple</Text>
-              <Text style={styles.welcomeDescription}>
-                Generate studio-quality professional headshots optimized for LinkedIn and 
-                career success. All professional features available in demo mode.
-              </Text>
-              
-              <View style={styles.featureList}>
-                <ProfessionalFeatureItem 
-                  icon="📸" 
-                  title="AI Headshot Generation" 
-                  description="Studio-quality professional photos in seconds"
-                  enabled={PROFESSIONAL_FEATURE_FLAGS.ai_enhancement}
-                />
-                <ProfessionalFeatureItem 
-                  icon="💼" 
-                  title="LinkedIn Integration" 
-                  description="Direct upload to your LinkedIn profile"
-                  enabled={PROFESSIONAL_FEATURE_FLAGS.linkedin_integration}
-                />
-                <ProfessionalFeatureItem 
-                  icon="🎨" 
-                  title="Professional Styles" 
-                  description="Corporate, Creative, Executive templates"
-                  enabled={PROFESSIONAL_FEATURE_FLAGS.style_templates}
-                />
-                <ProfessionalFeatureItem 
-                  icon="📊" 
-                  title="Quality Scoring" 
-                  description="Professional rating and improvement tips"
-                  enabled={PROFESSIONAL_FEATURE_FLAGS.quality_scoring}
-                />
-                <ProfessionalFeatureItem 
-                  icon="📈" 
-                  title="Career Analytics" 
-                  description="Track profile performance and career impact"
-                  enabled={PROFESSIONAL_FEATURE_FLAGS.professional_analytics}
-                />
-                <ProfessionalFeatureItem 
-                  icon="🏢" 
-                  title="Industry Optimization" 
-                  description="Tailored for your specific industry"
-                  enabled={PROFESSIONAL_FEATURE_FLAGS.industry_optimization}
-                />
-              </View>
-              
-              {PROFESSIONAL_CONFIG.enabled && (
-                <View style={styles.professionalDemoNotice}>
-                  <Text style={styles.professionalDemoNoticeText}>
-                    🎯 Professional Demo: Full LinkedIn integration & AI processing available
-                  </Text>
-                </View>
-              )}
-            </View>
-          </View>
-        </SafeAreaView>
+          <Stack.Screen 
+            name="PhotoCapture" 
+            component={PhotoCapture}
+            options={{ title: 'Take Photo' }}
+          />
+          <Stack.Screen 
+            name="Processing" 
+            component={ProcessingScreen}
+            options={{ title: 'Processing', headerLeft: () => null }}
+          />
+          <Stack.Screen 
+            name="Payment" 
+            component={PaymentScreen}
+            options={{ title: 'Upgrade Plan' }}
+          />
+          <Stack.Screen 
+            name="StyleTemplates" 
+            component={PlaceholderScreen}
+            options={{ title: 'Style Templates' }}
+          />
+          <Stack.Screen 
+            name="HeadshotHistory" 
+            component={PlaceholderScreen}
+            options={{ title: 'My Headshots' }}
+          />
+          <Stack.Screen 
+            name="Profile" 
+            component={PlaceholderScreen}
+            options={{ title: 'Profile' }}
+          />
+        </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
   );
 }
 
-// Professional Feature Item Component
-interface ProfessionalFeatureItemProps {
-  icon: string;
-  title: string;
-  description: string;
-  enabled: boolean;
-}
-
-const ProfessionalFeatureItem: React.FC<ProfessionalFeatureItemProps> = ({ 
-  icon, title, description, enabled 
-}) => (
-  <View style={[styles.professionalFeatureItem, { opacity: enabled ? 1 : 0.5 }]}>
-    <Text style={styles.professionalFeatureIcon}>{icon}</Text>
-    <View style={styles.professionalFeatureTextContainer}>
-      <Text style={styles.professionalFeatureTitle}>{title}</Text>
-      <Text style={styles.professionalFeatureDescription}>{description}</Text>
-    </View>
-    {enabled && <Text style={styles.professionalFeatureEnabled}>✓</Text>}
+// Placeholder component for screens not yet implemented
+const PlaceholderScreen = ({ navigation }: { navigation: any }) => (
+  <View style={styles.placeholderContainer}>
+    <Text style={styles.placeholderTitle}>Coming Soon</Text>
+    <Text style={styles.placeholderSubtitle}>This feature is under development</Text>
   </View>
 );
 
@@ -230,7 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#0077B5', // LinkedIn Blue
+    backgroundColor: '#0077B5',
     padding: 20,
   },
   loadingTitle: {
@@ -242,7 +215,7 @@ const styles = StyleSheet.create({
   },
   loadingSubtitle: {
     fontSize: 16,
-    color: '#B3D4E8', // Light LinkedIn blue
+    color: '#B3D4E8',
     marginTop: 8,
     textAlign: 'center',
   },
@@ -289,96 +262,24 @@ const styles = StyleSheet.create({
     color: '#FEE2E2',
   },
   
-  // Professional App
-  appContainer: {
+  // Placeholder Screen
+  placeholderContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  professionalHeader: {
-    backgroundColor: '#0077B5',
-    padding: 20,
-    paddingTop: 40,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  professionalHeaderTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  professionalHeaderSubtitle: {
-    fontSize: 16,
-    color: '#B3D4E8',
-    marginTop: 4,
-  },
-  
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  welcomeTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 12,
-  },
-  welcomeDescription: {
-    fontSize: 16,
-    color: '#6B7280',
-    lineHeight: 24,
-    marginBottom: 32,
-  },
-  
-  // Professional Features
-  featureList: {
-    flex: 1,
-  },
-  professionalFeatureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
     backgroundColor: '#F8FAFC',
-    borderRadius: 12,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#0077B5',
+    padding: 20,
   },
-  professionalFeatureIcon: {
+  placeholderTitle: {
     fontSize: 24,
-    marginRight: 16,
-  },
-  professionalFeatureTextContainer: {
-    flex: 1,
-  },
-  professionalFeatureTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 4,
-  },
-  professionalFeatureDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-  },
-  professionalFeatureEnabled: {
-    fontSize: 18,
-    color: '#059669',
     fontWeight: 'bold',
+    color: '#1F2937',
+    marginBottom: 8,
   },
-  
-  // Professional Demo Notice
-  professionalDemoNotice: {
-    backgroundColor: '#EFF8FF',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#93C5FD',
-    marginTop: 20,
-  },
-  professionalDemoNoticeText: {
-    fontSize: 14,
-    color: '#1E40AF',
+  placeholderSubtitle: {
+    fontSize: 16,
+    color: '#6B7280',
     textAlign: 'center',
-    fontWeight: '500',
   },
 });
 

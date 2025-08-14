@@ -155,11 +155,11 @@ const ConsentManager = ({
   };
 
   const handleViewPrivacyPolicy = () => {
-    Linking.openURL('https://linkedinheadshots.com/privacy-policy');
+    Linking.openURL('https://xciterr.com/privacy');
   };
 
   const handleExerciseRights = () => {
-    Linking.openURL('mailto:privacy@linkedinheadshots.com?subject=Privacy Rights Request');
+    Linking.openURL('mailto:xciterr@outlook.com?subject=Privacy Rights Request');
   };
 
   const renderConsentItem = (key, title, description, required = false) => (

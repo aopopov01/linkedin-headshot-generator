@@ -1,0 +1,79 @@
+{
+  "networkInfo": {
+    "primaryIP": "192.168.20.112",
+    "allIPs": [
+      "192.168.20.112"
+    ],
+    "isWSL": true,
+    "networkInterfaces": "inet 10.255.255.254/32 brd 10.255.255.254 scope global lo\n    inet 192.168.20.112/20 brd 192.168.31.255 scope global eth0",
+    "timestamp": "2025-08-16T11:05:16.870Z"
+  },
+  "backendTests": [
+    {
+      "name": "Direct IP (Primary)",
+      "url": "http://192.168.20.112:3000/health",
+      "priority": "primary",
+      "httpCode": "503",
+      "responseTime": 6,
+      "success": true,
+      "timestamp": "2025-08-16T11:05:16.876Z"
+    },
+    {
+      "name": "Localhost",
+      "url": "http://localhost:3000/health",
+      "priority": "fallback",
+      "httpCode": "503",
+      "responseTime": 5,
+      "success": true,
+      "timestamp": "2025-08-16T11:05:16.881Z"
+    },
+    {
+      "name": "Loopback",
+      "url": "http://127.0.0.1:3000/health",
+      "priority": "fallback",
+      "httpCode": "503",
+      "responseTime": 4,
+      "success": true,
+      "timestamp": "2025-08-16T11:05:16.885Z"
+    },
+    {
+      "name": "Android Emulator Bridge",
+      "url": "http://10.0.2.2:3000/health",
+      "priority": "android",
+      "httpCode": "ERROR",
+      "responseTime": 5007,
+      "success": false,
+      "error": "Command failed: curl -s -o /dev/null -w \"%{http_code}\" --connect-timeout 5 --max-time 10 \"http://10.0.2.2:3000/health\"\n",
+      "timestamp": "2025-08-16T11:05:21.892Z"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "success",
+      "message": "Primary endpoint (192.168.20.112:3000) is working correctly",
+      "action": "Mobile app should connect successfully using IP-based configuration"
+    },
+    {
+      "type": "info",
+      "message": "WSL2 environment detected",
+      "action": "Mobile devices should use the primary IP address for connectivity"
+    },
+    {
+      "type": "expo",
+      "message": "For Expo Go testing",
+      "action": "Use: npx expo start --tunnel for external device access"
+    },
+    {
+      "type": "development",
+      "message": "For development builds",
+      "action": "Use direct IP connection: http://192.168.20.112:3000"
+    }
+  ],
+  "summary": {
+    "totalEndpoints": 4,
+    "workingEndpoints": 3,
+    "primaryEndpointWorking": true,
+    "networkConfigured": true,
+    "timestamp": "2025-08-16T11:05:21.897Z"
+  }
+}

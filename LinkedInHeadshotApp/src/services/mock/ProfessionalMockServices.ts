@@ -130,7 +130,14 @@ export class MockProfessionalAIService {
   }
   
   private static hashImage(uri: string): string {
-    return btoa(uri).slice(0, 12);
+    // Simple hash for React Native compatibility
+    let hash = 0;
+    for (let i = 0; i < uri.length; i++) {
+      const char = uri.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString(36).slice(0, 12);
   }
 }
 

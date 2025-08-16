@@ -1,0 +1,697 @@
+// OmniShot Database Schema
+// Comprehensive data model for multi-platform professional photo optimization system
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ================================
+// USER MANAGEMENT
+// ================================
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  emailVerified     Boolean  @default(false)
+  username          String?  @unique
+  firstName         String?
+  lastName          String?
+  avatar            String?
+  phoneNumber       String?
+  
+  // Authentication
+  passwordHash      String?
+  isActive          Boolean  @default(true)
+  lastLoginAt       DateTime?
+  loginCount        Int      @default(0)
+  
+  // Subscription & Billing
+  tier              UserTier @default(FREE)
+  subscription      Subscription?
+  stripeCustomerId  String?
+  
+  // Profile & Preferences
+  profile           UserProfile?
+  preferences       UserPreferences?
+  
+  // Professional Information
+  industry          String?
+  jobTitle          String?
+  company           String?
+  location          String?
+  
+  // Platform Connections
+  platformAccounts  PlatformAccount[]
+  
+  // Optimization History
+  optimizations     Optimization[]
+  batchJobs         BatchJob[]
+  
+  // Analytics & Usage
+  analytics         UserAnalytics?
+  usageStats        UsageStats[]
+  
+  // Audit
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  deletedAt         DateTime?
+  
+  @@map("users")
+}
+
+enum UserTier {
+  FREE
+  PROFESSIONAL
+  BUSINESS
+  ENTERPRISE
+}
+
+model UserProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Professional Branding
+  brandColors       Json?    // Array of hex colors
+  brandFonts        Json?    // Font preferences
+  logoUrl           String?
+  
+  // Style Preferences
+  preferredStyles   String[] // Array of professional styles
+  defaultPlatforms  String[] // Default platforms for optimization
+  
+  // AI Preferences
+  preferredAIModel  String   @default("replicate")
+  qualityPreference String   @default("balanced") // high, balanced, fast
+  costPreference    String   @default("optimized") // lowest, optimized, premium
+  
+  // Business Information
+  website           String?
+  linkedinUrl       String?
+  portfolioUrl      String?
+  bio               String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@map("user_profiles")
+}
+
+model UserPreferences {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Notification Preferences
+  emailNotifications    Boolean  @default(true)
+  pushNotifications     Boolean  @default(true)
+  marketingEmails       Boolean  @default(false)
+  
+  // Processing Preferences
+  autoOptimization      Boolean  @default(false)
+  backgroundProcessing  Boolean  @default(true)
+  qualityOverSpeed      Boolean  @default(true)
+  
+  // Privacy Settings
+  shareAnalytics        Boolean  @default(false)
+  publicProfile         Boolean  @default(false)
+  
+  // Interface Preferences
+  theme                 String   @default("system") // light, dark, system
+  language              String   @default("en")
+  timezone              String   @default("UTC")
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@map("user_preferences")
+}
+
+// ================================
+// SUBSCRIPTION & BILLING
+// ================================
+
+model Subscription {
+  id                String            @id @default(cuid())
+  userId            String            @unique
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  stripeSubscriptionId String         @unique
+  status            SubscriptionStatus
+  tier              UserTier
+  
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean          @default(false)
+  canceledAt         DateTime?
+  
+  // Billing
+  amount            Decimal          @db.Decimal(10,2)
+  currency          String           @default("usd")
+  interval          String           // month, year
+  
+  // Usage Limits
+  monthlyOptimizations Int           @default(0)
+  usedOptimizations    Int           @default(0)
+  
+  // Features
+  features          SubscriptionFeatures?
+  
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  
+  @@map("subscriptions")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  UNPAID
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+}
+
+model SubscriptionFeatures {
+  id                      String       @id @default(cuid())
+  subscriptionId          String       @unique
+  subscription            Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  
+  // Feature Limits
+  maxOptimizationsPerMonth Int         @default(10)
+  maxBatchSize            Int          @default(5)
+  maxConcurrentJobs       Int          @default(2)
+  
+  // Features Access
+  advancedAI              Boolean      @default(false)
+  customDimensions        Boolean      @default(false)
+  batchProcessing         Boolean      @default(false)
+  directPublishing        Boolean      @default(false)
+  analyticsAccess         Boolean      @default(false)
+  prioritySupport         Boolean      @default(false)
+  apiAccess               Boolean      @default(false)
+  whiteLabeling           Boolean      @default(false)
+  
+  // Storage & Bandwidth
+  storageLimit            Int          @default(1000) // MB
+  bandwidthLimit          Int          @default(5000) // MB
+  
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+  
+  @@map("subscription_features")
+}
+
+// ================================
+// PLATFORM INTEGRATION
+// ================================
+
+model PlatformAccount {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  platform          String   // linkedin, instagram, facebook, etc.
+  platformUserId    String
+  username          String?
+  displayName       String?
+  
+  // OAuth Tokens
+  accessToken       String
+  refreshToken      String?
+  tokenExpiry       DateTime?
+  
+  // Platform-specific data
+  platformData      Json?    // Additional platform-specific information
+  
+  // Status
+  isActive          Boolean  @default(true)
+  lastSyncAt        DateTime?
+  
+  // Publishing
+  publications      Publication[]
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@unique([userId, platform])
+  @@map("platform_accounts")
+}
+
+model Publication {
+  id                String          @id @default(cuid())
+  platformAccountId String
+  platformAccount   PlatformAccount @relation(fields: [platformAccountId], references: [id], onDelete: Cascade)
+  optimizationId    String?
+  optimization      Optimization?   @relation(fields: [optimizationId], references: [id])
+  
+  // Publication Details
+  platformPostId    String?
+  caption           String?
+  hashtags          String[]
+  
+  // Scheduling
+  scheduledAt       DateTime?
+  publishedAt       DateTime?
+  
+  // Status
+  status            PublicationStatus @default(PENDING)
+  errorMessage      String?
+  
+  // Analytics
+  views             Int             @default(0)
+  likes             Int             @default(0)
+  comments          Int             @default(0)
+  shares            Int             @default(0)
+  
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  
+  @@map("publications")
+}
+
+enum PublicationStatus {
+  PENDING
+  SCHEDULED
+  PUBLISHED
+  FAILED
+  CANCELED
+}
+
+// ================================
+// OPTIMIZATION ENGINE
+// ================================
+
+model Optimization {
+  id                String            @id @default(cuid())
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  batchJobId        String?
+  batchJob          BatchJob?         @relation(fields: [batchJobId], references: [id])
+  
+  // Input
+  originalImageUrl  String
+  originalImageHash String
+  
+  // Configuration
+  targetPlatforms   String[]          // Array of platform names
+  professionalStyle String            // executive, creative, casual, etc.
+  customDimensions  Json?             // Custom width/height requirements
+  
+  // Processing
+  status            OptimizationStatus @default(PENDING)
+  progress          Int               @default(0)
+  
+  // AI Configuration
+  aiProvider        String?           // openai, replicate, stabilityai
+  aiModel           String?
+  promptUsed        String?
+  
+  // Cost Tracking
+  estimatedCost     Decimal?          @db.Decimal(10,4)
+  actualCost        Decimal?          @db.Decimal(10,4)
+  
+  // Results
+  results           OptimizationResult[]
+  publications      Publication[]
+  
+  // Analytics
+  processingTime    Int?              // milliseconds
+  qualityScore      Decimal?          @db.Decimal(3,2)
+  userRating        Int?              // 1-5 stars
+  
+  // Error Handling
+  errorMessage      String?
+  retryCount        Int               @default(0)
+  
+  // Metadata
+  metadata          Json?
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  completedAt       DateTime?
+  
+  @@map("optimizations")
+}
+
+enum OptimizationStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELED
+}
+
+model OptimizationResult {
+  id                String       @id @default(cuid())
+  optimizationId    String
+  optimization      Optimization @relation(fields: [optimizationId], references: [id], onDelete: Cascade)
+  
+  // Platform Details
+  platform          String
+  dimensions        Json         // {width, height}
+  
+  // Result Files
+  optimizedImageUrl String
+  thumbnailUrl      String?
+  
+  // Quality Metrics
+  qualityScore      Decimal?     @db.Decimal(3,2)
+  fileSize          Int          // bytes
+  compressionRatio  Decimal?     @db.Decimal(5,2)
+  
+  // Platform Compliance
+  meetsRequirements Boolean      @default(true)
+  compliance        Json?        // Platform-specific compliance details
+  
+  // Processing Details
+  processingTime    Int?         // milliseconds
+  aiModelUsed       String?
+  cost              Decimal?     @db.Decimal(10,4)
+  
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  
+  @@map("optimization_results")
+}
+
+// ================================
+// BATCH PROCESSING
+// ================================
+
+model BatchJob {
+  id                String            @id @default(cuid())
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Configuration
+  name              String?
+  description       String?
+  targetPlatforms   String[]
+  professionalStyle String
+  
+  // Status
+  status            BatchJobStatus    @default(PENDING)
+  progress          Int               @default(0)
+  totalImages       Int
+  processedImages   Int               @default(0)
+  successfulImages  Int               @default(0)
+  failedImages      Int               @default(0)
+  
+  // Processing
+  optimizations     Optimization[]
+  
+  // Cost
+  estimatedCost     Decimal?          @db.Decimal(10,2)
+  actualCost        Decimal?          @db.Decimal(10,2)
+  
+  // Timing
+  startedAt         DateTime?
+  completedAt       DateTime?
+  estimatedTime     Int?              // minutes
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  
+  @@map("batch_jobs")
+}
+
+enum BatchJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELED
+}
+
+// ================================
+// ANALYTICS & MONITORING
+// ================================
+
+model UserAnalytics {
+  id                      String   @id @default(cuid())
+  userId                  String   @unique
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Usage Statistics
+  totalOptimizations      Int      @default(0)
+  totalPlatforms          Int      @default(0)
+  totalCost               Decimal  @default(0) @db.Decimal(10,2)
+  totalSavings            Decimal  @default(0) @db.Decimal(10,2)
+  
+  // Quality Metrics
+  averageQualityScore     Decimal? @db.Decimal(3,2)
+  averageProcessingTime   Int?     // milliseconds
+  averageUserRating       Decimal? @db.Decimal(2,1)
+  
+  // Platform Usage
+  platformUsage           Json?    // {platform: count} mapping
+  styleUsage              Json?    // {style: count} mapping
+  
+  // Performance
+  successRate             Decimal  @default(0) @db.Decimal(3,2)
+  
+  // Engagement
+  firstOptimizationAt     DateTime?
+  lastOptimizationAt      DateTime?
+  longestStreak           Int      @default(0)
+  currentStreak           Int      @default(0)
+  
+  updatedAt               DateTime @updatedAt
+  
+  @@map("user_analytics")
+}
+
+model UsageStats {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Time Period
+  date            DateTime @db.Date
+  month           Int
+  year            Int
+  
+  // Counts
+  optimizations   Int      @default(0)
+  batchJobs       Int      @default(0)
+  publications    Int      @default(0)
+  apiCalls        Int      @default(0)
+  
+  // Cost
+  cost            Decimal  @default(0) @db.Decimal(10,4)
+  
+  // Platform Breakdown
+  platformStats   Json?    // {platform: {optimizations, cost}} mapping
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([userId, date])
+  @@map("usage_stats")
+}
+
+model SystemMetrics {
+  id                    String   @id @default(cuid())
+  
+  // Time Period
+  timestamp             DateTime @default(now())
+  date                  DateTime @db.Date
+  hour                  Int
+  
+  // System Performance
+  totalOptimizations    Int      @default(0)
+  activeUsers           Int      @default(0)
+  newUsers              Int      @default(0)
+  systemLoad            Decimal? @db.Decimal(3,2)
+  
+  // Processing Stats
+  averageProcessingTime Int?     // milliseconds
+  successRate           Decimal? @db.Decimal(3,2)
+  errorRate             Decimal? @db.Decimal(3,2)
+  
+  // Financial
+  totalRevenue          Decimal? @db.Decimal(10,2)
+  totalCosts            Decimal? @db.Decimal(10,2)
+  
+  // Platform Stats
+  platformMetrics       Json?    // Platform-specific metrics
+  
+  @@unique([date, hour])
+  @@map("system_metrics")
+}
+
+// ================================
+// PLATFORM SPECIFICATIONS
+// ================================
+
+model PlatformSpec {
+  id                String   @id @default(cuid())
+  platform          String   @unique
+  displayName       String
+  
+  // Specifications
+  specifications    Json     // Platform-specific requirements
+  
+  // API Configuration
+  apiConfig         Json?    // API endpoints and configuration
+  
+  // Status
+  isActive          Boolean  @default(true)
+  lastUpdated       DateTime @default(now())
+  
+  // Metadata
+  description       String?
+  supportedFeatures String[] // Array of supported features
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@map("platform_specs")
+}
+
+// ================================
+// JOB QUEUE & ASYNC PROCESSING
+// ================================
+
+model JobQueue {
+  id              String      @id @default(cuid())
+  
+  // Job Details
+  jobType         String      // optimization, batch, publishing, etc.
+  jobData         Json        // Job payload
+  priority        Int         @default(0)
+  
+  // Status
+  status          JobStatus   @default(PENDING)
+  attempts        Int         @default(0)
+  maxAttempts     Int         @default(3)
+  
+  // Error Handling
+  lastError       String?
+  stackTrace      String?
+  
+  // Timing
+  scheduledAt     DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  failedAt        DateTime?
+  
+  // Result
+  result          Json?
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  @@index([status, priority])
+  @@index([jobType, status])
+  @@map("job_queue")
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELED
+  DELAYED
+}
+
+// ================================
+// AUDIT & LOGGING
+// ================================
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  
+  // Actor
+  userId        String?
+  userEmail     String?
+  ipAddress     String?
+  userAgent     String?
+  
+  // Action
+  action        String   // login, optimization_create, etc.
+  resource      String?  // optimization, user, etc.
+  resourceId    String?
+  
+  // Details
+  oldValues     Json?
+  newValues     Json?
+  metadata      Json?
+  
+  // Status
+  success       Boolean  @default(true)
+  errorMessage  String?
+  
+  timestamp     DateTime @default(now())
+  
+  @@index([userId, timestamp])
+  @@index([action, timestamp])
+  @@map("audit_logs")
+}
+
+// ================================
+// NOTIFICATIONS
+// ================================
+
+model Notification {
+  id            String             @id @default(cuid())
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Content
+  title         String
+  message       String
+  type          NotificationType
+  priority      NotificationPriority @default(MEDIUM)
+  
+  // Delivery
+  channels      String[]           // email, push, in_app
+  
+  // Status
+  status        NotificationStatus @default(PENDING)
+  readAt        DateTime?
+  sentAt        DateTime?
+  
+  // Metadata
+  data          Json?              // Additional notification data
+  actionUrl     String?            // Deep link or URL
+  
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  
+  @@index([userId, status])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  MARKETING
+  SYSTEM
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}

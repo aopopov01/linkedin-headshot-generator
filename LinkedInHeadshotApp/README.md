@@ -1,15 +1,15 @@
-# LinkedIn Headshot Generator - AI-Powered Professional Photos
+# OmniShot - AI-Powered Multi-Platform Professional Photos
 
 ## 🎯 Overview
-A premium React Native application that transforms casual selfies into professional LinkedIn headshots using cutting-edge AI technology. Built for iOS with Apple Human Interface Guidelines, featuring Replicate AI integration, RevenueCat subscriptions, and a comprehensive backend infrastructure.
+A premium React Native application that transforms casual photos into professional headshots optimized for every platform using cutting-edge AI technology. Built for iOS and Android with modern design guidelines, featuring advanced AI integration, premium subscriptions, and comprehensive backend infrastructure.
 
 ## ✨ Key Features
-- **AI Photo Generation**: Professional headshots in 8 different styles
+- **AI Photo Generation**: Professional photos optimized for multiple platforms in 8 different styles
 - **Industry-Specific Templates**: Corporate, Creative, Healthcare, Executive styles
 - **Instant Processing**: 30-60 second generation using Replicate AI
-- **Premium Quality**: High-resolution outputs optimized for LinkedIn
+- **Premium Quality**: High-resolution outputs optimized for every platform (LinkedIn, Instagram, Facebook, Twitter, etc.)
 - **Freemium Model**: 1 free photo, then paid packages
-- **Cross-Platform**: iOS-focused with Android compatibility
+- **Cross-Platform**: Native iOS and Android applications
 - **Demo Integration**: Complete web demo and Docker deployment
 
 ## 🏗️ Architecture

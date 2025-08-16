@@ -10,11 +10,12 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 import Button, { PrimaryButton, SecondaryButton } from '../shared/Button';
 import { COLORS, TYPOGRAPHY, SPACING, RADIUS, SHADOWS, ACCESSIBILITY, responsive } from '../../utils/designSystem';
 import contentModerationService from '../../services/contentModerationService';
 import aiContentFilterService from '../../services/aiContentFilterService';
+import aiService from '../../services/aiService';
 
 const PhotoCapture = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -22,20 +23,6 @@ const PhotoCapture = ({ navigation }) => {
   const [moderationResult, setModerationResult] = useState(null);
 
   const handleImagePicker = () => {
-    const options = {
-      title: 'Select Photo',
-      mediaType: 'photo',
-      quality: 1,
-      maxWidth: 2048, // Higher quality for better AI processing
-      maxHeight: 2048,
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-      includeBase64: false,
-      includeExtra: true,
-    };
-
     // Enhanced alert with accessibility
     Alert.alert(
       'Select Photo Source',
@@ -43,13 +30,13 @@ const PhotoCapture = ({ navigation }) => {
       [
         { 
           text: 'Take Photo', 
-          onPress: () => openCamera(options),
+          onPress: () => openCamera(),
           style: 'default',
           accessibilityLabel: 'Take a new photo with camera'
         },
         { 
           text: 'Choose from Gallery', 
-          onPress: () => openGallery(options),
+          onPress: () => openGallery(),
           style: 'default',
           accessibilityLabel: 'Select existing photo from gallery'
         },
@@ -66,20 +53,66 @@ const PhotoCapture = ({ navigation }) => {
     );
   };
 
-  const openCamera = (options) => {
-    launchCamera(options, async (response) => {
-      if (response.assets && response.assets[0]) {
-        await processImageWithModeration(response.assets[0]);
+  const openCamera = async () => {
+    try {
+      // Request camera permissions
+      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+      
+      if (cameraPermission.status !== 'granted') {
+        Alert.alert(
+          'Camera Permission Required',
+          'Please enable camera access to take photos for your professional headshot.',
+          [{ text: 'OK' }]
+        );
+        return;
       }
-    });
+
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+        exif: false,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        await processImageWithModeration(result.assets[0]);
+      }
+    } catch (error) {
+      console.error('Camera error:', error);
+      Alert.alert('Error', 'Failed to open camera. Please try again.');
+    }
   };
 
-  const openGallery = (options) => {
-    launchImageLibrary(options, async (response) => {
-      if (response.assets && response.assets[0]) {
-        await processImageWithModeration(response.assets[0]);
+  const openGallery = async () => {
+    try {
+      // Request media library permissions
+      const libraryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      
+      if (libraryPermission.status !== 'granted') {
+        Alert.alert(
+          'Photo Library Permission Required',
+          'Please enable photo library access to select photos for your professional headshot.',
+          [{ text: 'OK' }]
+        );
+        return;
       }
-    });
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+        exif: false,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        await processImageWithModeration(result.assets[0]);
+      }
+    } catch (error) {
+      console.error('Gallery error:', error);
+      Alert.alert('Error', 'Failed to open photo library. Please try again.');
+    }
   };
 
   const processImageWithModeration = async (imageAsset) => {
@@ -90,10 +123,10 @@ const PhotoCapture = ({ navigation }) => {
       // Prepare image data for moderation
       const imageData = {
         uri: imageAsset.uri,
-        fileSize: imageAsset.fileSize,
+        fileSize: imageAsset.fileSize || 0,
         width: imageAsset.width,
         height: imageAsset.height,
-        type: imageAsset.type
+        type: imageAsset.type || 'image/jpeg'
       };
 
       // User context for moderation (in production, get from auth service)
@@ -148,6 +181,56 @@ const PhotoCapture = ({ navigation }) => {
       Alert.alert(
         'Processing Error',
         'There was an issue processing your image. Please try again or select a different photo.',
+        [{ text: 'OK', style: 'default' }]
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const proceedToAIProcessing = async () => {
+    if (!selectedImage) {
+      Alert.alert(
+        'Photo Required', 
+        'Please capture or select a photo before continuing.',
+        [{ text: 'OK', style: 'default' }],
+        { cancelable: true }
+      );
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      
+      console.log('Starting AI headshot generation...');
+      
+      // Process the image with AI service
+      const prediction = await aiService.processImageToHeadshot(
+        selectedImage.uri,
+        'corporate', // Default style template
+        {
+          numOutputs: 4,
+          numSteps: 30, // Faster processing for demo
+          guidanceScale: 5
+        }
+      );
+
+      console.log('Prediction initiated:', prediction.id);
+
+      // Navigate to processing screen with prediction details
+      navigation.navigate('Processing', {
+        predictionId: prediction.id,
+        originalImage: selectedImage,
+        styleTemplate: 'corporate',
+        prediction: prediction
+      });
+
+    } catch (error) {
+      console.error('AI Processing Error:', error);
+      
+      Alert.alert(
+        'Processing Failed',
+        `Failed to start AI processing: ${error.message}. Please try again with a different photo or check your internet connection.`,
         [{ text: 'OK', style: 'default' }]
       );
     } finally {
@@ -259,13 +342,23 @@ const PhotoCapture = ({ navigation }) => {
               Photo selected successfully
             </Text>
             
-            <SecondaryButton
-              title="Continue to Style Selection"
-              onPress={proceedToStyleSelection}
+            <PrimaryButton
+              title="Generate Professional Headshot"
+              onPress={proceedToAIProcessing}
               size="large"
               fullWidth={true}
-              accessibilityHint="Proceed to choose professional headshot style"
+              disabled={isProcessing}
+              accessibilityHint="Generate professional headshot with AI"
               style={styles.proceedButton}
+            />
+            
+            <SecondaryButton
+              title="Choose Style First"
+              onPress={proceedToStyleSelection}
+              size="medium"
+              fullWidth={true}
+              style={[styles.proceedButton, { marginTop: 12 }]}
+              accessibilityHint="Select style template before processing"
             />
           </View>
         )}

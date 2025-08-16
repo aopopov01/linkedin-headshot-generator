@@ -1,0 +1,304 @@
+{
+  "production": {
+    "server": {
+      "port": 3000,
+      "environment": "production",
+      "cluster": {
+        "enabled": true,
+        "workers": "auto"
+      },
+      "compression": {
+        "enabled": true,
+        "level": 6,
+        "threshold": 1024
+      },
+      "security": {
+        "helmet": true,
+        "cors": {
+          "enabled": true,
+          "origins": ["https://omnishot.app", "https://app.omnishot.com"],
+          "credentials": true
+        },
+        "rateLimit": {
+          "windowMs": 900000,
+          "max": 1000,
+          "skipSuccessfulRequests": false
+        }
+      }
+    },
+    "imageProcessing": {
+      "sharp": {
+        "concurrency": 4,
+        "cache": {
+          "items": 100,
+          "files": 20,
+          "memory": 52428800
+        },
+        "simd": true,
+        "limitInputPixels": 268402689
+      },
+      "optimization": {
+        "qualitySettings": {
+          "small": {
+            "jpeg": 85,
+            "webp": 80
+          },
+          "medium": {
+            "jpeg": 90,
+            "webp": 85
+          },
+          "large": {
+            "jpeg": 95,
+            "webp": 90
+          }
+        },
+        "formats": {
+          "useWebP": true,
+          "useAVIF": false,
+          "progressive": true,
+          "optimizeScans": true,
+          "mozjpeg": true
+        },
+        "sharpening": {
+          "small": {
+            "sigma": 0.5,
+            "m1": 1.0,
+            "m2": 1.5
+          },
+          "medium": {
+            "sigma": 1.0,
+            "m1": 1.2,
+            "m2": 2.0
+          },
+          "large": {
+            "sigma": 1.5,
+            "m1": 1.5,
+            "m2": 2.5
+          }
+        }
+      }
+    },
+    "concurrency": {
+      "maxConcurrentJobs": 8,
+      "queueTimeout": 30000,
+      "retryAttempts": 3,
+      "batchSize": 4,
+      "priorityLevels": ["high", "normal", "low"]
+    },
+    "memory": {
+      "maxHeapSizeMB": 512,
+      "gcInterval": 30000,
+      "bufferPoolSize": 20,
+      "memoryThresholdMB": 400,
+      "cleanupInterval": 60000
+    },
+    "monitoring": {
+      "enabled": true,
+      "metricsInterval": 5000,
+      "healthCheckInterval": 30000,
+      "performanceTracking": true,
+      "errorTracking": true,
+      "customMetrics": {
+        "imageProcessingTime": true,
+        "concurrentUsers": true,
+        "memoryUsage": true,
+        "platformSuccessRates": true
+      }
+    },
+    "logging": {
+      "level": "info",
+      "format": "json",
+      "rotation": {
+        "enabled": true,
+        "maxSize": "100MB",
+        "maxFiles": 5
+      },
+      "performance": {
+        "logSlowRequests": true,
+        "slowRequestThreshold": 1000
+      }
+    },
+    "caching": {
+      "redis": {
+        "enabled": true,
+        "host": "localhost",
+        "port": 6379,
+        "ttl": 3600,
+        "maxMemoryPolicy": "allkeys-lru"
+      },
+      "platformSpecs": {
+        "enabled": true,
+        "ttl": 86400
+      },
+      "imageResults": {
+        "enabled": true,
+        "ttl": 3600,
+        "maxSize": "100MB"
+      }
+    },
+    "platforms": {
+      "linkedin": {
+        "width": 400,
+        "height": 400,
+        "quality": 0.95,
+        "format": "jpeg",
+        "optimization": {
+          "brightness": 1.02,
+          "saturation": 1.05,
+          "sharpening": "medium"
+        }
+      },
+      "instagram": {
+        "width": 400,
+        "height": 400,
+        "quality": 0.90,
+        "format": "jpeg",
+        "supportsWebP": true,
+        "optimization": {
+          "brightness": 1.08,
+          "saturation": 1.2,
+          "sharpening": "high"
+        }
+      },
+      "facebook": {
+        "width": 400,
+        "height": 400,
+        "quality": 0.90,
+        "format": "jpeg",
+        "supportsWebP": true,
+        "optimization": {
+          "brightness": 1.05,
+          "saturation": 1.1,
+          "sharpening": "medium"
+        }
+      },
+      "twitter": {
+        "width": 400,
+        "height": 400,
+        "quality": 0.85,
+        "format": "jpeg",
+        "optimization": {
+          "brightness": 1.03,
+          "saturation": 1.08,
+          "sharpening": "high"
+        }
+      },
+      "youtube": {
+        "width": 800,
+        "height": 800,
+        "quality": 0.95,
+        "format": "jpeg",
+        "supportsWebP": true,
+        "optimization": {
+          "brightness": 1.02,
+          "saturation": 1.05,
+          "sharpening": "low"
+        }
+      },
+      "tiktok": {
+        "width": 400,
+        "height": 400,
+        "quality": 0.85,
+        "format": "jpeg",
+        "supportsWebP": true,
+        "optimization": {
+          "brightness": 1.1,
+          "saturation": 1.25,
+          "sharpening": "high"
+        }
+      },
+      "whatsapp_business": {
+        "width": 400,
+        "height": 400,
+        "quality": 0.88,
+        "format": "jpeg",
+        "optimization": {
+          "brightness": 1.06,
+          "saturation": 1.08,
+          "sharpening": "medium"
+        }
+      },
+      "github": {
+        "width": 400,
+        "height": 400,
+        "quality": 0.92,
+        "format": "jpeg",
+        "optimization": {
+          "brightness": 1.03,
+          "saturation": 1.02,
+          "sharpening": "low"
+        }
+      }
+    },
+    "ai": {
+      "providers": {
+        "replicate": {
+          "enabled": true,
+          "timeout": 30000,
+          "retries": 2,
+          "models": {
+            "professional": "tencentarc/photomaker:ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4",
+            "creative": "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
+          }
+        },
+        "openai": {
+          "enabled": true,
+          "timeout": 30000,
+          "retries": 2
+        },
+        "local": {
+          "enabled": true,
+          "fallback": true
+        }
+      },
+      "fallbackStrategy": "local",
+      "costOptimization": {
+        "enabled": true,
+        "budgetTiers": {
+          "free": { "maxCost": 0, "aiEnabled": false },
+          "basic": { "maxCost": 1.0, "aiEnabled": true },
+          "premium": { "maxCost": 5.0, "aiEnabled": true },
+          "enterprise": { "maxCost": 20.0, "aiEnabled": true }
+        }
+      }
+    },
+    "performance": {
+      "targets": {
+        "apiResponseTime": 100,
+        "imageProcessingTime": 5000,
+        "concurrentUsers": 30,
+        "memoryUsage": 512,
+        "successRate": 99.5
+      },
+      "optimization": {
+        "enableCompression": true,
+        "enableCaching": true,
+        "enableBatching": true,
+        "enablePrioritization": true
+      }
+    },
+    "alerts": {
+      "enabled": true,
+      "thresholds": {
+        "responseTime": 1000,
+        "errorRate": 0.05,
+        "memoryUsage": 0.8,
+        "queueLength": 20,
+        "cpuUsage": 0.9
+      },
+      "channels": {
+        "slack": {
+          "enabled": false,
+          "webhook": ""
+        },
+        "email": {
+          "enabled": false,
+          "recipients": []
+        },
+        "console": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}

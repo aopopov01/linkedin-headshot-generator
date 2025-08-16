@@ -7,81 +7,164 @@ import {
   Animated,
   Platform,
   AccessibilityInfo,
+  Alert,
 } from 'react-native';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import { InfoCard } from '../shared/Card';
+import { PrimaryButton } from '../shared/Button';
 import { COLORS, TYPOGRAPHY, SPACING, RADIUS, SHADOWS, ACCESSIBILITY, responsive } from '../../utils/designSystem';
+import aiService from '../../services/aiService';
 
 const ProcessingScreen = ({ navigation, route }) => {
-  const { image, selectedStyle } = route.params || {};
+  const { 
+    predictionId, 
+    originalImage, 
+    styleTemplate, 
+    prediction 
+  } = route.params || {};
+  
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [animatedValue] = useState(new Animated.Value(0));
+  const [isProcessing, setIsProcessing] = useState(true);
+  const [processingError, setProcessingError] = useState(null);
+  const [startTime] = useState(Date.now());
 
   const steps = [
-    'Analyzing your photo...',
-    'Applying AI enhancements...',
-    'Generating professional styles...',
-    'Optimizing image quality...',
-    'Finalizing your headshots...',
+    'Analyzing source image and face detection...',
+    'Preparing dramatic transformation algorithms...',
+    'Applying professional attire and styling...',
+    'Adding studio lighting and premium background...',
+    'Enhancing image quality with professional polish...',
+    'Finalizing your dramatic transformation...',
   ];
 
   useEffect(() => {
     // Announce processing started to screen readers
-    AccessibilityInfo.announceForAccessibility(ACCESSIBILITY.announcements.generationStarted);
+    AccessibilityInfo.announceForAccessibility('Professional headshot generation started');
     
-    const generateMockResults = () => {
-      // Mock generated images - in real app these would come from AI service
-      return [
-        { id: 1, uri: 'mock-result-1.jpg', style: selectedStyle },
-        { id: 2, uri: 'mock-result-2.jpg', style: selectedStyle },
-        { id: 3, uri: 'mock-result-3.jpg', style: selectedStyle },
-        { id: 4, uri: 'mock-result-4.jpg', style: selectedStyle },
-      ];
-    };
+    if (!predictionId) {
+      setProcessingError('Missing prediction ID. Please try again.');
+      setIsProcessing(false);
+      return;
+    }
 
-    // Simulate processing steps
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        const newProgress = prevProgress + 20;
-        
-        if (newProgress <= 100) {
-          const newStep = Math.floor(newProgress / 20);
-          setCurrentStep(newStep);
-          
-          // Announce step changes to screen readers
-          if (newStep < steps.length) {
-            AccessibilityInfo.announceForAccessibility(`Step ${newStep + 1}: ${steps[newStep]}`);
+    processAIHeadshots();
+  }, [predictionId]);
+
+  const processAIHeadshots = async () => {
+    try {
+      setIsProcessing(true);
+      setProcessingError(null);
+      
+      console.log('Starting AI processing for prediction:', predictionId);
+
+      // Simulate progress updates while waiting for AI
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev < 90) {
+            const newProgress = prev + Math.random() * 15;
+            const newStep = Math.floor(newProgress / 20);
+            setCurrentStep(Math.min(newStep, steps.length - 1));
+            
+            // Animate progress bar
+            Animated.timing(animatedValue, {
+              toValue: newProgress,
+              duration: 500,
+              useNativeDriver: false,
+            }).start();
+            
+            return newProgress;
           }
-          
-          // Animate progress bar
-          Animated.timing(animatedValue, {
-            toValue: newProgress,
-            duration: 300,
-            useNativeDriver: false,
-          }).start();
-          
-          return newProgress;
-        } else {
-          clearInterval(interval);
-          // Announce completion
-          AccessibilityInfo.announceForAccessibility(ACCESSIBILITY.announcements.generationComplete);
-          
-          // Navigate to results after processing is complete
-          setTimeout(() => {
-            navigation.navigate('ResultsGallery', {
-              originalImage: image,
-              selectedStyle,
-              generatedImages: generateMockResults(),
-            });
-          }, 1000);
-          return 100;
-        }
-      });
-    }, 2000);
+          return prev;
+        });
+      }, 2000);
 
-    return () => clearInterval(interval);
-  }, [animatedValue, image, navigation, selectedStyle, steps]);
+      // Wait for the AI prediction to complete
+      const result = await aiService.waitForPrediction(predictionId, 180000, 3000);
+      
+      clearInterval(progressInterval);
+
+      if (result.success) {
+        console.log('AI processing completed successfully');
+        
+        // Final progress update
+        setProgress(100);
+        setCurrentStep(steps.length - 1);
+        
+        Animated.timing(animatedValue, {
+          toValue: 100,
+          duration: 500,
+          useNativeDriver: false,
+        }).start();
+
+        // Announce completion
+        AccessibilityInfo.announceForAccessibility('Professional headshots generated successfully');
+
+        // Navigate to results
+        setTimeout(() => {
+          navigation.navigate('Result', {
+            outputs: result.outputs,
+            originalImage: originalImage,
+            styleTemplate: styleTemplate,
+            processingTime: result.processingTime,
+            prediction: result.prediction
+          });
+        }, 1500);
+
+      } else {
+        console.error('AI processing failed:', result.error);
+        setProcessingError(result.error || 'Processing failed');
+        setIsProcessing(false);
+        
+        // Announce error
+        AccessibilityInfo.announceForAccessibility('Processing failed. Please try again.');
+      }
+
+    } catch (error) {
+      console.error('Processing error:', error);
+      setProcessingError(error.message || 'An unexpected error occurred');
+      setIsProcessing(false);
+      
+      AccessibilityInfo.announceForAccessibility('Processing failed due to an error');
+    }
+  };
+
+  const handleRetry = () => {
+    navigation.goBack();
+  };
+
+  const handleCancel = () => {
+    if (predictionId) {
+      aiService.cancelPrediction(predictionId).catch(console.warn);
+    }
+    navigation.navigate('Home');
+  };
+
+  // If there's an error, show error state
+  if (processingError && !isProcessing) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Processing Failed</Text>
+          <Text style={styles.errorMessage}>{processingError}</Text>
+          
+          <View style={styles.errorActions}>
+            <PrimaryButton
+              title="Try Again"
+              onPress={handleRetry}
+              style={styles.errorButton}
+            />
+            <PrimaryButton
+              title="Cancel"
+              onPress={handleCancel}
+              style={[styles.errorButton, { backgroundColor: COLORS.neutral[400] }]}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
 
 
@@ -101,7 +184,7 @@ const ProcessingScreen = ({ navigation, route }) => {
             accessible={true}
             accessibilityRole="text"
           >
-            Our AI is generating professional {selectedStyle} style photos for you
+            Creating dramatic {styleTemplate || 'corporate'} transformation with professional attire, studio lighting, and premium backgrounds
           </Text>
         </View>
 
@@ -295,6 +378,37 @@ const styles = StyleSheet.create({
   },
   tipIcon: {
     fontSize: responsive.fs(24),
+  },
+  
+  // Error State Styles
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: responsive.sp(SPACING.xl),
+  },
+  errorTitle: {
+    fontSize: responsive.fs(TYPOGRAPHY.h2.fontSize),
+    fontWeight: TYPOGRAPHY.h2.fontWeight,
+    color: COLORS.text.primary,
+    textAlign: 'center',
+    marginBottom: responsive.sp(SPACING.lg),
+  },
+  errorMessage: {
+    fontSize: responsive.fs(TYPOGRAPHY.body1.fontSize),
+    color: COLORS.text.secondary,
+    textAlign: 'center',
+    marginBottom: responsive.sp(SPACING.xl),
+    lineHeight: TYPOGRAPHY.body1.lineHeight,
+  },
+  errorActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  errorButton: {
+    flex: 1,
+    marginHorizontal: responsive.sp(SPACING.sm),
   },
 });
 

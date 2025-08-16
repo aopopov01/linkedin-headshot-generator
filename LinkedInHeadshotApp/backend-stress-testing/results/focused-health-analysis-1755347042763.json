@@ -1,0 +1,555 @@
+{
+  "healthAnalysis": {
+    "statusCode": 503,
+    "healthData": {
+      "status": "unhealthy",
+      "timestamp": "2025-08-16T12:24:02.622Z",
+      "services": {
+        "optimization": {
+          "status": "unhealthy",
+          "error": "Input buffer contains unsupported image format"
+        },
+        "integration": {
+          "status": "degraded",
+          "timestamp": "2025-08-16T12:24:02.622Z",
+          "services": {
+            "optimizationEngine": {
+              "status": "unhealthy",
+              "error": "Input buffer contains unsupported image format"
+            },
+            "platformSpecs": {
+              "status": "healthy",
+              "platforms": 8,
+              "categories": 4,
+              "validSpecifications": 8,
+              "supportedPlatforms": [
+                "linkedin",
+                "instagram",
+                "facebook",
+                "twitter",
+                "youtube",
+                "tiktok",
+                "whatsapp_business",
+                "github"
+              ]
+            },
+            "imageProcessor": {
+              "status": "unhealthy",
+              "error": "Input buffer contains unsupported image format"
+            },
+            "customDimensions": {
+              "status": "healthy",
+              "metrics": {
+                "totalRequests": 0,
+                "successfulProcessing": 0,
+                "failedProcessing": 0,
+                "presetUsage": {},
+                "customDimensionStats": {
+                  "averageWidth": 0,
+                  "averageHeight": 0,
+                  "mostCommonAspectRatio": null
+                },
+                "successRate": "0%",
+                "mostUsedPreset": "none"
+              },
+              "constraints": {
+                "minWidth": 50,
+                "maxWidth": 4096,
+                "minHeight": 50,
+                "maxHeight": 4096,
+                "maxPixels": 16777216,
+                "supportedAspectRatios": {
+                  "square": {
+                    "ratio": 1,
+                    "tolerance": 0.02
+                  },
+                  "portrait": {
+                    "ratio": 0.75,
+                    "tolerance": 0.05
+                  },
+                  "landscape": {
+                    "ratio": 1.33,
+                    "tolerance": 0.05
+                  },
+                  "widescreen": {
+                    "ratio": 1.78,
+                    "tolerance": 0.05
+                  },
+                  "ultrawide": {
+                    "ratio": 2.4,
+                    "tolerance": 0.1
+                  }
+                },
+                "supportedPresets": 9,
+                "maxTotalPixels": 16777216,
+                "maxTotalPixelsMB": "48.0"
+              },
+              "availablePresets": 9
+            },
+            "batchProcessor": {
+              "status": "healthy",
+              "metrics": {
+                "totalBatches": 0,
+                "successfulBatches": 0,
+                "failedBatches": 0,
+                "totalImages": 0,
+                "successfulImages": 0,
+                "failedImages": 0,
+                "averageBatchTime": 0,
+                "averageImageTime": 0,
+                "concurrencyStats": {
+                  "current": 0,
+                  "peak": 0,
+                  "average": 0
+                },
+                "queueStatus": {
+                  "active": 0,
+                  "queued": 0,
+                  "capacity": 3
+                },
+                "successRate": "0%",
+                "imageSuccessRate": "0%"
+              },
+              "configuration": {
+                "maxConcurrentJobs": 3,
+                "maxBatchSize": 10,
+                "maxQueueSize": 50,
+                "jobTimeout": "300s"
+              },
+              "queueInfo": {
+                "active": [],
+                "queued": [],
+                "capacity": {
+                  "maxConcurrent": 3,
+                  "maxBatchSize": 10,
+                  "maxQueueSize": 50
+                }
+              }
+            },
+            "monitoring": {
+              "status": "healthy",
+              "metrics": {
+                "requests": {
+                  "total": 4,
+                  "successful": 4,
+                  "failed": 0,
+                  "inProgress": 0
+                },
+                "performance": {
+                  "averageResponseTime": 28,
+                  "minResponseTime": 1,
+                  "maxResponseTime": 46,
+                  "responseTimeHistory": [
+                    {
+                      "time": 33,
+                      "timestamp": 1755345809531
+                    },
+                    {
+                      "time": 32,
+                      "timestamp": 1755345809296
+                    },
+                    {
+                      "time": 46,
+                      "timestamp": 1755345809060
+                    },
+                    {
+                      "time": 1,
+                      "timestamp": 1755345230458
+                    }
+                  ]
+                },
+                "errors": {
+                  "total": 0,
+                  "byType": {},
+                  "recent": []
+                },
+                "resources": {
+                  "memoryUsage": 0.4241634651218871,
+                  "cpuUsage": 0,
+                  "activeConnections": 0,
+                  "queueLength": 0
+                },
+                "business": {
+                  "platformUsage": {
+                    "2": 4
+                  },
+                  "stylePreferences": {
+                    "professional": 4
+                  },
+                  "userEngagement": {
+                    "totalUsers": 0,
+                    "activeUsers": 0,
+                    "averageSessionTime": 0
+                  }
+                },
+                "system": {
+                  "uptime": 1755299957360,
+                  "version": "1.0.0",
+                  "environment": "development"
+                },
+                "derived": {
+                  "errorRate": 0,
+                  "successRate": 1,
+                  "uptime": 47085262,
+                  "requestRate": 0
+                }
+              },
+              "healthStatus": {
+                "status": "healthy",
+                "timestamp": 1755347012325,
+                "components": {
+                  "errorRate": {
+                    "status": "healthy",
+                    "value": 0,
+                    "threshold": 0.05
+                  },
+                  "responseTime": {
+                    "status": "healthy",
+                    "value": 28,
+                    "threshold": 30000
+                  },
+                  "queueLength": {
+                    "status": "healthy",
+                    "value": 0,
+                    "threshold": 20
+                  }
+                }
+              },
+              "activeAlerts": 0,
+              "configuration": {
+                "metricsRetention": "30 days",
+                "reportingInterval": "300 seconds",
+                "alertThresholds": {
+                  "errorRate": 0.05,
+                  "avgResponseTime": 30000,
+                  "queueLength": 20,
+                  "memoryUsage": 0.9,
+                  "cpuUsage": 0.8
+                }
+              }
+            }
+          },
+          "unhealthyServices": [
+            "optimizationEngine",
+            "imageProcessor"
+          ]
+        },
+        "api": {
+          "status": "degraded",
+          "metrics": {
+            "totalRequests": 0,
+            "successfulRequests": 0,
+            "failedRequests": 0,
+            "averageResponseTime": 0,
+            "providerStats": {
+              "replicate": {
+                "requests": 0,
+                "successes": 0,
+                "failures": 0,
+                "averageTime": 0,
+                "available": false
+              },
+              "openai": {
+                "requests": 0,
+                "successes": 0,
+                "failures": 0,
+                "averageTime": 0,
+                "available": false
+              },
+              "stability": {
+                "requests": 0,
+                "successes": 0,
+                "failures": 0,
+                "averageTime": 0,
+                "available": false
+              },
+              "cloudinary": {
+                "requests": 0,
+                "successes": 0,
+                "failures": 0,
+                "averageTime": 0,
+                "available": false
+              }
+            },
+            "rateLimitHits": 0,
+            "circuitBreakerTrips": 0,
+            "successRate": "0%",
+            "availableProviders": 0,
+            "totalProviders": 4
+          },
+          "providers": {
+            "replicate": {
+              "status": "unavailable",
+              "reason": "Missing configuration"
+            },
+            "openai": {
+              "status": "unavailable",
+              "reason": "Missing configuration"
+            },
+            "stability": {
+              "status": "unavailable",
+              "reason": "Missing configuration"
+            },
+            "cloudinary": {
+              "status": "unavailable",
+              "reason": "Missing configuration"
+            }
+          },
+          "configuration": {
+            "timeout": "30s",
+            "retryAttempts": 3,
+            "circuitBreakerThreshold": 5
+          }
+        }
+      },
+      "environment": "development"
+    },
+    "timestamp": "2025-08-16T12:24:02.626Z",
+    "analysis": {
+      "overall": "unhealthy",
+      "issues": [
+        "optimization: Input buffer contains unsupported image format",
+        "integration: degraded",
+        "api: degraded"
+      ],
+      "workingServices": [],
+      "failingServices": [
+        {
+          "name": "optimization",
+          "status": "unhealthy",
+          "error": "Input buffer contains unsupported image format"
+        },
+        {
+          "name": "integration",
+          "status": "degraded",
+          "error": "Unknown error"
+        },
+        {
+          "name": "api",
+          "status": "degraded",
+          "error": "Unknown error"
+        }
+      ]
+    }
+  },
+  "workingEndpoints": [
+    {
+      "path": "/api/v1/platforms",
+      "method": "GET",
+      "name": "Platform Specs",
+      "critical": false,
+      "working": true,
+      "statusCode": 200,
+      "responseTime": 1,
+      "responseSize": 6011,
+      "error": null
+    },
+    {
+      "path": "/api/v1/styles",
+      "method": "GET",
+      "name": "Available Styles",
+      "critical": false,
+      "working": true,
+      "statusCode": 200,
+      "responseTime": 1,
+      "responseSize": 1135,
+      "error": null
+    },
+    {
+      "path": "/api/v1/metrics",
+      "method": "GET",
+      "name": "Metrics",
+      "critical": false,
+      "working": true,
+      "statusCode": 200,
+      "responseTime": 1,
+      "responseSize": 623,
+      "error": null
+    }
+  ],
+  "failingEndpoints": [
+    {
+      "path": "/health",
+      "method": "GET",
+      "name": "Health Check",
+      "critical": true,
+      "working": false,
+      "statusCode": 503,
+      "responseTime": 3,
+      "responseSize": 4248
+    },
+    {
+      "path": "/api/v1/estimate-cost",
+      "method": "POST",
+      "name": "Cost Estimation",
+      "critical": false,
+      "working": false,
+      "statusCode": 500,
+      "responseTime": 1,
+      "responseSize": 85,
+      "error": "services.cost.calculateOptimizationCost is not a function"
+    }
+  ],
+  "performanceMetrics": {
+    "Platform Specs": {
+      "stressResults": [
+        {
+          "level": "Light",
+          "concurrent": 10,
+          "totalRequests": 20,
+          "successful": 20,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 18,
+          "throughput": 1111.111111111111
+        },
+        {
+          "level": "Medium",
+          "concurrent": 25,
+          "totalRequests": 25,
+          "successful": 25,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 13,
+          "throughput": 1923.076923076923
+        },
+        {
+          "level": "Heavy",
+          "concurrent": 50,
+          "totalRequests": 50,
+          "successful": 50,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 43,
+          "throughput": 1162.7906976744187
+        }
+      ],
+      "maxThroughput": 1923.076923076923,
+      "reliability": true
+    },
+    "Available Styles": {
+      "stressResults": [
+        {
+          "level": "Light",
+          "concurrent": 10,
+          "totalRequests": 20,
+          "successful": 20,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 9,
+          "throughput": 2222.222222222222
+        },
+        {
+          "level": "Medium",
+          "concurrent": 25,
+          "totalRequests": 25,
+          "successful": 25,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 11,
+          "throughput": 2272.727272727273
+        },
+        {
+          "level": "Heavy",
+          "concurrent": 50,
+          "totalRequests": 50,
+          "successful": 50,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 17,
+          "throughput": 2941.1764705882356
+        }
+      ],
+      "maxThroughput": 2941.1764705882356,
+      "reliability": true
+    },
+    "Metrics": {
+      "stressResults": [
+        {
+          "level": "Light",
+          "concurrent": 10,
+          "totalRequests": 20,
+          "successful": 20,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 4,
+          "throughput": 5000
+        },
+        {
+          "level": "Medium",
+          "concurrent": 25,
+          "totalRequests": 25,
+          "successful": 25,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 4,
+          "throughput": 6250
+        },
+        {
+          "level": "Heavy",
+          "concurrent": 50,
+          "totalRequests": 50,
+          "successful": 50,
+          "failed": 0,
+          "successRate": 100,
+          "duration": 9,
+          "throughput": 5555.555555555556
+        }
+      ],
+      "maxThroughput": 6250,
+      "reliability": true
+    }
+  },
+  "rootCauseAnalysis": {
+    "rootCauses": [
+      {
+        "category": "Image Processing",
+        "issue": "Unsupported image format handling",
+        "severity": "High",
+        "description": "Image processor failing to handle certain image formats",
+        "affectedService": "optimization"
+      },
+      {
+        "category": "Critical Endpoint Failure",
+        "issue": "Health Check not responding correctly",
+        "severity": "Critical",
+        "description": "Critical endpoint /health returning 503",
+        "affectedEndpoint": "/health"
+      }
+    ],
+    "timestamp": "2025-08-16T12:24:02.762Z",
+    "summary": {
+      "totalIssues": 2,
+      "criticalIssues": 1,
+      "highSeverityIssues": 1,
+      "mediumSeverityIssues": 0
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "Critical",
+      "action": "Fix Health Check endpoint immediately",
+      "details": "Critical endpoints must be operational for system health"
+    },
+    {
+      "priority": "High",
+      "action": "Implement robust image format validation and conversion",
+      "details": "Add support for more image formats or better error handling for unsupported formats"
+    },
+    {
+      "priority": "High",
+      "action": "Implement comprehensive health monitoring",
+      "details": "Set up real-time monitoring and alerting for all critical services"
+    },
+    {
+      "priority": "Medium",
+      "action": "Add circuit breakers for external service calls",
+      "details": "Prevent cascade failures when external services are unavailable"
+    },
+    {
+      "priority": "Medium",
+      "action": "Implement graceful degradation",
+      "details": "Allow system to operate in reduced functionality mode when some services fail"
+    }
+  ]
+}

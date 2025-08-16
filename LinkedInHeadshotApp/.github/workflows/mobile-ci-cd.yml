@@ -1,4 +1,4 @@
-name: LinkedIn Headshot Mobile CI/CD
+name: OmniShot Mobile CI/CD
 
 on:
   push:

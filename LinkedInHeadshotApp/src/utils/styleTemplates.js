@@ -1,4 +1,7 @@
 // Professional headshot style templates and configurations
+// Enhanced with dramatic AI transformation capabilities
+
+import { AttireTemplateUtils } from '../config/professionalAttireTemplates';
 
 export const STYLE_TEMPLATES = {
   corporate: {
@@ -6,20 +9,47 @@ export const STYLE_TEMPLATES = {
     name: 'Corporate',
     displayName: 'Corporate Professional',
     description: 'Classic business attire with clean background - perfect for finance, consulting, and traditional industries',
-    prompt: 'professional corporate headshot, business suit, clean white background, studio lighting, confident expression, high quality, 4k, professional photography',
-    negativePrompt: 'casual clothing, colorful background, poor lighting, blurry, distorted, unprofessional, cartoon',
+    
+    // Enhanced dramatic transformation prompts
+    prompt: 'ultra-realistic professional corporate headshot portrait, impeccably dressed person in premium business suit, crisp white dress shirt, sophisticated tie, clean white studio background, premium three-point studio lighting setup, confident trustworthy expression, sharp focus, incredibly detailed, high-end corporate photography, 8K resolution, professional retouching, executive quality',
+    
+    negativePrompt: 'casual clothing, colorful background, poor lighting, blurry, distorted, unprofessional, cartoon, anime, low quality, pixelated, amateur photography, harsh shadows, overexposed, underexposed, wrinkled clothing, poor grooming, inappropriate attire',
+    
+    // Dramatic transformation settings
+    dramaticSettings: {
+      clothingTransformation: true,
+      backgroundReplacement: true,
+      lightingEnhancement: true,
+      facePreservation: 0.95,
+      styleStrength: 0.9,
+      professionalGrade: true
+    },
+    
     category: 'business',
     popularity: 95,
     industries: ['Finance', 'Consulting', 'Law', 'Banking', 'Insurance'],
+    
     features: {
-      background: 'Clean white or neutral',
-      attire: 'Business suit or formal wear',
-      lighting: 'Professional studio lighting',
-      expression: 'Confident and trustworthy',
-      composition: 'Head and shoulders, centered',
+      background: 'Premium white studio with professional gradient',
+      attire: 'Executive business suit with complete professional styling',
+      lighting: 'Three-point studio lighting with key, fill, and rim',
+      expression: 'Confident, trustworthy, executive presence',
+      composition: 'Professional headshot with dramatic quality enhancement',
+      transformation: 'Complete professional makeover including attire and background'
     },
-    tags: ['professional', 'corporate', 'formal', 'business'],
+    
+    // Before/After transformation examples
+    transformationExamples: {
+      attire: 'Transforms casual clothing to premium business suit',
+      background: 'Replaces any background with professional studio setup',
+      lighting: 'Adds premium studio lighting for executive appearance',
+      overall: 'Creates dramatic corporate transformation with WOW factor'
+    },
+    
+    tags: ['professional', 'corporate', 'formal', 'business', 'dramatic', 'transformation'],
     pricing: 'free',
+    transformationType: 'dramatic_professional',
+    recommendedFor: ['Executive meetings', 'LinkedIn profiles', 'Corporate websites', 'Professional networking']
   },
 
   creative: {
@@ -47,21 +77,62 @@ export const STYLE_TEMPLATES = {
     id: 'executive',
     name: 'Executive',
     displayName: 'Executive Leadership',
-    description: 'Premium style for C-suite executives and senior leadership roles',
-    prompt: 'executive professional headshot, formal dark business suit, neutral gray background, premium studio lighting, authoritative confident expression, high quality, 4k, professional photography',
-    negativePrompt: 'casual attire, bright colors, poor posture, blurry, distorted, unprofessional',
+    description: 'ULTIMATE TRANSFORMATION: Premium C-suite makeover with dramatic before/after results',
+    
+    // Most dramatic transformation prompts for maximum WOW factor
+    prompt: 'ULTRA-REALISTIC EXECUTIVE TRANSFORMATION: CEO-level professional headshot portrait, person transformed into premium dark navy three-piece business suit, crisp white French cuff dress shirt, luxury silk tie, gold cufflinks, perfectly groomed executive appearance, sophisticated gray gradient background, PREMIUM STUDIO LIGHTING with dramatic key light and rim light, commanding authoritative expression, executive presence and gravitas, incredibly sharp focus, museum-quality detail, HIGHEST-END CORPORATE PHOTOGRAPHY, 8K+ resolution, professional retouching perfection, Fortune 500 CEO quality',
+    
+    negativePrompt: 'casual clothing, poor lighting, blurry, distorted, unprofessional, cartoon, anime, low quality, pixelated, amateur photography, harsh shadows, overexposed, underexposed, casual background, wrinkled clothing, poor grooming, inappropriate attire, budget photography, amateur styling, low-end appearance',
+    
+    // Maximum dramatic transformation settings
+    dramaticSettings: {
+      clothingTransformation: true,
+      backgroundReplacement: true,
+      lightingEnhancement: true,
+      executiveGrooming: true,
+      premiumStyling: true,
+      facePreservation: 0.98, // Highest face preservation
+      styleStrength: 0.95, // Maximum style transformation
+      professionalGrade: true,
+      executiveLevel: true,
+      dramaticLevel: 10 // Maximum drama
+    },
+    
     category: 'executive',
     popularity: 75,
-    industries: ['Executive', 'C-Suite', 'Board Members', 'Senior Leadership'],
+    industries: ['Executive', 'C-Suite', 'Board Members', 'Senior Leadership', 'Fortune 500'],
+    
     features: {
-      background: 'Sophisticated gray or navy',
-      attire: 'Premium business suit',
-      lighting: 'Dramatic, professional',
-      expression: 'Authoritative and confident',
-      composition: 'Commanding presence',
+      background: 'Sophisticated executive gradient with premium studio lighting',
+      attire: 'Three-piece executive suit with luxury accessories and perfect grooming',
+      lighting: 'Dramatic premium studio setup with key, fill, and rim lights',
+      expression: 'Commanding executive presence with authoritative confidence',
+      composition: 'CEO-level professional headshot with ultimate dramatic impact',
+      transformation: 'COMPLETE EXECUTIVE MAKEOVER - transforms any photo into Fortune 500 CEO appearance'
     },
-    tags: ['executive', 'leadership', 'authoritative', 'premium'],
+    
+    // Dramatic before/after transformation examples
+    transformationExamples: {
+      attire: 'Transforms ANY clothing into premium three-piece executive suit',
+      background: 'Creates sophisticated executive office environment',
+      lighting: 'Adds dramatic premium studio lighting for commanding presence',
+      grooming: 'Enhances to executive-level professional grooming',
+      overall: 'Creates DRAMATIC CEO transformation - ordinary to Fortune 500 executive'
+    },
+    
+    tags: ['executive', 'leadership', 'authoritative', 'premium', 'dramatic', 'CEO', 'transformation', 'luxury'],
     pricing: 'premium',
+    transformationType: 'ultimate_dramatic_executive',
+    recommendedFor: ['C-Suite profiles', 'Board positions', 'Executive leadership', 'Fortune 500 roles', 'Premium LinkedIn'],
+    
+    // Special executive features
+    executiveFeatures: {
+      luxuryAccessories: true,
+      executiveGrooming: true,
+      premiumLighting: true,
+      commandingPresence: true,
+      fortuneQuality: true
+    }
   },
 
   startup: {
@@ -89,21 +160,52 @@ export const STYLE_TEMPLATES = {
     id: 'healthcare',
     name: 'Healthcare',
     displayName: 'Healthcare Professional',
-    description: 'Trustworthy and caring appearance for medical and healthcare professionals',
-    prompt: 'healthcare professional headshot, medical white coat or professional attire, clean background, trustworthy caring expression, high quality, 4k, professional photography',
-    negativePrompt: 'unprofessional attire, distracting background, harsh expression, blurry, distorted',
+    description: 'DRAMATIC MEDICAL TRANSFORMATION: Complete healthcare professional makeover',
+    
+    // Enhanced healthcare transformation prompts
+    prompt: 'ULTRA-REALISTIC HEALTHCARE TRANSFORMATION: professional medical headshot portrait, person transformed into pristine white medical coat over premium professional business attire, perfectly clean and pressed medical appearance, stethoscope appropriately placed, clean medical facility background, professional medical photography lighting, trustworthy caring facial expression, approachable yet authoritative medical presence, incredibly detailed, hospital-grade professional photography, 8K resolution, medical-standard professional retouching',
+    
+    negativePrompt: 'unprofessional attire, casual clothing, distracting background, harsh expression, blurry, distorted, low quality, amateur photography, inappropriate medical setting, wrinkled medical coat, unprofessional medical environment, poor grooming',
+    
+    // Medical transformation settings
+    dramaticSettings: {
+      clothingTransformation: true,
+      medicalCoatAddition: true,
+      backgroundReplacement: true,
+      lightingEnhancement: true,
+      medicalAccessories: true,
+      facePreservation: 0.96,
+      styleStrength: 0.9,
+      professionalGrade: true,
+      medicalStandard: true
+    },
+    
     category: 'healthcare',
     popularity: 70,
-    industries: ['Medicine', 'Healthcare', 'Nursing', 'Therapy', 'Wellness'],
+    industries: ['Medicine', 'Healthcare', 'Nursing', 'Therapy', 'Wellness', 'Medical Practice'],
+    
     features: {
-      background: 'Clean medical environment',
-      attire: 'White coat or professional medical attire',
-      lighting: 'Clean, reassuring',
-      expression: 'Trustworthy and compassionate',
-      composition: 'Professional medical standard',
+      background: 'Clean medical facility environment with professional setup',
+      attire: 'Pristine white medical coat with professional business attire underneath',
+      lighting: 'Medical-grade even lighting for trustworthy professional appearance',
+      expression: 'Trustworthy, caring, medically authoritative presence',
+      composition: 'Hospital-quality professional headshot with medical credibility',
+      transformation: 'COMPLETE MEDICAL MAKEOVER - transforms any photo into trusted healthcare professional'
     },
-    tags: ['healthcare', 'medical', 'trustworthy', 'caring'],
+    
+    // Medical transformation examples
+    transformationExamples: {
+      attire: 'Transforms any clothing into pristine medical coat over professional attire',
+      background: 'Creates clean medical facility environment',
+      lighting: 'Adds medical-standard professional lighting',
+      accessories: 'Adds appropriate medical accessories like stethoscope',
+      overall: 'Creates dramatic healthcare transformation - instant medical credibility'
+    },
+    
+    tags: ['healthcare', 'medical', 'trustworthy', 'caring', 'dramatic', 'transformation', 'professional'],
     pricing: 'premium',
+    transformationType: 'dramatic_medical_professional',
+    recommendedFor: ['Medical practice websites', 'Healthcare LinkedIn', 'Hospital staff profiles', 'Medical directories']
   },
 
   academic: {
@@ -267,19 +369,94 @@ export const StyleTemplateUtils = {
     );
   },
 
-  // Get style configuration for AI processing
+  // Get style configuration for AI processing (ENHANCED for dramatic transformations)
   getStyleConfig: (styleId, customizations = {}) => {
     const style = STYLE_TEMPLATES[styleId];
     if (!style) return null;
 
+    // Use dramatic settings if available
+    const dramaticSettings = style.dramaticSettings || {};
+    
     return {
       prompt: style.prompt,
       negativePrompt: style.negativePrompt,
-      styleStrength: customizations.styleStrength || 20,
+      styleStrength: customizations.styleStrength || dramaticSettings.styleStrength || 0.8,
       numOutputs: customizations.numOutputs || 4,
-      guidanceScale: customizations.guidanceScale || 5,
-      numSteps: customizations.numSteps || 50,
+      guidanceScale: customizations.guidanceScale || 7.5, // Higher for better results
+      numSteps: customizations.numSteps || 80, // Higher for better quality
+      strength: customizations.strength || 0.85, // High transformation strength
+      facePreservation: dramaticSettings.facePreservation || 0.95,
+      transformationType: style.transformationType || 'standard',
+      dramaticLevel: dramaticSettings.dramaticLevel || 5,
       ...customizations,
+    };
+  },
+
+  // NEW: Get dramatic transformation configuration
+  getDramaticConfig: (styleId, options = {}) => {
+    const style = STYLE_TEMPLATES[styleId];
+    if (!style) return null;
+
+    const attireConfig = AttireTemplateUtils.generateTransformationPrompt(
+      styleId, 
+      options.gender || 'neutral', 
+      options.backgroundType || 'studio'
+    );
+
+    if (!attireConfig) {
+      // Fallback to style template prompts
+      return StyleTemplateUtils.getStyleConfig(styleId, options);
+    }
+
+    return {
+      prompt: attireConfig.mainPrompt,
+      negativePrompt: attireConfig.negativePrompt,
+      styleStrength: attireConfig.styleStrength,
+      formalityLevel: attireConfig.formalityLevel,
+      numSteps: options.numSteps || 100, // High quality for dramatic results
+      guidanceScale: options.guidanceScale || 8.0, // Strong prompt adherence
+      strength: options.strength || 0.9, // High transformation
+      numOutputs: options.numOutputs || 6, // More variations
+      seed: options.seed || null,
+      metadata: attireConfig.metadata,
+      transformationType: 'dramatic_professional'
+    };
+  },
+
+  // NEW: Get transformation examples for marketing/display
+  getTransformationExamples: (styleId) => {
+    const style = STYLE_TEMPLATES[styleId];
+    return style?.transformationExamples || null;
+  },
+
+  // NEW: Check if style supports dramatic transformation
+  supportsDramaticTransformation: (styleId) => {
+    const style = STYLE_TEMPLATES[styleId];
+    return style?.dramaticSettings?.clothingTransformation === true;
+  },
+
+  // NEW: Get recommended processing time for dramatic transformations
+  getDramaticProcessingTime: (styleId, numOutputs = 4) => {
+    const style = STYLE_TEMPLATES[styleId];
+    const baseTime = style?.dramaticSettings?.dramaticLevel || 5;
+    const outputMultiplier = numOutputs / 4;
+    const qualityMultiplier = style?.transformationType === 'ultimate_dramatic_executive' ? 1.5 : 1;
+    
+    return Math.ceil((baseTime * 30 * outputMultiplier * qualityMultiplier) / 1000) * 1000; // Round to seconds
+  },
+
+  // NEW: Get style comparison for before/after marketing
+  getStyleComparison: (styleId) => {
+    const style = STYLE_TEMPLATES[styleId];
+    if (!style) return null;
+
+    return {
+      before: 'Casual photo with any clothing and background',
+      after: style.features.transformation || style.description,
+      dramaticLevel: style.dramaticSettings?.dramaticLevel || 5,
+      transformationFeatures: Object.keys(style.dramaticSettings || {}).filter(key => 
+        style.dramaticSettings[key] === true
+      )
     };
   },
 

@@ -1,0 +1,84 @@
+{
+  "timestamp": "2025-08-14T13:27:06.934Z",
+  "workingModels": [
+    {
+      "name": "tencentarc/photomaker",
+      "description": "Create photos, paintings and avatars for anyone in any style within seconds.",
+      "latestVersion": "ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4",
+      "url": "https://replicate.com/tencentarc/photomaker",
+      "category": "photomaker",
+      "recommended": true
+    },
+    {
+      "name": "zsxkib/instant-id",
+      "description": "Make realistic images of real people instantly",
+      "latestVersion": "2e4785a4d80dadf580077b2244c8d7c05d8e3faac04a04c02d8e099dd2876789",
+      "url": "https://replicate.com/zsxkib/instant-id",
+      "category": "instantid",
+      "recommended": true
+    },
+    {
+      "name": "black-forest-labs/flux-1.1-pro",
+      "description": "Faster, better FLUX Pro. Text-to-image model with excellent image quality, prompt adherence, and output diversity.",
+      "latestVersion": "80a09d66baa990429c2f5ae8a4306bf778a1b3775afd01cc2cc8bdbe9033769c",
+      "url": "https://replicate.com/black-forest-labs/flux-1.1-pro",
+      "category": "flux",
+      "recommended": true
+    },
+    {
+      "name": "black-forest-labs/flux-dev",
+      "description": "A 12 billion parameter rectified flow transformer capable of generating images from text descriptions",
+      "latestVersion": "6e4a938f85952bdabcc15aa329178c4d681c52bf25a0342403287dc26944661d",
+      "url": "https://replicate.com/black-forest-labs/flux-dev",
+      "category": "flux",
+      "recommended": true
+    },
+    {
+      "name": "black-forest-labs/flux-schnell",
+      "description": "The fastest image generation model tailored for local development and personal use",
+      "latestVersion": "c846a69991daf4c0e5d016514849d14ee5b2e6846ce6b9d6f21369e564cfe51e",
+      "url": "https://replicate.com/black-forest-labs/flux-schnell",
+      "category": "flux",
+      "recommended": true
+    },
+    {
+      "name": "fofr/face-to-many",
+      "description": "Turn a face into 3D, emoji, pixel art, video game, claymation or toy",
+      "latestVersion": "a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf",
+      "url": "https://replicate.com/fofr/face-to-many",
+      "category": "face",
+      "recommended": true
+    }
+  ],
+  "recommendations": {
+    "photomaker": {
+      "name": "tencentarc/photomaker",
+      "description": "Create photos, paintings and avatars for anyone in any style within seconds.",
+      "latestVersion": "ddfc2b08d209f9fa8c1eca692712918bd449f695dabb4a958da31802a9570fe4",
+      "url": "https://replicate.com/tencentarc/photomaker",
+      "category": "photomaker",
+      "recommended": true
+    },
+    "instantid": {
+      "name": "zsxkib/instant-id",
+      "description": "Make realistic images of real people instantly",
+      "latestVersion": "2e4785a4d80dadf580077b2244c8d7c05d8e3faac04a04c02d8e099dd2876789",
+      "url": "https://replicate.com/zsxkib/instant-id",
+      "category": "instantid",
+      "recommended": true
+    },
+    "flux": {
+      "name": "black-forest-labs/flux-1.1-pro",
+      "description": "Faster, better FLUX Pro. Text-to-image model with excellent image quality, prompt adherence, and output diversity.",
+      "latestVersion": "80a09d66baa990429c2f5ae8a4306bf778a1b3775afd01cc2cc8bdbe9033769c",
+      "url": "https://replicate.com/black-forest-labs/flux-1.1-pro",
+      "category": "flux",
+      "recommended": true
+    }
+  },
+  "issues": [
+    "Insufficient API credits",
+    "Incorrect model versions",
+    "Silent fallback to local processing"
+  ]
+}

@@ -1,0 +1,343 @@
+{
+  "timestamp": "2025-08-16T12:02:05.382Z",
+  "appStructure": {
+    "totalDependencies": 15,
+    "devDependencies": 4,
+    "components": 24,
+    "screens": 12,
+    "services": 32,
+    "mainDependencies": {
+      "ui": [
+        "@react-native-async-storage/async-storage",
+        "react-native",
+        "react-native-paper",
+        "react-native-safe-area-context",
+        "react-native-screens"
+      ],
+      "networking": [
+        "axios"
+      ],
+      "state": [],
+      "async": [],
+      "image": [],
+      "dev": []
+    },
+    "bundleRelevantDeps": []
+  },
+  "bundleAnalysis": {
+    "metroConfigExists": true,
+    "appJsSize": 43856,
+    "totalImports": 8,
+    "externalImports": 6,
+    "potentiallyHeavyImports": [],
+    "recommendedOptimizations": []
+  },
+  "startupPerformance": {
+    "appJsComplexity": 245,
+    "synchronousOperations": [],
+    "asyncInitialization": true,
+    "lazyLoadingImplemented": false,
+    "splashScreenOptimized": true,
+    "preloadingStrategies": []
+  },
+  "componentPerformance": {
+    "totalComponents": 24,
+    "largeComponents": [
+      {
+        "file": "src/components/admin/ContentModerationDashboard.jsx",
+        "size": 18498,
+        "lines": 621
+      },
+      {
+        "file": "src/components/ai/ProcessingScreen.jsx",
+        "size": 12036,
+        "lines": 415
+      },
+      {
+        "file": "src/components/ai/ProductionAIProcessor.jsx",
+        "size": 17583,
+        "lines": 662
+      },
+      {
+        "file": "src/components/ai/ResultsGallery.jsx",
+        "size": 8340,
+        "lines": 282
+      },
+      {
+        "file": "src/components/ai/StyleSelector.jsx",
+        "size": 7680,
+        "lines": 259
+      },
+      {
+        "file": "src/components/ai/__tests__/StyleSelector.test.jsx",
+        "size": 17167,
+        "lines": 557
+      },
+      {
+        "file": "src/components/camera/PhotoCapture.jsx",
+        "size": 15947,
+        "lines": 516
+      },
+      {
+        "file": "src/components/camera/__tests__/PhotoCapture.test.jsx",
+        "size": 16691,
+        "lines": 539
+      },
+      {
+        "file": "src/components/debug/NetworkMonitor.jsx",
+        "size": 12054,
+        "lines": 446
+      },
+      {
+        "file": "src/components/debug/PermissionTestPanel.jsx",
+        "size": 7694,
+        "lines": 253
+      },
+      {
+        "file": "src/components/headshot/DualProviderTransformationScreen.jsx",
+        "size": 23705,
+        "lines": 198
+      },
+      {
+        "file": "src/components/headshot/ProfessionalHeadshotProcessor.jsx",
+        "size": 16867,
+        "lines": 672
+      },
+      {
+        "file": "src/components/headshot/TransformationResultsScreen.jsx",
+        "size": 20798,
+        "lines": 780
+      },
+      {
+        "file": "src/components/privacy/ConsentManager.jsx",
+        "size": 11531,
+        "lines": 451
+      },
+      {
+        "file": "src/components/profile/PaymentScreen.jsx",
+        "size": 11209,
+        "lines": 424
+      },
+      {
+        "file": "src/components/shared/AccessibleImage.jsx",
+        "size": 7345,
+        "lines": 303
+      },
+      {
+        "file": "src/components/shared/Alert.jsx",
+        "size": 10053,
+        "lines": 398
+      },
+      {
+        "file": "src/components/shared/Button.jsx",
+        "size": 7496,
+        "lines": 326
+      },
+      {
+        "file": "src/components/shared/Card.jsx",
+        "size": 9665,
+        "lines": 414
+      },
+      {
+        "file": "src/components/shared/Grid.jsx",
+        "size": 7167,
+        "lines": 313
+      },
+      {
+        "file": "src/components/shared/Input.jsx",
+        "size": 8941,
+        "lines": 370
+      },
+      {
+        "file": "src/components/shared/LoadingSpinner.jsx",
+        "size": 5772,
+        "lines": 218
+      },
+      {
+        "file": "src/components/shared/Navigation.jsx",
+        "size": 9220,
+        "lines": 341
+      },
+      {
+        "file": "src/components/shared/PremiumBadge.jsx",
+        "size": 6193,
+        "lines": 320
+      }
+    ],
+    "memoizationOpportunities": [
+      "src/components/ai/__tests__/StyleSelector.test.jsx",
+      "src/components/camera/__tests__/PhotoCapture.test.jsx",
+      "src/components/shared/AccessibleImage.jsx",
+      "src/components/shared/Button.jsx",
+      "src/components/shared/Card.jsx",
+      "src/components/shared/Input.jsx"
+    ],
+    "expensiveOperations": [
+      "src/components/admin/ContentModerationDashboard.jsx",
+      "src/components/ai/ProcessingScreen.jsx",
+      "src/components/ai/ProductionAIProcessor.jsx",
+      "src/components/ai/ResultsGallery.jsx",
+      "src/components/ai/StyleSelector.jsx",
+      "src/components/camera/PhotoCapture.jsx",
+      "src/components/debug/NetworkMonitor.jsx",
+      "src/components/headshot/TransformationResultsScreen.jsx",
+      "src/components/profile/PaymentScreen.jsx",
+      "src/components/shared/Alert.jsx",
+      "src/components/shared/Grid.jsx"
+    ],
+    "stateManagementIssues": [
+      {
+        "file": "src/components/ai/ProcessingScreen.jsx",
+        "useStateCount": 6
+      },
+      {
+        "file": "src/components/ai/ProductionAIProcessor.jsx",
+        "useStateCount": 7
+      },
+      {
+        "file": "src/components/headshot/DualProviderTransformationScreen.jsx",
+        "useStateCount": 11
+      },
+      {
+        "file": "src/components/headshot/ProfessionalHeadshotProcessor.jsx",
+        "useStateCount": 8
+      },
+      {
+        "file": "src/components/headshot/TransformationResultsScreen.jsx",
+        "useStateCount": 12
+      }
+    ]
+  },
+  "networkPerformance": {
+    "totalServiceFiles": 32,
+    "apiCalls": [
+      {
+        "file": "src/services/aiService.js",
+        "fetchCalls": 0,
+        "axiosCalls": 5,
+        "total": 5
+      },
+      {
+        "file": "src/services/bulletproofAIService.js",
+        "fetchCalls": 2,
+        "axiosCalls": 0,
+        "total": 2
+      },
+      {
+        "file": "src/services/headshotTransformationService.js",
+        "fetchCalls": 0,
+        "axiosCalls": 3,
+        "total": 3
+      },
+      {
+        "file": "src/services/omnishotApiService.js",
+        "fetchCalls": 4,
+        "axiosCalls": 0,
+        "total": 4
+      },
+      {
+        "file": "src/services/optimizedAnalyticsService.js",
+        "fetchCalls": 1,
+        "axiosCalls": 0,
+        "total": 1
+      },
+      {
+        "file": "src/services/productionAIService.js",
+        "fetchCalls": 0,
+        "axiosCalls": 7,
+        "total": 7
+      },
+      {
+        "file": "src/services/professionalHeadshotService.js",
+        "fetchCalls": 0,
+        "axiosCalls": 2,
+        "total": 2
+      },
+      {
+        "file": "src/services/replicateHeadshotService.js",
+        "fetchCalls": 2,
+        "axiosCalls": 0,
+        "total": 2
+      }
+    ],
+    "cachingImplemented": true,
+    "retryMechanisms": [
+      "src/services/apiIntegrationLayer.js",
+      "src/services/backgroundJobService.js",
+      "src/services/batchProcessingService.js",
+      "src/services/bulletproofAIService.js",
+      "src/services/errorHandlingService.js",
+      "src/services/multiPlatformOptimizationEngine.js",
+      "src/services/omnishotApiService.js",
+      "src/services/omnishotIntegrationService.js",
+      "src/services/optimizedAnalyticsService.js",
+      "src/services/productionAIService.js"
+    ],
+    "offlineSupport": true,
+    "requestOptimizations": []
+  },
+  "recommendations": [
+    {
+      "priority": "MEDIUM",
+      "category": "Component Optimization",
+      "issue": "6 components could benefit from memoization",
+      "recommendation": "Implement React.memo for pure components to prevent unnecessary re-renders",
+      "implementation": [
+        "Wrap functional components with React.memo",
+        "Use useMemo for expensive calculations",
+        "Use useCallback for event handlers passed to child components",
+        "Implement shouldComponentUpdate for class components"
+      ]
+    },
+    {
+      "priority": "HIGH",
+      "category": "Render Performance",
+      "issue": "11 components have expensive operations in render",
+      "recommendation": "Move expensive operations outside render cycle",
+      "implementation": [
+        "Use useMemo for expensive array operations",
+        "Move data processing to useEffect hooks",
+        "Implement virtualization for long lists",
+        "Consider moving heavy calculations to background threads"
+      ]
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Startup Optimization",
+      "issue": "No lazy loading detected for initial app load",
+      "recommendation": "Implement lazy loading to improve startup time",
+      "implementation": [
+        "Use React.lazy for non-critical screens",
+        "Defer loading of heavy dependencies",
+        "Implement progressive app loading",
+        "Optimize splash screen duration"
+      ]
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Image Optimization",
+      "issue": "Image processing app needs optimized image handling",
+      "recommendation": "Implement advanced image optimization for mobile",
+      "implementation": [
+        "Use react-native-fast-image for better image caching",
+        "Implement progressive image loading",
+        "Optimize image formats (WebP support)",
+        "Add image compression before upload",
+        "Implement lazy loading for image galleries"
+      ]
+    },
+    {
+      "priority": "HIGH",
+      "category": "Memory Management",
+      "issue": "Image processing apps are memory intensive",
+      "recommendation": "Implement comprehensive memory management",
+      "implementation": [
+        "Add memory usage monitoring",
+        "Implement proper cleanup in useEffect hooks",
+        "Use weak references for large objects",
+        "Implement image recycling for galleries",
+        "Add memory warnings and cleanup triggers"
+      ]
+    }
+  ]
+}

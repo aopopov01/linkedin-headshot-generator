@@ -1,0 +1,31 @@
+{
+  "name": "omnishot-backend-stress-testing",
+  "version": "1.0.0",
+  "description": "Comprehensive stress testing suite for OmniShot backend API",
+  "main": "stress-test-runner.js",
+  "scripts": {
+    "test": "node stress-test-runner.js",
+    "test:load": "node load-testing/api-load-test.js",
+    "test:concurrency": "node concurrency-testing/concurrent-requests.js",
+    "test:limits": "node limit-testing/resource-limits.js",
+    "test:error": "node error-testing/error-handling.js",
+    "test:scalability": "node scalability-testing/scalability-analysis.js",
+    "monitor": "node monitoring/resource-monitor.js",
+    "report": "node reporting/performance-reporter.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "colors": "^1.4.0",
+    "table": "^6.8.1"
+  },
+  "keywords": [
+    "stress-testing",
+    "load-testing",
+    "performance",
+    "api-testing",
+    "backend-testing",
+    "omnishot"
+  ],
+  "author": "SRE Team",
+  "license": "MIT"
+}

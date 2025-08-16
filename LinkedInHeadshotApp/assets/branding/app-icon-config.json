@@ -1,0 +1,167 @@
+{
+  "appIconConfig": {
+    "name": "OmniShot",
+    "description": "Multi-platform professional photo optimization",
+    "brandColors": {
+      "primary": "#1B365D",
+      "secondary": "#FF6B35",
+      "accent": "#FFFFFF",
+      "background": "#F9FAFB"
+    },
+    "iconConcept": {
+      "mainElement": "Professional camera lens with multiple platform icons around it",
+      "style": "Modern, clean, professional",
+      "mood": "Confident, innovative, trustworthy"
+    },
+    "iconSizes": {
+      "ios": {
+        "app-icon-20x20@1x": "20x20",
+        "app-icon-20x20@2x": "40x40",
+        "app-icon-20x20@3x": "60x60",
+        "app-icon-29x29@1x": "29x29",
+        "app-icon-29x29@2x": "58x58",
+        "app-icon-29x29@3x": "87x87",
+        "app-icon-40x40@1x": "40x40",
+        "app-icon-40x40@2x": "80x80",
+        "app-icon-40x40@3x": "120x120",
+        "app-icon-60x60@2x": "120x120",
+        "app-icon-60x60@3x": "180x180",
+        "app-icon-76x76@1x": "76x76",
+        "app-icon-76x76@2x": "152x152",
+        "app-icon-83.5x83.5@2x": "167x167",
+        "app-icon-1024x1024@1x": "1024x1024"
+      },
+      "android": {
+        "mipmap-mdpi": "48x48",
+        "mipmap-hdpi": "72x72",
+        "mipmap-xhdpi": "96x96",
+        "mipmap-xxhdpi": "144x144",
+        "mipmap-xxxhdpi": "192x192",
+        "playstore-icon": "512x512"
+      }
+    },
+    "designGuidelines": {
+      "background": "Use OmniShot Deep Blue (#1B365D) as primary background",
+      "centerElement": "White camera aperture/lens symbol in the center",
+      "accentElements": "Small platform icons (LinkedIn, Instagram, etc.) arranged around the lens in OmniShot Orange (#FF6B35)",
+      "typography": "Clean, modern sans-serif for any text elements",
+      "gradients": "Subtle radial gradient from center to edge for depth",
+      "shadows": "Soft drop shadow for iOS compatibility",
+      "borderRadius": "Follow platform guidelines (iOS: rounded square, Android: adaptive)"
+    }
+  },
+  "brandingElements": {
+    "logoVariants": {
+      "primary": {
+        "description": "Full OmniShot logo with text and icon",
+        "usage": "App headers, marketing materials, business cards",
+        "backgroundColor": "Transparent or white",
+        "textColor": "#1B365D",
+        "accentColor": "#FF6B35"
+      },
+      "iconOnly": {
+        "description": "Just the camera lens symbol without text",
+        "usage": "App icon, favicon, social media profile images",
+        "backgroundColor": "#1B365D",
+        "iconColor": "#FFFFFF",
+        "accentColor": "#FF6B35"
+      },
+      "horizontal": {
+        "description": "Text and icon arranged horizontally",
+        "usage": "Website header, email signatures, letterhead",
+        "backgroundColor": "Transparent",
+        "layout": "Icon on left, text on right"
+      },
+      "vertical": {
+        "description": "Text and icon arranged vertically",
+        "usage": "Mobile app splash screen, business cards",
+        "backgroundColor": "#1B365D",
+        "layout": "Icon on top, text below"
+      }
+    },
+    "taglines": {
+      "primary": "Every Platform. Every Time. Every You.",
+      "secondary": "Multi-platform professional photo optimization",
+      "short": "Professional photos for every platform",
+      "technical": "AI-powered multi-platform optimization"
+    },
+    "colorUsage": {
+      "primary": {
+        "color": "#1B365D",
+        "name": "OmniShot Deep Blue",
+        "usage": "Primary brand color, backgrounds, headers, primary buttons",
+        "accessibility": "Passes WCAG AA with white text"
+      },
+      "secondary": {
+        "color": "#FF6B35",
+        "name": "OmniShot Orange",
+        "usage": "Accent color, call-to-action elements, highlights, progress indicators",
+        "accessibility": "Passes WCAG AA with white or dark blue text"
+      },
+      "neutral": {
+        "light": "#F9FAFB",
+        "medium": "#6B7280",
+        "dark": "#374151",
+        "usage": "Text, borders, subtle backgrounds"
+      }
+    },
+    "typography": {
+      "primaryFont": "System Default (iOS: San Francisco, Android: Roboto)",
+      "fallbackFonts": "Helvetica Neue, Arial, sans-serif",
+      "weights": {
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600,
+        "bold": 700
+      },
+      "sizes": {
+        "display": "32px+ (App title, hero text)",
+        "heading": "20-28px (Section headers)",
+        "body": "16-18px (Main content)",
+        "caption": "12-14px (Secondary info, metadata)"
+      }
+    }
+  },
+  "platformSpecificBranding": {
+    "linkedin": {
+      "description": "Professional, corporate styling",
+      "emphasis": "Executive appearance, business professionalism",
+      "colorTreatment": "More Deep Blue, sophisticated"
+    },
+    "instagram": {
+      "description": "Social, engaging styling",
+      "emphasis": "Lifestyle professional, approachable",
+      "colorTreatment": "Balanced colors, vibrant Orange highlights"
+    },
+    "facebook": {
+      "description": "Social networking, trustworthy",
+      "emphasis": "Friendly professional, community-oriented",
+      "colorTreatment": "Warm and welcoming"
+    },
+    "twitter": {
+      "description": "Professional updates, thought leadership",
+      "emphasis": "Industry expert, authoritative",
+      "colorTreatment": "Clean and modern"
+    },
+    "youtube": {
+      "description": "Content creation, creative professional",
+      "emphasis": "Creative authority, media presence",
+      "colorTreatment": "Bold and confident"
+    },
+    "tiktok": {
+      "description": "Short-form content, dynamic",
+      "emphasis": "Young professional, energetic",
+      "colorTreatment": "High contrast, vibrant"
+    },
+    "whatsapp_business": {
+      "description": "Business communication, approachable",
+      "emphasis": "Trustworthy business owner, accessible",
+      "colorTreatment": "Professional yet friendly"
+    },
+    "github": {
+      "description": "Developer profile, technical expertise",
+      "emphasis": "Technical competence, innovation",
+      "colorTreatment": "Clean, minimal, tech-focused"
+    }
+  }
+}

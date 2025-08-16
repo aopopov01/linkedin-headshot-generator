@@ -1,41 +1,51 @@
-// Image Processing Utilities
-import ImageResizer from '@bam.tech/react-native-image-resizer';
-import RNFS from 'react-native-fs';
+// Image Processing Utilities for Expo
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
+
+// Cloudinary configuration
+const CLOUDINARY_CONFIG = {
+  cloudName: 'dcpyzhrez',
+  uploadPreset: 'ml_default', // You'll need to create this in Cloudinary
+  apiKey: '438571726452967'
+};
 
 class ImageProcessingUtils {
   
-  // Resize image for optimal processing
+  // Resize image for optimal processing using Expo ImageManipulator
   static async resizeForProcessing(imageUri, options = {}) {
     try {
       const defaultOptions = {
         width: 1024,
         height: 1024,
-        quality: 90,
-        outputFormat: 'JPEG',
-        mode: 'cover',
+        quality: 0.9,
         ...options,
       };
 
-      const resizedImage = await ImageResizer.createResizedImage(
+      const manipResult = await ImageManipulator.manipulateAsync(
         imageUri,
-        defaultOptions.width,
-        defaultOptions.height,
-        defaultOptions.outputFormat,
-        defaultOptions.quality,
-        0, // rotation
-        null, // outputPath
-        false, // keepMeta
-        {
-          mode: defaultOptions.mode,
-          onlyScaleDown: true,
+        [
+          { 
+            resize: { 
+              width: defaultOptions.width,
+              height: defaultOptions.height 
+            } 
+          }
+        ],
+        { 
+          compress: defaultOptions.quality,
+          format: ImageManipulator.SaveFormat.JPEG,
+          base64: false 
         }
       );
 
+      // Get file info for size
+      const fileInfo = await FileSystem.getInfoAsync(manipResult.uri);
+
       return {
-        uri: resizedImage.uri,
-        width: resizedImage.width,
-        height: resizedImage.height,
-        size: resizedImage.size,
+        uri: manipResult.uri,
+        width: manipResult.width,
+        height: manipResult.height,
+        size: fileInfo.size || 0,
       };
     } catch (error) {
       console.error('Image resize failed:', error);
@@ -43,10 +53,12 @@ class ImageProcessingUtils {
     }
   }
 
-  // Convert image to base64
+  // Convert image to base64 using Expo FileSystem
   static async convertToBase64(imageUri, includePrefix = true) {
     try {
-      const base64String = await RNFS.readFile(imageUri, 'base64');
+      const base64String = await FileSystem.readAsStringAsync(imageUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
       
       if (includePrefix) {
         return `data:image/jpeg;base64,${base64String}`;
@@ -279,6 +291,62 @@ class ImageProcessingUtils {
       console.log('Cleaned up temporary files');
     } catch (error) {
       console.warn('Cleanup failed:', error);
+    }
+  }
+
+  // Upload image to Cloudinary
+  static async uploadToCloudinary(imageUri, options = {}) {
+    try {
+      const base64Data = await this.convertToBase64(imageUri, true);
+      
+      const formData = new FormData();
+      formData.append('file', base64Data);
+      formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+      formData.append('cloud_name', CLOUDINARY_CONFIG.cloudName);
+      
+      // Add additional options
+      if (options.folder) {
+        formData.append('folder', options.folder);
+      }
+      
+      if (options.public_id) {
+        formData.append('public_id', options.public_id);
+      }
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Cloudinary upload failed: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      
+      return {
+        success: true,
+        url: result.secure_url,
+        publicId: result.public_id,
+        width: result.width,
+        height: result.height,
+        format: result.format,
+        bytes: result.bytes,
+        cloudinaryResponse: result
+      };
+      
+    } catch (error) {
+      console.error('Cloudinary upload failed:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to upload image to Cloudinary'
+      };
     }
   }
 

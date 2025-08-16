@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-08-14T13:58:36.578Z",
+  "token_status": "invalid",
+  "api_connectivity": "limited",
+  "model_results": [
+    {
+      "model_id": "timbrooks/instruct-pix2pix",
+      "model_name": "Instruct Pix2Pix (PRIMARY)",
+      "type": "image-to-image",
+      "priority": "HIGH",
+      "status": "error",
+      "response_time": 168,
+      "error": "HTTP 404: Not Found",
+      "estimated_wait": 0
+    },
+    {
+      "model_id": "runwayml/stable-diffusion-v1-5",
+      "model_name": "Stable Diffusion v1.5",
+      "type": "text-to-image-controlnet",
+      "priority": "HIGH",
+      "status": "error",
+      "response_time": 196,
+      "error": "HTTP 404: Not Found",
+      "estimated_wait": 0
+    },
+    {
+      "model_id": "stabilityai/stable-diffusion-xl-base-1.0",
+      "model_name": "SDXL Base",
+      "type": "text-to-image",
+      "priority": "MEDIUM",
+      "status": "success",
+      "response_time": 8664,
+      "error": null,
+      "estimated_wait": 0,
+      "response_size": 63337
+    },
+    {
+      "model_id": "SG161222/Realistic_Vision_V5.1_noVAE",
+      "model_name": "Realistic Vision V5.1",
+      "type": "text-to-image-realistic",
+      "priority": "HIGH",
+      "status": "error",
+      "response_time": 227,
+      "error": "HTTP 404: Not Found",
+      "estimated_wait": 0
+    },
+    {
+      "model_id": "stabilityai/stable-diffusion-2-1",
+      "model_name": "Stable Diffusion 2.1",
+      "type": "text-to-image",
+      "priority": "MEDIUM",
+      "status": "error",
+      "response_time": 170,
+      "error": "HTTP 404: Not Found",
+      "estimated_wait": 0
+    }
+  ],
+  "critical_issues": [
+    "Invalid Hugging Face token",
+    "Primary image-to-image model not working"
+  ],
+  "recommendations": [
+    "Fix API token authentication",
+    "Optimize model selection and fallback logic",
+    "Update app to prioritize working models",
+    "Debug app-side integration issues"
+  ],
+  "realistic_test": {
+    "status": "success",
+    "model_used": "stabilityai/stable-diffusion-xl-base-1.0",
+    "output_size": 78174,
+    "output_file": "/home/he_reat/Desktop/Projects/LinkedIn Headshot/LinkedInHeadshotApp/debug-transformation-result.jpg"
+  }
+}

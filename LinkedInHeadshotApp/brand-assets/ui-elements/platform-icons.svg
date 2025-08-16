@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .platform-icon { cursor: pointer; transition: transform 0.2s ease; }
+      .platform-icon:hover { transform: scale(1.05); }
+      .icon-background { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)); }
+    </style>
+  </defs>
+
+  <!-- LinkedIn Icon -->
+  <g class="platform-icon" transform="translate(50, 50)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#0A66C2"/>
+    <rect x="20" y="32" width="8" height="26" rx="1" fill="#FFFFFF"/>
+    <circle cx="24" cy="24" r="4" fill="#FFFFFF"/>
+    <path d="M32 38 Q32 34 36 34 Q40 34 40 38 L40 58 L48 58 L48 38 Q48 28 42 28 Q36 28 32 32 L32 30 L32 58 L40 58" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">LinkedIn</text>
+  </g>
+
+  <!-- Instagram Icon -->
+  <g class="platform-icon" transform="translate(180, 50)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="url(#instagramGradient)"/>
+    <defs>
+      <linearGradient id="instagramGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#833AB4"/>
+        <stop offset="50%" style="stop-color:#E4405F"/>
+        <stop offset="100%" style="stop-color:#F77737"/>
+      </linearGradient>
+    </defs>
+    <rect x="20" y="20" width="40" height="40" rx="12" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <circle cx="40" cy="40" r="12" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <circle cx="52" cy="28" r="3" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Instagram</text>
+  </g>
+
+  <!-- Facebook Icon -->
+  <g class="platform-icon" transform="translate(310, 50)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#1877F2"/>
+    <path d="M45 20 L45 30 L50 30 L50 38 L45 38 L45 60 L37 60 L37 38 L32 38 L32 30 L37 30 L37 26 Q37 20 43 20 Z" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Facebook</text>
+  </g>
+
+  <!-- Twitter Icon -->
+  <g class="platform-icon" transform="translate(440, 50)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#1DA1F2"/>
+    <path d="M55 28 Q50 30 45 30 Q48 27 48 23 Q45 25 41 25 Q35 25 35 31 L35 33 Q28 32 23 26 Q21 29 23 32 Q21 31 20 29 Q20 33 24 35 Q23 35 22 34 Q23 38 27 39 Q24 40 21 39 Q25 43 30 43 Q22 48 12 45 Q17 48 23 48 Q35 48 42 41 Q48 35 48 28 Q51 26 52 23 Q49 24 46 24 Q49 22 51 19 Q48 21 45 22 Q41 19 37 19 Q30 19 27 26 Q26 29 28 32" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Twitter</text>
+  </g>
+
+  <!-- TikTok Icon -->
+  <g class="platform-icon" transform="translate(570, 50)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#FE2C55"/>
+    <path d="M35 20 Q38 20 38 23 L38 35 Q42 37 46 37 L46 32 Q44 30 42 30 L42 25 Q46 25 48 29 Q50 33 54 35 L54 40 Q50 38 46 35 L46 50 Q46 56 40 56 Q34 56 34 50 Q34 44 40 44 Q42 44 44 46 L44 50 Q44 52 42 52 Q40 52 40 50 L40 35 Q38 33 35 33 Z" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">TikTok</text>
+  </g>
+
+  <!-- YouTube Icon -->
+  <g class="platform-icon" transform="translate(50, 180)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#FF0000"/>
+    <path d="M30 25 Q20 25 20 35 L20 45 Q20 55 30 55 L50 55 Q60 55 60 45 L60 35 Q60 25 50 25 Z M35 32 L48 40 L35 48 Z" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">YouTube</text>
+  </g>
+
+  <!-- Discord Icon -->
+  <g class="platform-icon" transform="translate(180, 180)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#5865F2"/>
+    <path d="M25 30 Q35 25 45 25 Q55 25 65 30 Q65 45 60 55 Q55 52 50 50 Q52 47 52 45 Q45 48 40 48 Q35 48 28 45 Q28 47 30 50 Q25 52 20 55 Q15 45 15 30" fill="#FFFFFF"/>
+    <circle cx="32" cy="38" r="3" fill="#5865F2"/>
+    <circle cx="48" cy="38" r="3" fill="#5865F2"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Discord</text>
+  </g>
+
+  <!-- WhatsApp Business Icon -->
+  <g class="platform-icon" transform="translate(310, 180)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#25D366"/>
+    <circle cx="40" cy="40" r="18" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    <path d="M32 35 Q35 32 40 35 Q45 32 48 35 Q45 38 40 35 Q35 38 32 35" fill="#FFFFFF"/>
+    <path d="M28 48 L32 44 Q36 48 40 48 Q44 48 48 44 L52 48 Q48 52 40 52 Q32 52 28 48" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="9" font-weight="600" fill="#FFFFFF" text-anchor="middle">WhatsApp</text>
+  </g>
+
+  <!-- Pinterest Icon -->  
+  <g class="platform-icon" transform="translate(440, 180)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#E60023"/>
+    <path d="M40 20 Q50 20 55 30 Q55 40 50 45 Q45 50 40 45 Q38 43 38 40 L40 35 Q42 37 45 35 Q47 33 45 30 Q43 27 40 30 Q37 33 37 37 L37 50 Q35 55 32 50 L32 37 Q32 25 40 20" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Pinterest</text>
+  </g>
+
+  <!-- Snapchat Icon -->
+  <g class="platform-icon" transform="translate(570, 180)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#FFFC00"/>
+    <path d="M40 25 Q45 20 50 25 Q55 30 50 40 Q45 35 40 40 Q35 35 30 40 Q25 30 30 25 Q35 20 40 25" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#000000" text-anchor="middle">Snapchat</text>
+  </g>
+
+  <!-- Custom Platform Icon -->
+  <g class="platform-icon" transform="translate(50, 310)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#6B7280"/>
+    <rect x="25" y="25" width="30" height="30" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="40" cy="40" r="8" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+    <path d="M32 32 L35 29 M48 32 L45 29 M32 48 L35 51 M48 48 L45 51" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Custom</text>
+  </g>
+
+  <!-- Dating Apps Category -->
+  <g class="platform-icon" transform="translate(180, 310)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="url(#datingGradient)"/>
+    <defs>
+      <linearGradient id="datingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#FF4458"/>
+        <stop offset="100%" style="stop-color:#FF6B8A"/>
+      </linearGradient>
+    </defs>
+    <path d="M30 35 Q30 25 40 25 Q50 25 50 35 Q50 45 40 55 Q30 45 30 35" fill="#FFFFFF"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Dating</text>
+  </g>
+
+  <!-- Professional Networks -->
+  <g class="platform-icon" transform="translate(310, 310)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#1B365D"/>
+    <rect x="25" y="30" width="12" height="8" rx="2" fill="#FFFFFF"/>
+    <rect x="43" y="30" width="12" height="8" rx="2" fill="#FFFFFF"/>
+    <rect x="25" y="42" width="12" height="8" rx="2" fill="#FFFFFF"/>
+    <rect x="43" y="42" width="12" height="8" rx="2" fill="#FFFFFF"/>
+    <circle cx="40" cy="25" r="3" fill="#FF6B35"/>
+    <text x="40" y="72" font-size="9" font-weight="600" fill="#FFFFFF" text-anchor="middle">Networks</text>
+  </g>
+
+  <!-- E-commerce Platforms -->
+  <g class="platform-icon" transform="translate(440, 310)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#00A86B"/>
+    <rect x="25" y="30" width="30" height="20" rx="3" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="32" cy="45" r="3" fill="#FFFFFF"/>
+    <circle cx="48" cy="45" r="3" fill="#FFFFFF"/>
+    <path d="M28 30 L30 25 L50 25 L52 30" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+    <text x="40" y="72" font-size="9" font-weight="600" fill="#FFFFFF" text-anchor="middle">Commerce</text>
+  </g>
+
+  <!-- Portfolio Platforms -->
+  <g class="platform-icon" transform="translate(570, 310)">
+    <rect class="icon-background" width="80" height="80" rx="16" fill="#8B5CF6"/>
+    <rect x="22" y="28" width="36" height="24" rx="2" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+    <rect x="26" y="32" width="8" height="6" rx="1" fill="#FFFFFF"/>
+    <rect x="36" y="32" width="8" height="3" rx="1" fill="#FFFFFF"/>
+    <rect x="46" y="32" width="8" height="3" rx="1" fill="#FFFFFF"/>
+    <rect x="26" y="40" width="28" height="8" rx="1" fill="#FFFFFF" opacity="0.5"/>
+    <text x="40" y="72" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Portfolio</text>
+  </g>
+
+  <!-- Instructions Text -->
+  <text x="400" y="480" font-size="20" font-weight="600" fill="#1B365D" text-anchor="middle">
+    Select Your Target Platform
+  </text>
+  <text x="400" y="510" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">
+    Choose where you'll use your professional photo for optimized results
+  </text>
+  
+  <!-- Multi-select indicator -->
+  <g transform="translate(350, 530)">
+    <circle cx="10" cy="10" r="8" fill="none" stroke="#FF6B35" stroke-width="2"/>
+    <path d="M6 10 L9 13 L14 7" stroke="#FF6B35" stroke-width="2" fill="none"/>
+    <text x="25" y="15" font-size="12" font-weight="500" fill="#6B7280">
+      Select multiple platforms for batch optimization
+    </text>
+  </g>
+</svg>

@@ -1,4 +1,4 @@
-name: LinkedIn Headshot Backend CI/CD
+name: OmniShot Backend CI/CD
 
 on:
   push:

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  linkedin-headshot-app:
+    build: .
+    container_name: linkedin-headshot-dev
+    ports:
+      - "8081:8081"   # Metro bundler
+      - "8097:8097"   # React Native debugger
+      - "19000:19000" # Expo CLI
+      - "19001:19001" # Expo CLI
+      - "19002:19002" # Expo CLI
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - REACT_NATIVE_PACKAGER_HOSTNAME=0.0.0.0
+    networks:
+      - app-network
+    command: npm run expo
+
+networks:
+  app-network:
+    driver: bridge

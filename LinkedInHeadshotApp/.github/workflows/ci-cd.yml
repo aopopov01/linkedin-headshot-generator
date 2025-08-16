@@ -1,4 +1,4 @@
-name: LinkedIn Headshot Generator CI/CD Pipeline
+name: OmniShot CI/CD Pipeline
 
 on:
   push:

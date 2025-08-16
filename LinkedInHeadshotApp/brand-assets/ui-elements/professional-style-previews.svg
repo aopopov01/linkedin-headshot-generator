@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1000" height="800" viewBox="0 0 1000 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .style-card { cursor: pointer; transition: all 0.3s ease; }
+      .style-card:hover { transform: translateY(-4px); }
+      .style-preview { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1)); }
+    </style>
+    <linearGradient id="executiveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1B365D"/>
+      <stop offset="100%" style="stop-color:#2A4A73"/>
+    </linearGradient>
+    <linearGradient id="creativeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B46C1"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="techGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981"/>
+      <stop offset="100%" style="stop-color:#34D399"/>
+    </linearGradient>
+    <linearGradient id="healthcareGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EF4444"/>
+      <stop offset="100%" style="stop-color:#F87171"/>
+    </linearGradient>
+    <linearGradient id="financeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B"/>
+      <stop offset="100%" style="stop-color:#FBBf24"/>
+    </linearGradient>
+    <linearGradient id="startupGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#A78BFA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="40" font-size="24" font-weight="700" fill="#1B365D" text-anchor="middle">
+    Professional Style Categories
+  </text>
+  <text x="500" y="65" font-size="14" font-weight="400" fill="#6B7280" text-anchor="middle">
+    Choose the style that best represents your professional identity
+  </text>
+
+  <!-- Executive Style -->
+  <g class="style-card" transform="translate(50, 100)">
+    <rect class="style-preview" width="280" height="180" rx="12" fill="url(#executiveGrad)"/>
+    
+    <!-- Executive Figure Silhouette -->
+    <g transform="translate(140, 40)">
+      <!-- Head -->
+      <circle cx="0" cy="15" r="12" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Body/Suit -->
+      <rect x="-15" y="25" width="30" height="45" rx="2" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Tie -->
+      <rect x="-2" y="25" width="4" height="25" fill="#FF6B35" opacity="0.8"/>
+      <!-- Shoulders -->
+      <rect x="-20" y="25" width="40" height="15" rx="8" fill="#FFFFFF" opacity="0.7"/>
+    </g>
+    
+    <!-- Formal Background Elements -->
+    <rect x="20" y="20" width="240" height="2" fill="#FFFFFF" opacity="0.3"/>
+    <rect x="20" y="140" width="240" height="2" fill="#FFFFFF" opacity="0.3"/>
+    
+    <text x="140" y="155" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Executive</text>
+    <text x="140" y="170" font-size="11" font-weight="500" fill="#FFFFFF" text-anchor="middle" opacity="0.8">
+      Authoritative • Confident • Leadership
+    </text>
+  </g>
+
+  <!-- Creative Style -->
+  <g class="style-card" transform="translate(360, 100)">
+    <rect class="style-preview" width="280" height="180" rx="12" fill="url(#creativeGrad)"/>
+    
+    <!-- Creative Figure -->
+    <g transform="translate(140, 40)">
+      <!-- Head -->
+      <circle cx="0" cy="15" r="12" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Casual Top -->
+      <rect x="-18" y="25" width="36" height="40" rx="4" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Artistic Elements -->
+      <circle cx="-25" cy="30" r="3" fill="#FFD700" opacity="0.8"/>
+      <circle cx="25" cy="35" r="2" fill="#FF6B35" opacity="0.8"/>
+      <rect x="-30" y="50" width="8" height="2" fill="#FFFFFF" opacity="0.6" transform="rotate(45)"/>
+    </g>
+    
+    <!-- Creative Background -->
+    <circle cx="50" cy="50" r="15" fill="#FFFFFF" opacity="0.2"/>
+    <circle cx="230" cy="40" r="10" fill="#FFD700" opacity="0.3"/>
+    <path d="M200 120 L220 100 L240 120 L220 140 Z" fill="#FFFFFF" opacity="0.2"/>
+    
+    <text x="140" y="155" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Creative</text>
+    <text x="140" y="170" font-size="11" font-weight="500" fill="#FFFFFF" text-anchor="middle" opacity="0.8">
+      Artistic • Innovative • Expressive
+    </text>
+  </g>
+
+  <!-- Tech Style -->
+  <g class="style-card" transform="translate(670, 100)">
+    <rect class="style-preview" width="280" height="180" rx="12" fill="url(#techGrad)"/>
+    
+    <!-- Tech Figure -->
+    <g transform="translate(140, 40)">
+      <!-- Head -->
+      <circle cx="0" cy="15" r="12" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Smart Casual -->
+      <rect x="-16" y="25" width="32" height="42" rx="3" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Collar -->
+      <path d="M-8 25 L0 35 L8 25" stroke="#10B981" stroke-width="2" fill="none"/>
+    </g>
+    
+    <!-- Tech Background Elements -->
+    <rect x="30" y="30" width="40" height="25" rx="4" fill="#FFFFFF" opacity="0.2"/>
+    <circle cx="220" cy="45" r="8" fill="#FFFFFF" opacity="0.3"/>
+    <rect x="200" y="120" width="30" height="20" rx="2" fill="#FFFFFF" opacity="0.2"/>
+    <!-- Code-like lines -->
+    <rect x="35" y="35" width="20" height="2" fill="#10B981" opacity="0.8"/>
+    <rect x="35" y="40" width="15" height="2" fill="#10B981" opacity="0.6"/>
+    <rect x="35" y="45" width="25" height="2" fill="#10B981" opacity="0.8"/>
+    
+    <text x="140" y="155" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Tech</text>
+    <text x="140" y="170" font-size="11" font-weight="500" fill="#FFFFFF" text-anchor="middle" opacity="0.8">
+      Modern • Innovative • Approachable
+    </text>
+  </g>
+
+  <!-- Healthcare Style -->
+  <g class="style-card" transform="translate(50, 320)">
+    <rect class="style-preview" width="280" height="180" rx="12" fill="url(#healthcareGrad)"/>
+    
+    <!-- Healthcare Figure -->
+    <g transform="translate(140, 40)">
+      <!-- Head -->
+      <circle cx="0" cy="15" r="12" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Professional Attire -->
+      <rect x="-15" y="25" width="30" height="45" rx="2" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Stethoscope representation -->
+      <circle cx="-10" cy="35" r="3" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.7"/>
+      <path d="M-7 35 Q0 30 7 35" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.7"/>
+    </g>
+    
+    <!-- Healthcare Background -->
+    <rect x="30" y="40" width="220" height="100" rx="8" fill="#FFFFFF" opacity="0.1"/>
+    <!-- Medical cross -->
+    <g transform="translate(50, 60)">
+      <rect x="8" y="0" width="4" height="20" fill="#FFFFFF" opacity="0.4"/>
+      <rect x="0" y="8" width="20" height="4" fill="#FFFFFF" opacity="0.4"/>
+    </g>
+    
+    <text x="140" y="155" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Healthcare</text>
+    <text x="140" y="170" font-size="11" font-weight="500" fill="#FFFFFF" text-anchor="middle" opacity="0.8">
+      Trustworthy • Professional • Caring
+    </text>
+  </g>
+
+  <!-- Finance Style -->
+  <g class="style-card" transform="translate(360, 320)">
+    <rect class="style-preview" width="280" height="180" rx="12" fill="url(#financeGrad)"/>
+    
+    <!-- Finance Figure -->
+    <g transform="translate(140, 40)">
+      <!-- Head -->
+      <circle cx="0" cy="15" r="12" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Conservative Suit -->
+      <rect x="-14" y="25" width="28" height="45" rx="1" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Conservative Tie -->
+      <rect x="-1.5" y="25" width="3" height="30" fill="#1B365D" opacity="0.8"/>
+    </g>
+    
+    <!-- Finance Background Elements -->
+    <rect x="40" y="40" width="200" height="80" rx="4" fill="#FFFFFF" opacity="0.1"/>
+    <!-- Chart elements -->
+    <g transform="translate(60, 100)">
+      <rect x="0" y="10" width="4" height="20" fill="#FFFFFF" opacity="0.6"/>
+      <rect x="8" y="5" width="4" height="25" fill="#FFFFFF" opacity="0.6"/>
+      <rect x="16" y="15" width="4" height="15" fill="#FFFFFF" opacity="0.6"/>
+      <rect x="24" y="0" width="4" height="30" fill="#FFFFFF" opacity="0.6"/>
+    </g>
+    
+    <text x="140" y="155" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Finance</text>
+    <text x="140" y="170" font-size="11" font-weight="500" fill="#FFFFFF" text-anchor="middle" opacity="0.8">
+      Conservative • Reliable • Professional
+    </text>
+  </g>
+
+  <!-- Startup Style -->
+  <g class="style-card" transform="translate(670, 320)">
+    <rect class="style-preview" width="280" height="180" rx="12" fill="url(#startupGrad)"/>
+    
+    <!-- Startup Figure -->
+    <g transform="translate(140, 40)">
+      <!-- Head -->
+      <circle cx="0" cy="15" r="12" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Casual Professional -->
+      <rect x="-17" y="25" width="34" height="40" rx="4" fill="#FFFFFF" opacity="0.9"/>
+      <!-- Open collar -->
+      <path d="M-6 25 L-3 32 L3 32 L6 25" stroke="#8B5CF6" stroke-width="2" fill="none"/>
+    </g>
+    
+    <!-- Startup Background -->
+    <circle cx="60" cy="60" r="20" fill="#FFFFFF" opacity="0.2"/>
+    <circle cx="220" cy="50" r="15" fill="#FFFFFF" opacity="0.15"/>
+    <!-- Growth arrow -->
+    <g transform="translate(200, 100)">
+      <path d="M0 20 L20 0 M15 0 L20 0 L20 5" stroke="#FFFFFF" stroke-width="3" opacity="0.6"/>
+    </g>
+    
+    <text x="140" y="155" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">Startup</text>
+    <text x="140" y="170" font-size="11" font-weight="500" fill="#FFFFFF" text-anchor="middle" opacity="0.8">
+      Dynamic • Energetic • Entrepreneurial
+    </text>
+  </g>
+
+  <!-- Selection Instructions -->
+  <g transform="translate(50, 550)">
+    <rect width="900" height="120" rx="8" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    
+    <text x="450" y="30" font-size="16" font-weight="600" fill="#1B365D" text-anchor="middle">
+      Style Selection Guide
+    </text>
+    
+    <g transform="translate(100, 45)">
+      <circle cx="8" cy="8" r="4" fill="#FF6B35"/>
+      <text x="20" y="12" font-size="13" font-weight="500" fill="#374151">
+        <tspan font-weight="600">Executive:</tspan> C-Suite, Directors, Senior Management
+      </text>
+    </g>
+    
+    <g transform="translate(100, 65)">
+      <circle cx="8" cy="8" r="4" fill="#6B46C1"/>
+      <text x="20" y="12" font-size="13" font-weight="500" fill="#374151">
+        <tspan font-weight="600">Creative:</tspan> Designers, Artists, Marketing, Media
+      </text>
+    </g>
+    
+    <g transform="translate(100, 85)">
+      <circle cx="8" cy="8" r="4" fill="#10B981"/>
+      <text x="20" y="12" font-size="13" font-weight="500" fill="#374151">
+        <tspan font-weight="600">Tech:</tspan> Developers, Engineers, Product Managers
+      </text>
+    </g>
+    
+    <g transform="translate(500, 45)">
+      <circle cx="8" cy="8" r="4" fill="#EF4444"/>
+      <text x="20" y="12" font-size="13" font-weight="500" fill="#374151">
+        <tspan font-weight="600">Healthcare:</tspan> Medical Professionals, Healthcare Admin
+      </text>
+    </g>
+    
+    <g transform="translate(500, 65)">
+      <circle cx="8" cy="8" r="4" fill="#F59E0B"/>
+      <text x="20" y="12" font-size="13" font-weight="500" fill="#374151">
+        <tspan font-weight="600">Finance:</tspan> Banking, Accounting, Financial Services
+      </text>
+    </g>
+    
+    <g transform="translate(500, 85)">
+      <circle cx="8" cy="8" r="4" fill="#8B5CF6"/>
+      <text x="20" y="12" font-size="13" font-weight="500" fill="#374151">
+        <tspan font-weight="600">Startup:</tspan> Entrepreneurs, Consultants, Innovation
+      </text>
+    </g>
+  </g>
+
+  <!-- Custom Style Option -->
+  <g transform="translate(350, 700)">
+    <rect width="300" height="50" rx="8" fill="none" stroke="#FF6B35" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="150" y="20" font-size="14" font-weight="600" fill="#FF6B35" text-anchor="middle">
+      Custom Style Requirements?
+    </text>
+    <text x="150" y="35" font-size="11" font-weight="500" fill="#6B7280" text-anchor="middle">
+      Contact us for industry-specific customization
+    </text>
+  </g>
+</svg>

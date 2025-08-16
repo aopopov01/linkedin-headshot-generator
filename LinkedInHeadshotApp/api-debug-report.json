@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-08-14T13:25:50.895Z",
+  "summary": {
+    "passed": 2,
+    "failed": 3,
+    "warnings": 0
+  },
+  "results": [
+    {
+      "test": "API_CONNECTIVITY",
+      "status": "PASS"
+    },
+    {
+      "test": "MODEL_AVAILABILITY",
+      "results": [
+        {
+          "model": "FLUX_DEV",
+          "status": "FAIL",
+          "status_code": 404
+        },
+        {
+          "model": "INSTANT_ID",
+          "status": "FAIL",
+          "status_code": 404
+        },
+        {
+          "model": "PHOTOMAKER",
+          "status": "FAIL",
+          "status_code": 404
+        }
+      ]
+    },
+    {
+      "test": "IMAGE_ENCODING",
+      "status": "PASS",
+      "size": 86.25
+    },
+    {
+      "test": "FLUX_MODEL",
+      "status": "FAIL",
+      "status_code": 402,
+      "response": "{\"title\":\"Insufficient credit\",\"detail\":\"You have insufficient credit to run this model. Go to https://replicate.com/account/billing#billing to purchase credit. Once you purchase credit, please wait a few minutes before trying again.\",\"status\":402}\n"
+    },
+    {
+      "test": "INSTANT_ID_MODEL",
+      "status": "FAIL",
+      "status_code": 422,
+      "response": "{\"title\":\"Invalid version or not permitted\",\"detail\":\"The specified version does not exist (or perhaps you don't have permission to use it?)\",\"status\":422}\n"
+    },
+    {
+      "test": "PHOTOMAKER_MODEL",
+      "status": "FAIL",
+      "status_code": 402,
+      "response": "{\"title\":\"Insufficient credit\",\"detail\":\"You have insufficient credit to run this model. Go to https://replicate.com/account/billing#billing to purchase credit. Once you purchase credit, please wait a few minutes before trying again.\",\"status\":402}\n"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1584" height="396" viewBox="0 0 1584 396" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- LinkedIn Cover Background -->
+  <defs>
+    <linearGradient id="linkedinCoverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1B365D"/>
+      <stop offset="70%" style="stop-color:#2A4A73"/>
+      <stop offset="100%" style="stop-color:#FF6B35;stop-opacity:0.1"/>
+    </linearGradient>
+    <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="1584" height="396" fill="url(#linkedinCoverGradient)"/>
+  
+  <!-- Subtle pattern overlay -->
+  <g opacity="0.1">
+    <circle cx="1400" cy="100" r="60" fill="#FFFFFF"/>
+    <circle cx="1500" cy="250" r="40" fill="#FF6B35"/>
+    <rect x="100" y="300" width="80" height="80" rx="8" fill="#FFFFFF" opacity="0.3"/>
+  </g>
+  
+  <!-- Main Content Area -->
+  <g transform="translate(120, 98)">
+    <!-- OmniShot Logo -->
+    <g>
+      <!-- Icon Mark -->
+      <g transform="translate(0, 0)">
+        <circle cx="35" cy="35" r="30" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+        <g fill="#FFFFFF" opacity="0.6">
+          <path d="M35 15 L42 22 L35 29 L28 22 Z"/>
+          <path d="M55 35 L48 42 L41 35 L48 28 Z"/>
+          <path d="M35 55 L28 48 L35 41 L42 48 Z"/>
+          <path d="M15 35 L22 28 L29 35 L22 42 Z"/>
+        </g>
+        <circle cx="35" cy="35" r="12" fill="#FF6B35" filter="url(#textGlow)"/>
+        <circle cx="35" cy="35" r="6" fill="#FFFFFF"/>
+      </g>
+      
+      <!-- Wordmark -->
+      <g transform="translate(85, 20)">
+        <text x="0" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="800" fill="#FFFFFF" letter-spacing="-1px">
+          Omni<tspan fill="#FF6B35">Shot</tspan>
+        </text>
+        <text x="0" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#E5E7EB" letter-spacing="2px" opacity="0.9">
+          EVERY PLATFORM. EVERY TIME. EVERY YOU.
+        </text>
+      </g>
+    </g>
+    
+    <!-- Value Proposition -->
+    <g transform="translate(0, 120)">
+      <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#FFFFFF">
+        Transform Any Photo Into Platform-Perfect Professional Portraits
+      </text>
+      <text x="0" y="35" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="400" fill="#E5E7EB" opacity="0.9">
+        AI-powered photo optimization for LinkedIn, Instagram, Facebook, Twitter, TikTok, YouTube and more
+      </text>
+    </g>
+  </g>
+  
+  <!-- Right Side Visual Elements -->
+  <g transform="translate(1200, 50)">
+    <!-- Platform Icons -->
+    <g transform="translate(0, 0)">
+      <text x="0" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="#FFFFFF">
+        Supported Platforms:
+      </text>
+      
+      <!-- Platform Icon Row -->
+      <g transform="translate(0, 30)">
+        <rect x="0" y="0" width="24" height="24" rx="4" fill="#0A66C2" opacity="0.9"/>
+        <rect x="32" y="0" width="24" height="24" rx="4" fill="#E4405F" opacity="0.9"/>
+        <rect x="64" y="0" width="24" height="24" rx="4" fill="#1877F2" opacity="0.9"/>
+        <rect x="96" y="0" width="24" height="24" rx="4" fill="#1DA1F2" opacity="0.9"/>
+        <rect x="128" y="0" width="24" height="24" rx="4" fill="#FE2C55" opacity="0.9"/>
+        <rect x="160" y="0" width="24" height="24" rx="4" fill="#FF0000" opacity="0.9"/>
+        
+        <text x="192" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#E5E7EB">
+          +4 more
+        </text>
+      </g>
+    </g>
+    
+    <!-- Key Stats/Features -->
+    <g transform="translate(0, 90)">
+      <g>
+        <text x="0" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#FF6B35">
+          30s
+        </text>
+        <text x="40" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#E5E7EB">
+          Processing Time
+        </text>
+      </g>
+      
+      <g transform="translate(0, 35)">
+        <text x="0" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#FF6B35">
+          10+
+        </text>
+        <text x="40" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#E5E7EB">
+          Platform Formats
+        </text>
+      </g>
+      
+      <g transform="translate(0, 70)">
+        <text x="0" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#FF6B35">
+          6
+        </text>
+        <text x="25" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#E5E7EB">
+          Professional Styles
+        </text>
+      </g>
+    </g>
+    
+    <!-- Call to Action -->
+    <g transform="translate(0, 200)">
+      <rect width="280" height="40" rx="6" fill="#FF6B35" filter="url(#textGlow)"/>
+      <text x="140" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+        Download OmniShot Today
+      </text>
+    </g>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <g opacity="0.3">
+    <circle cx="100" cy="100" r="3" fill="#FF6B35"/>
+    <circle cx="1450" cy="350" r="2" fill="#FFFFFF"/>
+    <circle cx="200" cy="350" r="2" fill="#FF6B35"/>
+  </g>
+</svg>

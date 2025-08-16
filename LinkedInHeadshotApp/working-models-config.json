@@ -1,0 +1,168 @@
+{
+  "timestamp": "2025-08-14T14:01:12.793Z",
+  "working_models": [
+    {
+      "id": "stabilityai/stable-diffusion-xl-base-1.0",
+      "name": "SDXL Base (VERIFIED WORKING)",
+      "type": "text-to-image",
+      "endpoint": "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+      "priority": "HIGH",
+      "verified": true,
+      "test_result": {
+        "working": true,
+        "error": null,
+        "response_time": 7871,
+        "output_size": 37391,
+        "status_code": 200,
+        "can_process_images": false,
+        "output_file": "/home/he_reat/Desktop/Projects/LinkedIn Headshot/LinkedInHeadshotApp/test-output-stabilityai-stable-diffusion-xl-base-1.0.jpg"
+      }
+    }
+  ],
+  "failed_models": [
+    {
+      "id": "stabilityai/stable-diffusion-2-1-base",
+      "name": "Stable Diffusion 2.1 Base",
+      "type": "text-to-image",
+      "endpoint": "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1-base",
+      "priority": "HIGH",
+      "test_result": {
+        "working": false,
+        "error": "Model not found",
+        "response_time": 167,
+        "output_size": 0,
+        "status_code": 404,
+        "can_process_images": false
+      }
+    },
+    {
+      "id": "runwayml/stable-diffusion-v1-5",
+      "name": "Stable Diffusion v1.5",
+      "type": "text-to-image",
+      "endpoint": "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+      "priority": "MEDIUM",
+      "test_result": {
+        "working": false,
+        "error": "Model not found",
+        "response_time": 165,
+        "output_size": 0,
+        "status_code": 404,
+        "can_process_images": false
+      }
+    },
+    {
+      "id": "timbrooks/instruct-pix2pix",
+      "name": "InstructPix2Pix (Original)",
+      "type": "image-to-image",
+      "endpoint": "https://api-inference.huggingface.co/models/timbrooks/instruct-pix2pix",
+      "priority": "HIGH",
+      "test_result": {
+        "working": false,
+        "error": "Model not found",
+        "response_time": 164,
+        "output_size": 0,
+        "status_code": 404,
+        "can_process_images": true
+      }
+    },
+    {
+      "id": "lllyasviel/sd-controlnet-openpose",
+      "name": "ControlNet OpenPose",
+      "type": "image-to-image-controlnet",
+      "endpoint": "https://api-inference.huggingface.co/models/lllyasviel/sd-controlnet-openpose",
+      "priority": "HIGH",
+      "test_result": {
+        "working": false,
+        "error": "Model not found",
+        "response_time": 167,
+        "output_size": 0,
+        "status_code": 404,
+        "can_process_images": true
+      }
+    },
+    {
+      "id": "Fantasy-Studio/Paint-by-Example",
+      "name": "Paint by Example",
+      "type": "image-to-image",
+      "endpoint": "https://api-inference.huggingface.co/models/Fantasy-Studio/Paint-by-Example",
+      "priority": "MEDIUM",
+      "test_result": {
+        "working": false,
+        "error": "Model not found",
+        "response_time": 170,
+        "output_size": 0,
+        "status_code": 404,
+        "can_process_images": true
+      }
+    },
+    {
+      "id": "SG161222/Realistic_Vision_V3.0_VAE",
+      "name": "Realistic Vision V3 (VAE)",
+      "type": "text-to-image-realistic",
+      "endpoint": "https://api-inference.huggingface.co/models/SG161222/Realistic_Vision_V3.0_VAE",
+      "priority": "HIGH",
+      "test_result": {
+        "working": false,
+        "error": "Model not found",
+        "response_time": 164,
+        "output_size": 0,
+        "status_code": 404,
+        "can_process_images": false
+      }
+    },
+    {
+      "id": "prompthero/openjourney-v4",
+      "name": "OpenJourney v4",
+      "type": "text-to-image",
+      "endpoint": "https://api-inference.huggingface.co/models/prompthero/openjourney-v4",
+      "priority": "MEDIUM",
+      "test_result": {
+        "working": false,
+        "error": "Model not found",
+        "response_time": 161,
+        "output_size": 0,
+        "status_code": 404,
+        "can_process_images": false
+      }
+    }
+  ],
+  "recommended_config": {
+    "primary_model": {
+      "id": "stabilityai/stable-diffusion-xl-base-1.0",
+      "name": "SDXL Base (VERIFIED WORKING)",
+      "type": "text-to-image",
+      "endpoint": "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+      "priority": "HIGH",
+      "verified": true,
+      "test_result": {
+        "working": true,
+        "error": null,
+        "response_time": 7871,
+        "output_size": 37391,
+        "status_code": 200,
+        "can_process_images": false,
+        "output_file": "/home/he_reat/Desktop/Projects/LinkedIn Headshot/LinkedInHeadshotApp/test-output-stabilityai-stable-diffusion-xl-base-1.0.jpg"
+      }
+    },
+    "fallback_models": [],
+    "all_working_models": [
+      {
+        "id": "stabilityai/stable-diffusion-xl-base-1.0",
+        "name": "SDXL Base (VERIFIED WORKING)",
+        "type": "text-to-image",
+        "endpoint": "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+        "priority": "HIGH",
+        "verified": true,
+        "test_result": {
+          "working": true,
+          "error": null,
+          "response_time": 7871,
+          "output_size": 37391,
+          "status_code": 200,
+          "can_process_images": false,
+          "output_file": "/home/he_reat/Desktop/Projects/LinkedIn Headshot/LinkedInHeadshotApp/test-output-stabilityai-stable-diffusion-xl-base-1.0.jpg"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon Mark Only - Camera Aperture with Multi-directional Arrows -->
+  <g transform="translate(10, 10)">
+    <!-- Aperture Base Circle -->
+    <circle cx="30" cy="30" r="28" fill="none" stroke="#1B365D" stroke-width="3"/>
+    
+    <!-- Aperture Blades -->
+    <g fill="#1B365D" opacity="0.8">
+      <path d="M30 10 L38 18 L30 26 L22 18 Z"/>
+      <path d="M50 30 L42 38 L34 30 L42 22 Z"/>
+      <path d="M30 50 L22 42 L30 34 L38 42 Z"/>
+      <path d="M10 30 L18 22 L26 30 L18 38 Z"/>
+    </g>
+    
+    <!-- Center Aperture -->
+    <circle cx="30" cy="30" r="9" fill="#FF6B35"/>
+    <circle cx="30" cy="30" r="4.5" fill="white"/>
+    
+    <!-- Multi-directional Arrows (representing multi-platform) -->
+    <g stroke="#FF6B35" stroke-width="2.5" fill="none">
+      <!-- Top Arrow -->
+      <path d="M30 5 L27 8 M30 5 L33 8 M30 5 L30 1"/>
+      <!-- Right Arrow -->
+      <path d="M55 30 L52 27 M55 30 L52 33 M55 30 L59 30"/>
+      <!-- Bottom Arrow -->
+      <path d="M30 55 L27 52 M30 55 L33 52 M30 55 L30 59"/>
+      <!-- Left Arrow -->
+      <path d="M5 30 L8 27 M5 30 L8 33 M5 30 L1 30"/>
+    </g>
+  </g>
+</svg>

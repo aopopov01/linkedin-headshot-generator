@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 16:9 Presentation Master Slide Template -->
+  
+  <defs>
+    <linearGradient id="presentationBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#F9FAFB"/>
+    </linearGradient>
+    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1B365D"/>
+      <stop offset="100%" style="stop-color:#FF6B35"/>
+    </linearGradient>
+    <filter id="slideGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="url(#presentationBg)"/>
+  
+  <!-- Header Bar -->
+  <rect width="1920" height="8" fill="url(#headerGradient)"/>
+  
+  <!-- Header Section -->
+  <g transform="translate(80, 40)">
+    <!-- OmniShot Logo -->
+    <g>
+      <!-- Icon -->
+      <circle cx="30" cy="30" r="25" fill="none" stroke="#1B365D" stroke-width="2"/>
+      <g fill="#1B365D" opacity="0.6">
+        <path d="M30 12 L35 17 L30 22 L25 17 Z"/>
+        <path d="M48 30 L43 35 L38 30 L43 25 Z"/>
+        <path d="M30 48 L25 43 L30 38 L35 43 Z"/>
+        <path d="M12 30 L17 25 L22 30 L17 35 Z"/>
+      </g>
+      <circle cx="30" cy="30" r="10" fill="#FF6B35"/>
+      <circle cx="30" cy="30" r="5" fill="#FFFFFF"/>
+      
+      <!-- Wordmark -->
+      <text x="70" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="800" fill="#1B365D" letter-spacing="-0.5px">
+        Omni<tspan fill="#FF6B35">Shot</tspan>
+      </text>
+      <text x="70" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="500" fill="#6B7280" letter-spacing="1px">
+        EVERY PLATFORM. EVERY TIME. EVERY YOU.
+      </text>
+    </g>
+    
+    <!-- Navigation/Section Indicator -->
+    <g transform="translate(1600, 15)">
+      <text x="0" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#6B7280" text-anchor="end">
+        Product Overview
+      </text>
+      <text x="0" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#9CA3AF" text-anchor="end">
+        Slide 1 of 12
+      </text>
+    </g>
+  </g>
+  
+  <!-- Main Content Area -->
+  <g transform="translate(120, 160)">
+    <!-- Title -->
+    <text x="0" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="800" fill="#1B365D" letter-spacing="-1px">
+      Transform Professional Photos
+    </text>
+    <text x="0" y="120" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="800" fill="#FF6B35" letter-spacing="-1px">
+      for Every Platform
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="0" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="400" fill="#6B7280">
+      AI-powered photo optimization that delivers studio-quality results
+    </text>
+    <text x="0" y="212" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="400" fill="#6B7280">
+      optimized for LinkedIn, Instagram, Facebook, and 7+ more platforms
+    </text>
+    
+    <!-- Key Stats -->
+    <g transform="translate(0, 300)">
+      <g>
+        <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="800" fill="#FF6B35">
+          30s
+        </text>
+        <text x="90" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="#374151">
+          Processing Time
+        </text>
+      </g>
+      
+      <g transform="translate(350, 0)">
+        <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="800" fill="#FF6B35">
+          10+
+        </text>
+        <text x="100" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="#374151">
+          Platforms Supported
+        </text>
+      </g>
+      
+      <g transform="translate(700, 0)">
+        <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="800" fill="#FF6B35">
+          6
+        </text>
+        <text x="70" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="#374151">
+          Professional Styles
+        </text>
+      </g>
+    </g>
+    
+    <!-- Platform Icons Row -->
+    <g transform="translate(0, 420)">
+      <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600" fill="#1B365D">
+        Supported Platforms:
+      </text>
+      
+      <g transform="translate(0, 30)">
+        <rect x="0" y="0" width="48" height="48" rx="8" fill="#0A66C2"/>
+        <text x="24" y="30" font-family="system-ui" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">in</text>
+        <text x="24" y="65" font-family="system-ui" font-size="12" font-weight="500" fill="#374151" text-anchor="middle">LinkedIn</text>
+      </g>
+      
+      <g transform="translate(80, 30)">
+        <rect x="0" y="0" width="48" height="48" rx="8" fill="#E4405F"/>
+        <circle cx="24" cy="24" r="12" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+        <circle cx="32" cy="16" r="2" fill="#FFFFFF"/>
+        <text x="24" y="65" font-family="system-ui" font-size="12" font-weight="500" fill="#374151" text-anchor="middle">Instagram</text>
+      </g>
+      
+      <g transform="translate(160, 30)">
+        <rect x="0" y="0" width="48" height="48" rx="8" fill="#1877F2"/>
+        <text x="24" y="32" font-family="system-ui" font-size="24" font-weight="bold" fill="#FFFFFF" text-anchor="middle">f</text>
+        <text x="24" y="65" font-family="system-ui" font-size="12" font-weight="500" fill="#374151" text-anchor="middle">Facebook</text>
+      </g>
+      
+      <g transform="translate(240, 30)">
+        <rect x="0" y="0" width="48" height="48" rx="8" fill="#1DA1F2"/>
+        <path d="M30 15 Q20 15 20 25 Q30 25 30 15" fill="#FFFFFF"/>
+        <text x="24" y="65" font-family="system-ui" font-size="12" font-weight="500" fill="#374151" text-anchor="middle">Twitter</text>
+      </g>
+      
+      <g transform="translate(320, 30)">
+        <rect x="0" y="0" width="48" height="48" rx="8" fill="#FE2C55"/>
+        <path d="M24 10 L30 20 L24 35 L18 20 Z" fill="#FFFFFF"/>
+        <text x="24" y="65" font-family="system-ui" font-size="12" font-weight="500" fill="#374151" text-anchor="middle">TikTok</text>
+      </g>
+      
+      <g transform="translate(400, 30)">
+        <rect x="0" y="0" width="48" height="48" rx="8" fill="#FF0000"/>
+        <path d="M18 18 Q12 18 12 24 L12 30 Q12 36 18 36 L30 36 Q36 36 36 30 L36 24 Q36 18 30 18 Z M20 22 L28 24 L20 30 Z" fill="#FFFFFF"/>
+        <text x="24" y="65" font-family="system-ui" font-size="12" font-weight="500" fill="#374151" text-anchor="middle">YouTube</text>
+      </g>
+      
+      <g transform="translate(480, 30)">
+        <rect x="0" y="0" width="48" height="48" rx="8" fill="#6B7280"/>
+        <text x="24" y="30" font-family="system-ui" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">+4</text>
+        <text x="24" y="65" font-family="system-ui" font-size="12" font-weight="500" fill="#374151" text-anchor="middle">More</text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Right Side Visual Area -->
+  <g transform="translate(1200, 200)">
+    <!-- Placeholder for content/demo -->
+    <rect width="600" height="400" rx="16" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="2" stroke-dasharray="10,5"/>
+    <text x="300" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="500" fill="#9CA3AF" text-anchor="middle">
+      Content Area
+    </text>
+    <text x="300" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" fill="#9CA3AF" text-anchor="middle">
+      Screenshots, demos, or visuals
+    </text>
+    <text x="300" y="230" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" fill="#9CA3AF" text-anchor="middle">
+      600 × 400 pixels
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(120, 1000)">
+    <!-- Contact Information -->
+    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#6B7280">
+      www.omnishot.app • hello@omnishot.app • Available on iOS & Android
+    </text>
+    
+    <!-- Date and Confidentiality -->
+    <text x="1680" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" fill="#9CA3AF" text-anchor="end">
+      Confidential & Proprietary • January 2025
+    </text>
+  </g>
+  
+  <!-- Subtle Background Elements -->
+  <g opacity="0.03">
+    <circle cx="1700" cy="300" r="100" fill="#FF6B35"/>
+    <circle cx="200" cy="800" r="80" fill="#1B365D"/>
+    <rect x="1500" y="700" width="150" height="150" rx="20" fill="#FF6B35"/>
+  </g>
+  
+  <!-- Brand Accent Line -->
+  <rect x="0" y="1072" width="1920" height="8" fill="url(#headerGradient)"/>
+</svg>
+
+<!-- 
+PRESENTATION TEMPLATE USAGE GUIDE:
+
+1. SLIDE VARIATIONS:
+   - Title Slide: Use this as base, adjust text sizing
+   - Content Slides: Replace right area with bullet points or visuals
+   - Demo Slides: Use right area for app screenshots
+   - Data Slides: Replace stats section with charts/graphs
+   - Closing Slide: Add CTA and contact details
+
+2. CONTENT AREAS:
+   - Left Side (120-1150px): Main content, text, bullets
+   - Right Side (1200-1800px): Visuals, screenshots, demos
+   - Header (0-120px): Logo, navigation, slide numbers
+   - Footer (1000-1080px): Contact info, confidentiality
+
+3. COLOR USAGE:
+   - Primary Headings: #1B365D (Deep Blue)
+   - Accent Elements: #FF6B35 (Orange)
+   - Body Text: #374151 (Charcoal)
+   - Supporting Text: #6B7280 (Medium Gray)
+   - Backgrounds: #FFFFFF, #F9FAFB (Light grays)
+
+4. TYPOGRAPHY HIERARCHY:
+   - Main Headlines: 56px, weight 800
+   - Section Headers: 24-32px, weight 600-700
+   - Body Text: 18-20px, weight 400-500
+   - Captions: 12-14px, weight 400
+
+5. CUSTOMIZATION:
+   - Update slide numbers in navigation
+   - Replace content area with relevant visuals
+   - Adjust stats/metrics based on current data
+   - Modify platform icons based on focus areas
+   - Update contact information in footer
+
+6. EXPORT SETTINGS:
+   - Resolution: 1920×1080 (16:9 ratio)
+   - Format: PDF for sharing, PNG for images
+   - Color Profile: sRGB for digital display
+   - Font Embedding: Ensure system fonts render correctly
+
+SLIDE DECK STRUCTURE RECOMMENDATION:
+1. Title/Introduction
+2. Problem Statement
+3. Solution Overview
+4. Product Demo
+5. Platform Benefits
+6. Professional Styles
+7. Technology & AI
+8. Market Opportunity
+9. Business Model
+10. Competitive Advantage
+11. Roadmap
+12. Call to Action
+-->

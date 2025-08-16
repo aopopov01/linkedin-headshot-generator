@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>OmniShot Email Signature</title>
+    <style>
+        /* Reset styles for email compatibility */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .email-signature {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            max-width: 600px;
+            border-left: 4px solid #FF6B35;
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+        
+        .signature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .company-logo {
+            margin-right: 15px;
+        }
+        
+        .company-info h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1B365D;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+        
+        .company-info .highlight {
+            color: #FF6B35;
+        }
+        
+        .tagline {
+            font-size: 11px;
+            font-weight: 500;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+        
+        .contact-info {
+            margin: 15px 0;
+        }
+        
+        .contact-item {
+            font-size: 14px;
+            color: #374151;
+            margin: 4px 0;
+            text-decoration: none;
+        }
+        
+        .contact-item a {
+            color: #1B365D;
+            text-decoration: none;
+        }
+        
+        .contact-item a:hover {
+            color: #FF6B35;
+            text-decoration: underline;
+        }
+        
+        .cta-section {
+            margin: 15px 0;
+            padding: 12px 0;
+            border-top: 1px solid #E5E7EB;
+        }
+        
+        .cta-text {
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 8px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: #FF6B35;
+            color: #FFFFFF !important;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .cta-button:hover {
+            background-color: #E55A2E;
+        }
+        
+        .platform-icons {
+            margin-top: 8px;
+        }
+        
+        .platform-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 4px;
+            border-radius: 3px;
+        }
+        
+        .disclaimer {
+            font-size: 10px;
+            color: #9CA3AF;
+            margin-top: 10px;
+            line-height: 1.3;
+        }
+        
+        /* Mobile responsiveness for email clients that support it */
+        @media (max-width: 480px) {
+            .email-signature {
+                padding-left: 15px;
+            }
+            
+            .signature-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .company-logo {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- OmniShot Email Signature Template -->
+<div class="email-signature">
+    
+    <!-- Header with Logo and Company Info -->
+    <div class="signature-header">
+        <div class="company-logo">
+            <!-- OmniShot Logo SVG -->
+            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="25" cy="25" r="20" fill="none" stroke="#1B365D" stroke-width="2"/>
+                <g fill="#1B365D" opacity="0.6">
+                    <path d="M25 12 L30 17 L25 22 L20 17 Z"/>
+                    <path d="M38 25 L33 30 L28 25 L33 20 Z"/>
+                    <path d="M25 38 L20 33 L25 28 L30 33 Z"/>
+                    <path d="M12 25 L17 20 L22 25 L17 30 Z"/>
+                </g>
+                <circle cx="25" cy="25" r="8" fill="#FF6B35"/>
+                <circle cx="25" cy="25" r="4" fill="#FFFFFF"/>
+            </svg>
+        </div>
+        
+        <div class="company-info">
+            <h1>Omni<span class="highlight">Shot</span></h1>
+            <div class="tagline">Every Platform. Every Time. Every You.</div>
+        </div>
+    </div>
+    
+    <!-- Contact Information -->
+    <div class="contact-info">
+        <div class="contact-item">
+            📧 <a href="mailto:hello@omnishot.app">hello@omnishot.app</a>
+        </div>
+        <div class="contact-item">
+            🌐 <a href="https://www.omnishot.app" target="_blank">www.omnishot.app</a>
+        </div>
+        <div class="contact-item">
+            📱 Download: <a href="#" target="_blank">iOS</a> | <a href="#" target="_blank">Android</a>
+        </div>
+    </div>
+    
+    <!-- Call to Action Section -->
+    <div class="cta-section">
+        <div class="cta-text">Transform your professional presence with AI-powered photo optimization:</div>
+        
+        <a href="https://www.omnishot.app/download" class="cta-button" target="_blank">
+            Try OmniShot Free
+        </a>
+        
+        <div class="platform-icons">
+            <span style="font-size: 11px; color: #6B7280; margin-right: 8px;">Supports:</span>
+            <div class="platform-icon" style="background-color: #0A66C2;" title="LinkedIn"></div>
+            <div class="platform-icon" style="background-color: #E4405F;" title="Instagram"></div>
+            <div class="platform-icon" style="background-color: #1877F2;" title="Facebook"></div>
+            <div class="platform-icon" style="background-color: #1DA1F2;" title="Twitter"></div>
+            <div class="platform-icon" style="background-color: #FE2C55;" title="TikTok"></div>
+            <div class="platform-icon" style="background-color: #FF0000;" title="YouTube"></div>
+            <span style="font-size: 10px; color: #9CA3AF;">+4 more</span>
+        </div>
+    </div>
+    
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+        This email and any attachments are confidential. OmniShot - Professional Photo AI Platform.<br>
+        Unsubscribe from marketing emails: <a href="#" style="color: #9CA3AF;">click here</a>
+    </div>
+    
+</div>
+
+</body>
+</html>
+
+<!-- 
+INSTRUCTIONS FOR USE:
+
+1. CUSTOMIZATION:
+   - Replace placeholder links (#) with actual URLs
+   - Update contact information as needed
+   - Modify CTA button text and destination URL
+   - Add your name and title if this is for individual use
+
+2. EMAIL CLIENT COMPATIBILITY:
+   - Tested for Gmail, Outlook, Apple Mail
+   - Uses inline CSS for maximum compatibility
+   - Minimal external dependencies
+   - Fallback fonts for cross-platform support
+
+3. PERSONALIZATION OPTIONS:
+   - Add personal name and title above company info
+   - Include phone number if desired
+   - Add social media links (LinkedIn, Twitter, etc.)
+   - Customize the CTA based on current campaigns
+
+4. IMPLEMENTATION:
+   - Copy the HTML and paste into your email client's signature editor
+   - Test across different email clients
+   - Ensure links are working properly
+   - Consider creating multiple versions for different team members
+
+5. BEST PRACTICES:
+   - Keep signature under 600px wide
+   - Limit to essential information
+   - Test on mobile email clients
+   - Update regularly with current campaigns
+   - Monitor click-through rates on CTA buttons
+
+EXAMPLE PERSONALIZED VERSION:
+Add above the company info:
+<div style="margin-bottom: 8px;">
+    <strong style="color: #1B365D; font-size: 16px;">John Smith</strong><br>
+    <span style="color: #6B7280; font-size: 13px;">Head of Marketing</span>
+</div>
+-->

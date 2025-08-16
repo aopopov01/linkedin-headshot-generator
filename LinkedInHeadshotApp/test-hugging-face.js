@@ -8,7 +8,7 @@
 const https = require('https');
 
 // Replace this with your actual Hugging Face token
-const HF_TOKEN = 'process.env.HUGGING_FACE_API_TOKEN';
+const HF_TOKEN = 'YOUR_HUGGING_FACE_TOKEN_HERE';
 
 class HuggingFaceTest {
   constructor() {

@@ -24,7 +24,7 @@ The LinkedIn Headshot app's "no AI transformation" issue has been **completely r
 
 3. **✅ Verified Working Configuration**
    - `stabilityai/stable-diffusion-xl-base-1.0` confirmed generating **37KB+ AI content**
-   - Token `[SECURE_TOKEN_REDACTED]` is **valid and functional**
+   - Token `YOUR_HUGGING_FACE_TOKEN_HERE` is **valid and functional**
    - Response times average 7-8 seconds for real AI transformations
 
 ---

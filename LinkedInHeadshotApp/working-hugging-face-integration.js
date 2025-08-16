@@ -6,7 +6,7 @@
  * Uses only verified working models that produce real AI transformations
  */
 
-const WORKING_HF_TOKEN = 'process.env.HUGGING_FACE_API_TOKEN';
+const WORKING_HF_TOKEN = 'YOUR_HUGGING_FACE_TOKEN_HERE';
 
 // VERIFIED WORKING MODELS (tested and confirmed)
 const WORKING_MODELS = [

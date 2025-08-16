@@ -20,7 +20,7 @@ The LinkedIn Headshot app has **valid Hugging Face credentials** but suffers fro
 
 ### ✅ WHAT IS WORKING
 
-- **Hugging Face Token:** `[SECURE_TOKEN_REDACTED]` is **VALID and FUNCTIONAL**
+- **Hugging Face Token:** `YOUR_HUGGING_FACE_TOKEN_HERE` is **VALID and FUNCTIONAL**
 - **API Connectivity:** Successfully established to Hugging Face infrastructure
 - **One Working Model:** `stabilityai/stable-diffusion-xl-base-1.0` produces **real AI transformations**
 - **Image Generation:** **78,174 bytes** of actual AI-generated content confirmed
@@ -195,7 +195,7 @@ Move the hardcoded token to environment variables:
 {
   "expo": {
     "extra": {
-      "huggingfaceToken": "[SECURE_TOKEN_REDACTED]"
+      "huggingfaceToken": "YOUR_HUGGING_FACE_TOKEN_HERE"
     }
   }
 }

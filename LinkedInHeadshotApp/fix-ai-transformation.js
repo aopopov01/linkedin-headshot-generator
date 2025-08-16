@@ -184,7 +184,7 @@ class AITransformationFixer {
             const retryResponse = await fetch(model.endpoint, {
               method: 'POST',
               headers: {
-                'Authorization': 'Bearer process.env.HUGGING_FACE_API_TOKEN',
+                'Authorization': 'Bearer YOUR_HUGGING_FACE_TOKEN_HERE',
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify(requestBody),

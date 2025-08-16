@@ -158,7 +158,7 @@ export default function App() {
           const hfResponse = await fetch(model.endpoint, {
             method: 'POST',
             headers: {
-              'Authorization': 'Bearer process.env.HUGGING_FACE_API_TOKEN',
+              'Authorization': 'Bearer YOUR_HUGGING_FACE_TOKEN_HERE',
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestBody),
@@ -281,7 +281,7 @@ export default function App() {
           const hfResponse = await fetch(model.endpoint, {
             method: 'POST',
             headers: {
-              'Authorization': 'Bearer process.env.HUGGING_FACE_API_TOKEN',
+              'Authorization': 'Bearer YOUR_HUGGING_FACE_TOKEN_HERE',
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestBody),
@@ -548,7 +548,7 @@ export default function App() {
           const response = await fetch(endpoint.url, {
             method: 'POST',
             headers: {
-              'Authorization': 'Bearer process.env.HUGGING_FACE_API_TOKEN',
+              'Authorization': 'Bearer YOUR_HUGGING_FACE_TOKEN_HERE',
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -794,7 +794,7 @@ export default function App() {
           const response = await fetch(model.endpoint, {
             method: 'POST',
             headers: {
-              'Authorization': 'Bearer process.env.HUGGING_FACE_API_TOKEN',
+              'Authorization': 'Bearer YOUR_HUGGING_FACE_TOKEN_HERE',
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestBody),
@@ -828,7 +828,7 @@ export default function App() {
             const retryResponse = await fetch(model.endpoint, {
               method: 'POST',
               headers: {
-                'Authorization': 'Bearer process.env.HUGGING_FACE_API_TOKEN',
+                'Authorization': 'Bearer YOUR_HUGGING_FACE_TOKEN_HERE',
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify(requestBody),

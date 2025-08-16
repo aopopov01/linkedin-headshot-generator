@@ -18,7 +18,7 @@
    - Location: Multiple client-side files
    - Risk: Complete Replicate API access, unlimited usage charges
    
-2. **Hugging Face API Token**: `[SECURE_TOKEN_REDACTED]`
+2. **Hugging Face API Token**: `YOUR_HUGGING_FACE_TOKEN_HERE`
    - Location: Multiple client-side files
    - Risk: Complete Hugging Face API access, model abuse
 
